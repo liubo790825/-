@@ -1,0 +1,15 @@
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\obj\Debug\LeaRun.Application.Code.csprojResolveAssemblyReference.cache
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Application.Code.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Application.Code.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Cache.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Cache.Factory.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Util.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Util.Extension.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\Newtonsoft.Json.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Cache.Factory.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Cache.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Util.Extension.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\LeaRun.Util.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\bin\Debug\Newtonsoft.Json.xml
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\obj\Debug\LeaRun.Application.Code.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Application\LeaRun.Application.Code\obj\Debug\LeaRun.Application.Code.pdb

@@ -1,0 +1,13 @@
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\obj\Debug\LeaRun.Data.csprojResolveAssemblyReference.cache
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\LeaRun.Data.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\LeaRun.Data.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\LeaRun.Util.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\MySql.Data.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\Oracle.DataAccess.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\Newtonsoft.Json.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\LeaRun.Util.Extension.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\LeaRun.Util.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\Newtonsoft.Json.xml
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\bin\Debug\LeaRun.Util.Extension.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\obj\Debug\LeaRun.Data.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Data\LeaRun.Data\obj\Debug\LeaRun.Data.pdb

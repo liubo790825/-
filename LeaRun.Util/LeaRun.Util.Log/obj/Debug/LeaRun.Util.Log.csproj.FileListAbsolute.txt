@@ -1,0 +1,7 @@
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Log\bin\Debug\LeaRun.Util.Log.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Log\bin\Debug\LeaRun.Util.Log.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Log\bin\Debug\log4net.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Log\bin\Debug\log4net.xml
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Log\obj\Debug\LeaRun.Util.Log.csprojResolveAssemblyReference.cache
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Log\obj\Debug\LeaRun.Util.Log.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Log\obj\Debug\LeaRun.Util.Log.pdb

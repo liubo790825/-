@@ -151,7 +151,7 @@
         },
         two: {
             init: function (r, f) {
-                if (r) n("#F_ModuleId").ComboBoxTree({
+                if (r) n("#F_ModuleId").comboBoxTree({
                     url: "../../AuthorizeManage/Module/GetTreeJson",
                     description: "==请选择==",
                     maxHeight: "300px",

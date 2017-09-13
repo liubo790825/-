@@ -77,6 +77,12 @@ angular.module('starter.config', [])
       //工作办理记录数
       TeaStuLeaveNumberApi: rootUrl + '/baodaoYuyueManage/TeaStuLeaveNumber',//请假
       TeaCancelAppNumberApi: rootUrl + '/baodaoYuyueManage/TeaCancelAppNumber',//操行扣分申请撤销
+
+      //宿舍交换
+      TeaGetDormExchangeListApi: rootUrl + '/baodaoYuyueManage/TeaGetDormExchangeList',//获取交换宿舍申请
+      TeaDormExchangeApi: rootUrl + '/baodaoYuyueManage/TeaDormExchangeNumber',//教师端获取宿舍交换申请记录数
+      TeaGetDormExchangeStuInfoApi: rootUrl + '/baodaoYuyueManage/TeaGetDormExchangeStuInfo',//宿舍交换双方学生信息
+      SaveDormExchangePassedApi: rootUrl + '/baodaoYuyueManage/saveTeaDormExchangeReview',//保存教师审核是否通过
   };
   return apiUrl;
 });

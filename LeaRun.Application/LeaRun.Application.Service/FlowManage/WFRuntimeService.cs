@@ -80,7 +80,14 @@ namespace LeaRun.Application.Service.FlowManage
 
                 wfProcessInstanceEntity.EnabledMark = 1;//正式运行
                 wfProcessInstanceEntity.MakerList = (wfruntime.GetStatus() != 4 ? GetMakerList(wfruntime) : "");//当前节点可执行的人信息
-                wfProcessInstanceEntity.isFinish = (wfruntime.GetStatus() == 4 ? 1 : 0);
+                if (wfruntime.GetStatus() == 4)
+                {
+                    wfProcessInstanceEntity.isFinish = 1;
+                }
+                else
+                {
+                    wfProcessInstanceEntity.isFinish = null;
+                }
                 #endregion
 
                 #region 实例模板

@@ -191,6 +191,8 @@ namespace LeaRun.Application.Service.FlowManage
 	                                WF_ProcessInstance w
                                 LEFT JOIN 
 	                                Base_DataItemDetail t2 ON t2.ItemDetailId = w.SchemeType
+                                LEFT JOIN 
+                                    WF_ProcessNodes t3 ON t3.F_ProcessId = w.Id
                                 WHERE w.EnabledMark = 1 AND w.isFinish = 0 ");
                 var parameter = new List<DbParameter>();
                 var queryParam = queryJson.ToJObject();

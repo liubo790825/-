@@ -1,0 +1,70 @@
+﻿<ion-modal-view ">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+    <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">详细信息</h1>
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content delegate-handle="DormExchangeTargetPassed-content">
+
+        <ion-list class="lr-list-form">
+
+            <div class="item item-divider bgcolor_c">
+                申请交换信息
+            </div>
+            <ion-item class="lr-item-htitle">
+                <span>申请时间：</span>
+                <span class="positive ng-binding">{{GetMyExchangeList.appDatetime|date:"yyyy-MM-dd"}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>申请学生姓名：</span>
+                <span class="positive ng-binding">{{GetMyExchangeList.appStuName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>申请学生班级：</span>
+                <span class="positive ng-binding">{{GetMyExchangeList.className}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>申请学生房间号：</span>
+                <span class="positive ng-binding">{{GetMyExchangeList.dormName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>申请学生床位号：</span>
+                <span class="positive ng-binding">{{GetMyExchangeList.bedName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>申请交换原因：</span>
+                <span class="positive ng-binding">{{GetMyExchangeList.appRemark}}</span>
+            </ion-item>
+            <div class="item item-divider">
+                是否同意交换<span>*</span>
+            </div>
+            <label class="item item-input item-select mt10" ng-show="{{GetMyExchangeList.passed}}">
+                <div class="input-label">
+                    请选择是否同意
+                </div>
+                <select ng-model="editData.targetPassed" ng-class="{'active' : isInputActive('targetPassed')}">
+                    <option value="1" selected="selected">同意</option>
+                    <option value="2">不同意</option>
+                </select>
+            </label>
+            <ion-item class="item-input" ng-show="{{GetMyExchangeList.passed}}">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加同意或拒绝理由</div>
+                <input type="text" ng-model="editData.targetRemark" ng-class="{'active' : isInputActive('targetRemark')}" />
+            </ion-item>
+
+            <div ng-show="{{GetMyExchangeList.passed}}">
+                <button class="button button-block button-positive" ng-click="saveExchangeDormTargetPassed()">
+                    提交
+                </button>
+            </div>
+        </ion-list>
+
+
+
+    </ion-content>
+</ion-modal-view>

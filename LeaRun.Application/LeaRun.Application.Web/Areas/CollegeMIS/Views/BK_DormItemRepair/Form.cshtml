@@ -1,0 +1,142 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+
+        $('#DormBuildingId').ComboBox({
+            url: "/CollegeMIS/BK_DormBuilding/GetListJson",
+            description: "==请选择==",
+            id: "DormBuildingId",
+            text: "DormBuildingName",
+            height: "230px",
+            allowSearch: true
+        }).bind("change", function () {
+            var dormbuildingid = $(this).attr('data-value');//attr('data-text');
+            $('#DormFloorsId').ComboBox({
+                url: "/CollegeMIS/BK_DormFloors/GetPageListJson",
+                param: { queryJson: "{\"DormBuildingId\":\"" + dormbuildingid + "\"}", pagination: null },
+                description: "==请选择==",
+                id: "DormFloorsId",
+                text: "DormFloorsName",
+                height: "230px",
+                allowSearch: true
+            }).bind("change", function () {
+                var dormfloorsid = $(this).attr('data-value');//attr('data-text');
+                $('#DormId').ComboBox({
+                    url: "/CollegeMIS/BK_Dorm/GetPageListJson",
+                    param: { queryJson: "{\"DormFloorsId\":\"" + dormfloorsid + "\"}", pagination: null },
+                    description: "==请选择==",
+                    id: "DormId",
+                    text: "DormName",
+                    height: "230px",
+                    allowSearch: true
+                })
+            })
+        })
+
+         
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_DormItemRepair/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    if (data != null) { 
+
+                        $('#DormFloorsId').ComboBox({
+                            url: "/CollegeMIS/BK_DormFloors/GetPageListJson",
+                            param: { queryJson: "{\"DormBuildingId\":\"" + data.DormBuildingId + "\"}", pagination: null },
+                            description: "==请选择==",
+                            id: "DormFloorsId",
+                            text: "DormFloorsName",
+                            height: "230px",
+                            allowSearch: true
+                        })
+
+                        $('#DormId').ComboBox({
+                            url: "/CollegeMIS/BK_Dorm/GetPageListJson",
+                            param: { queryJson: "{\"DormFloorsId\":\"" + data.DormFloorsId + "\"}", pagination: null },
+                            description: "==请选择==",
+                            id: "DormId",
+                            text: "DormName",
+                            height: "230px",
+                            allowSearch: true
+                        })
+                    }
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_DormItemRepair/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">宿舍楼序号</td>
+            <td class="formValue">
+                <div id="DormBuildingId" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+            </td>
+        
+            <td class="formTitle">楼层序号</td>
+            <td class="formValue">
+                <div id="DormFloorsId" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">宿舍序号</td>
+            <td class="formValue">
+                @*<input id="DormId" type="text" class="form-control"  />*@
+                <div id="DormId" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+            </td>
+        </tr>
+        @*<tr>
+            <td class="formTitle">单元序号</td>
+            <td class="formValue">
+                <input id="DormUnitId" type="text" class="form-control"  />
+            </td>
+        </tr>*@
+        <tr>
+            <td class="formTitle">待修理物品</td>
+            <td class="formValue">
+                <input id="RepairItem" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">修理价格</td>
+            <td class="formValue">
+                <input id="RepairPrice" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">物品价格</td>
+            <td class="formValue">
+                <input id="ItemPrice" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">是否修理完成</td>
+            <td class="formValue">
+                <input id="RepairDone" type="text" class="form-control"  />
+            </td>
+        </tr>
+       
+    </table>
+</div>

@@ -764,4 +764,147 @@ AngModule//angular.module('starter.modules', [])
     };
 }])
 
+//宿舍交换
+.factory('ExchangeDorm', ['$learunFormatDate', '$learunGetDataItem', '$learunHttp', 'ApiUrl', '$learunTopAlert', 'UserInfo', function ($learunFormatDate, $learunGetDataItem, $learunHttp, ApiUrl, $learunTopAlert, UserInfo) {
+
+    var stuinfo = UserInfo.get();
+    var editDataEx = [
+      {
+          "name": "序号Id",
+          "id": "iD",
+          "isRequire": false
+      },
+      {
+          "name": "申请学生ID号",
+          "id": "appStuId",
+          "isRequire": false
+      },
+      {
+          "name": "申请人班级ID号",
+          "id": "appClassId",
+          "isRequire": false
+      },
+      {
+          "name": "申请人学号",
+          "id": "appStuNo",
+          "isRequire": false
+      },
+      {
+          "name": "申请人姓名",
+          "id": "appStuName",
+          "isRequire": false
+      },
+      {
+          "name": "申请人电话",
+          "id": "appStuPhone",
+          "isRequire": false
+      },
+      {
+          "name": "原床位",
+          "id": "oldBedId",
+          "isRequire": false
+      },
+      {
+          "name": "目标学生ID号，可能为空",
+          "id": "targetStuId",
+          "isRequire": false
+      },
+      {
+          "name": "目标学生班级ID号，可能为空",
+          "id": "targetClassId",
+          "isRequire": false
+      },
+      {
+          "name": "目标学生号，可能为空",
+          "id": "targetStuNo",
+          "isRequire": false
+      },
+      {
+          "name": "目标学生姓名，可能为空",
+          "id": "targetStuName",
+          "isRequire": false
+      },
+      {
+          "name": "目标学生电话",
+          "id": "targetStuPhone",
+          "isRequire": false
+      },
+      {
+          "name": "目标说明不同意说明",
+          "id": "targetRemark",
+          "isRequire": false
+      },
+      {
+          "name": "目标床位ID号",
+          "id": "newBedId",
+          "isRequire": false
+      },
+      {
+          "name": "目标学生是否同意，0未查看，1同意，2不同意",
+          "id": "targetPassed",
+          "isRequire": false
+      },
+      {
+          "name": "是否通过，1申请中，0未通过，2通过",
+          "id": "passed",
+          "isRequire": false
+      },
+      {
+          "name": "通过时间",
+          "id": "passedTime",
+          "isRequire": false
+      },
+      {
+          "name": "申请时间",
+          "id": "appDatetime",
+          "isRequire": false
+      },
+      {
+          "name": "申请原因",
+          "id": "appRemark",
+          "isRequire": false
+      },
+      {
+          "name": "是否取消申请，0未取消，1取消",
+          "id": "deleteMark",
+          "isRequire": false
+      },
+      {
+          "name": "联合取消申请使用，1未取消，0取消",
+          "id": "enableMark",
+          "isRequire": false
+      },
+      {
+          "name": "取消时间",
+          "id": "cancelTime",
+          "isRequire": false
+      }
+
+
+    ];//编辑数据字段
+
+    //返回
+    return {
+        editSubmit: function (stuexchangedorm, callback) {
+            $learunHttp.post({
+                "url": ApiUrl.SaveDormExchangePassedApi,
+                "data": stuexchangedorm,
+                "isverify": true,
+                "success": function (data) {
+                    $learunTopAlert.show({ text: "保存成功！" });
+                },
+                "error": function () {
+                    $learunTopAlert.show({ text: "保存失败！" });
+                },
+                "finally": function () {
+                    callback();
+                }
+            });
+        },
+        getEditDataEx: function () {
+            return editDataEx;
+        }
+    };
+}])
+
 ;

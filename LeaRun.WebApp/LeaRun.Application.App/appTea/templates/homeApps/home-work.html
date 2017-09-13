@@ -21,24 +21,30 @@
             </div>
             <ion-list>
 
-                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('qingjiashenpiDetails.html','up')">
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openWorkFuncModal('qingjiashenpiDetails.html','up')">
                     <i class="icon ion-ios-list-outline positive-bg"></i>
                     学生请假
                     <span class="badge badge-assertive">{{Number.TeaStuLeaveNumber.result.number}}</span>
                     <i class="icon ion-chevron-right icon-accessory"></i>
                 </ion-item>
-                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('TeaCaoxingKoufenChexiaoList.html','up')">
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openWorkFuncModal('TeaCaoxingKoufenChexiaoList.html','up')">
                     <i class="icon ion-ios-list-outline positive-bg"></i>
                     操行扣分撤销申请审核
                     <span class="badge badge-positive">{{Number.TeaCancelAppNumber.result.number}}</span>
                     <i class="icon ion-chevron-right icon-accessory"></i>
                 </ion-item>
-                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('chuqinDetails.html','up')">
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openWorkFuncModal('DormExchangeList.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    宿舍交换
+                    <span class="badge badge-positive">{{Number.TeaDormExchangeNumber.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <!--<ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('chuqinDetails.html','up')">
                     <i class="icon ion-ios-list-outline positive-bg"></i>
                     出勤统计
                     <span class="badge badge-positive">98%</span>
                     <i class="icon ion-chevron-right icon-accessory"></i>
-                </ion-item>
+                </ion-item>-->
 
 
     </ion-content>

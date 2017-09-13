@@ -1,0 +1,14 @@
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\LeaRun.Util.Ioc.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\LeaRun.Util.Ioc.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.Unity.Configuration.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.Unity.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.Unity.RegistrationByConvention.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.ServiceLocation.xml
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.Unity.xml
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.Unity.Configuration.xml
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\bin\Debug\Microsoft.Practices.Unity.RegistrationByConvention.xml
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\obj\Debug\LeaRun.Util.Ioc.dll
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\obj\Debug\LeaRun.Util.Ioc.pdb
+D:\工作区\大学数字化校园\大学数字校园\Junmao-XJ V6.1\LeaRun.Util\LeaRun.Util.Ioc\obj\Debug\LeaRun.Util.Ioc.csprojResolveAssemblyReference.cache

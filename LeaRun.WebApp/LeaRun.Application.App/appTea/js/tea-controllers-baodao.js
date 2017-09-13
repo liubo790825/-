@@ -139,8 +139,8 @@ AngCtrl
 
 //抵校管理
 .controller('BaodaoCtrl', [
-    '$scope', '$learunPageModal', '$timeout', '$ionicModal', '$learunPopup', '$ionicLoading', '$learunTopAlert', '$learunTriggerRefresh', '$learunSelectModal', '$learunDataIsAll', 'UserInfo', 'lrmBaseInfo', '$learunHttp', 'ApiUrl', 'AQuestions', 'StuLeave', 'CancelApp',
-  function ($scope, $learunPageModal, $timeout, $ionicModal, $learunPopup, $ionicLoading, $learunTopAlert, $learunTriggerRefresh, $learunSelectModal, $learunDataIsAll, UserInfo, lrmBaseInfo, $learunHttp, ApiUrl, AQuestions, StuLeave, CancelApp) {
+    '$scope', '$learunPageModal', '$timeout', '$ionicModal', '$learunPopup', '$ionicLoading', '$learunTopAlert', '$learunTriggerRefresh', '$learunSelectModal', '$learunDataIsAll', 'UserInfo', 'lrmBaseInfo', '$learunHttp', 'ApiUrl', 'AQuestions', 'StuLeave', 'CancelApp', 'ExchangeDorm',
+  function ($scope, $learunPageModal, $timeout, $ionicModal, $learunPopup, $ionicLoading, $learunTopAlert, $learunTriggerRefresh, $learunSelectModal, $learunDataIsAll, UserInfo, lrmBaseInfo, $learunHttp, ApiUrl, AQuestions, StuLeave, CancelApp, ExchangeDorm) {
       $scope.detailsData = UserInfo.get();
       $scope.editData = {};
       $scope.TCdata = {};
@@ -208,6 +208,13 @@ AngCtrl
                   $scope.Number.TeaCancelAppNumber = data;
               }
           });
+          $learunHttp.post({//宿舍交换申请
+              "url": ApiUrl.TeaDormExchangeApi,
+              "success": function (data) {
+                  $scope.Number.TeaDormExchangeNumber = data;
+              }
+          });
+
       }
 
       //打开报到功能模块页==============================================================
@@ -289,7 +296,25 @@ AngCtrl
               });
           }
           
+          if ($scope.detailsModal != null) {
+              $scope.detailsModal.remove();
+          }
+          $ionicModal.fromTemplateUrl('templates/homeApps/baodao/' + viewpage, {
+              scope: $scope,
+              animation: 'slide-in-' + direction,//left,right,up,down
+          }).then(function (modal) {
+              $scope.detailsModal = modal;
+              $scope.detailsModal.show();
+          });
+      };
+      $scope.closeBaodaoFuncModal = function () {//关闭页面
+          $scope.detailsModal.remove();
+      };
 
+      //报到功能modal-end===================================================================
+      
+      //工作办理modal-start===================================================================
+      $scope.openWorkFuncModal = function (viewpage, direction, obj) {
 
           if (viewpage == "qingjiashenpiDetails.html") {
               $scope.LeaveStu = {};
@@ -341,7 +366,7 @@ AngCtrl
                   }
               });
           }
-          
+
 
           if (viewpage == "TeaCaoxingKoufenChexiaoList.html") {
               $scope.ReviewStuCaoxingKoufenList = {};
@@ -359,11 +384,49 @@ AngCtrl
           }
 
 
+          if (viewpage == "DormExchangeList.html") {
+              $scope.DormExchangeList = {};
+              //查询宿舍交换申请列表
+              $learunHttp.post({
+                  "url": ApiUrl.TeaGetDormExchangeListApi,
+                  "data": { "page": 1, "rows": 10, "sidx": "StuName", "sord": "desc" },
+                  "success": function (data) {
+                      $scope.DormExchangeList = data.result.rows;
+                  }
+              });
+          }
+          if (viewpage == "DormExchangeListDetails.html") {
+              $scope.DormExchangeListDetails = {};
+              $scope.DormExchangeListDetails = obj;
+              $scope.DormExchangeListDetails.targetPassed = "同意"
+              $scope.DormExchangeListDetailsAppStu = {};// 提出申请学生信息
+              $scope.DormExchangeListDetailsTargetStu = {};//接受申请学生信息
+
+              var queryData = { "StuNo": obj.appStuId };
+              //查询提出申请交换学生信息
+              $learunHttp.post({
+                  "url": ApiUrl.TeaGetDormExchangeStuInfoApi,
+                  "data": { "queryData": JSON.stringify(queryData) },
+                  "success": function (data) {
+                      $scope.DormExchangeListDetailsAppStu = data.result;
+                  }
+              });
+              var queryData = { "StuNo": obj.targetStuId };
+              //查询接受交换的学生信息
+              $learunHttp.post({
+                  "url": ApiUrl.TeaGetDormExchangeStuInfoApi,
+                  "data": {"queryData": JSON.stringify(queryData) },
+                  "success": function (data) {
+                      $scope.DormExchangeListDetailsTargetStu = data.result;
+                  }
+              });
+          }
+
 
           if ($scope.detailsModal != null) {
               $scope.detailsModal.remove();
           }
-          $ionicModal.fromTemplateUrl('templates/homeApps/baodao/'+ viewpage, {
+          $ionicModal.fromTemplateUrl('templates/homeApps/baodao/' + viewpage, {
               scope: $scope,
               animation: 'slide-in-' + direction,//left,right,up,down
           }).then(function (modal) {
@@ -371,10 +434,12 @@ AngCtrl
               $scope.detailsModal.show();
           });
       };
-      $scope.closeBaodaoFuncModal = function () {//关闭页面
+      $scope.closeWorkFuncModal = function () {//关闭页面
           $scope.detailsModal.remove();
       };
-      //报到功能modal-end===================================================================
+
+      //工作办理modal-end===================================================================
+
 
 
 
@@ -457,6 +522,28 @@ AngCtrl
       }
       //操行扣分申请撤销代码end==================================================================
 
+
+
+      //宿舍交换保存start===================================================================
+      $scope.editData = {};
+      $scope.submitDormExchangeReview = function () {
+
+          var res = $learunDataIsAll.isAll($scope.editData, ExchangeDorm.getEditDataEx());
+          if (res != null) {
+              $learunTopAlert.show({ text: res.name + "不能为空" });
+          } else {
+              $ionicLoading.show();
+              $scope.editData.iD = $scope.DormExchangeListDetails.iD;
+              $scope.editData.passedTime = new Date();
+
+              ExchangeDorm.editSubmit($scope.editData, function () {
+                  $ionicLoading.hide();
+                  $scope.detailsModal.remove();
+                  $learunTriggerRefresh.triggerRefresh('TeaDormExchangePassed-content');
+              });
+          }
+      }
+      //宿舍交换保存end==================================================================
 
 
       $learunPageModal($scope, 'templates/homeApps/baodao/');

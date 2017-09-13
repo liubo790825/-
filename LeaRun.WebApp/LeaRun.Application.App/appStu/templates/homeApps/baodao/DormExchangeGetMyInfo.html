@@ -1,0 +1,72 @@
+﻿<ion-modal-view ">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+    <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">详细信息</h1>
+    <button class="button button-clear" ng-click="openDetailsModal('DormExchangeStandard.html','up')">修改</button>
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content delegate-handle="DormExchange-content">
+
+        <ion-list class="lr-list-form">
+
+            <div class="item item-divider bgcolor_c">
+                申请交换信息
+            </div>
+            <ion-item class="lr-item-htitle">
+                <span>申请时间：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.appDatetime|date:"yyyy-MM-dd"}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>申请交换房间号：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.dormName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>申请交换床位号：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.bedName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>申请交换原因：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.appRemark}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>交换学生姓名：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.targetStuName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>交换学生班级：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.className}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>交换学生电话：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.targetStuPhone}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>交换学生是否同意：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.targetPassed}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>交换学生是否同意说明：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.targetRemark}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>交换是否通过：</span>
+                <span class="positive ng-binding">{{DormExchangeGetMyInfo.passed}}</span>
+            </ion-item>
+
+
+            <div>
+                <button class="button button-block button-positive" ng-click="openDetailsModal('DormExchangeStandard.html','up')">
+                    修改
+                </button>
+            </div>
+        </ion-list>
+
+
+        
+    </ion-content>
+</ion-modal-view>

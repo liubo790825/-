@@ -1,6 +1,6 @@
-﻿<ion-modal-view ng-init="LvseTongdaodoRefresh()">
+﻿<ion-modal-view ">
     <ion-header-bar class="bar-stable nav-title-slide-ios7">
-        <button class="button button-clear " ng-click="closeDormExchangeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+    <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
         <h1 class="title">详细信息</h1>
         <button class="button button-clear" ng-click="saveExchangeDorm()">提交</button>
     </ion-header-bar>
@@ -38,16 +38,16 @@
             </div>
             <ion-item class="item-input">
                 <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加交换理由</div>
-                <input type="text" ng-model="editData.AppRemark" ng-class="{'active' : isInputActive('AppRemark')}" />
+                <input type="text" ng-model="stuexchangedorm.appRemark" ng-class="{'active' : dormExchangeInputActive('appRemark')}" />
             </ion-item>
-
+            <div>
+                <button class="button button-block button-positive" ng-click="saveExchangeDorm()">
+                    提交
+                </button>
+            </div>
         </ion-list>
 
 
-        <div>
-            <button class="button button-block button-positive" ng-click="saveExchangeDorm()">
-                提交
-            </button>
-        </div>
+        
     </ion-content>
 </ion-modal-view>

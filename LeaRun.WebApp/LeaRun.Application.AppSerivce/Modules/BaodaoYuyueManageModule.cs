@@ -35,6 +35,7 @@ namespace LeaRun.Application.AppSerivce
         private BK_StuQSBLL stuqsBLL = new BK_StuQSBLL();
         private BK_BehaviorRecodeBLL BehaviorRecodeBll = new BK_BehaviorRecodeBLL();
         private BK_CancelAppBLL CancelAppBll = new BK_CancelAppBLL();
+        private BK_AppChangeBedBLL AppChangeBedBLL = new BK_AppChangeBedBLL();
 
 
         public BaodaoYuyueManage()
@@ -70,9 +71,13 @@ namespace LeaRun.Application.AppSerivce
             Post["/baodaoYuyueManage/TeaGetReviewStuCaoxingKoufenList"] = TeaGetReviewStuCaoxingKoufenList;//保存操行扣分审核信息
             Post["/baodaoYuyueManage/saveTeaCancelAppReview"] = saveTeaCancelAppReview;//保存教师审核操行扣分撤销申请
 
-            //工作办理记录数
+            //工作办理
             Post["/baodaoYuyueManage/TeaStuLeaveNumber"] = TeaStuLeaveNumber;//获取请假记录数
             Post["/baodaoYuyueManage/TeaCancelAppNumber"] = TeaCancelAppNumber;//获取操行撤销记录数
+            Post["/baodaoYuyueManage/TeaGetDormExchangeList"] = TeaGetDormExchangeList;//教师端获取交换申请
+            Post["/baodaoYuyueManage/TeaDormExchangeNumber"] = TeaDormExchangeNumber;//教师端获取宿舍交换申请记录数
+            Post["/baodaoYuyueManage/TeaGetDormExchangeStuInfo"] = TeaGetDormExchangeStuInfo;//宿舍交换双方学生信息
+            Post["/baodaoYuyueManage/saveTeaDormExchangeReview"] = saveTeaDormExchangeReview;// 保存教师宿舍交换审核信息
             #endregion
 
 
@@ -103,6 +108,11 @@ namespace LeaRun.Application.AppSerivce
             Post["/baodaoYuyueManage/saveReviewCancelApp"] = saveReviewCancelApp;//保存学生会撤消申请审核信息
             Post["/baodaoYuyueManage/StuCancelAppNumber"] = StuCancelAppNumber;//获取操行扣分申请撤销记录数
             Post["/baodaoYuyueManage/GetExchangeDormListAndChildList"] = GetExchangeDormListAndChildList;//交换宿舍房间与床位
+            Post["/baodaoYuyueManage/SelectOldBedId"] = SelectOldBedId;//获取原床位信息
+            Post["/baodaoYuyueManage/saveDormExchangeAppRemark"] = saveDormExchangeAppRemark;//保存宿舍交换申请信息
+            Post["/baodaoYuyueManage/SelectAppChangeBed"] = SelectAppChangeBed;//获取宿舍交换记录信息
+            Post["/baodaoYuyueManage/SelectMyDromExchagnge"] = SelectMyDromExchagnge;//查询我的宿舍交换记录信息
+            Post["/baodaoYuyueManage/StuGetMyExchangeList"] = StuGetMyExchangeList;//对我的交换申请
 
             #endregion
         }
@@ -1004,6 +1014,133 @@ Plugins插件：会生成到另外一个单独的目录
         }
 
 
+        /// <summary>
+        /// 教师端获取交换申请
+        /// </summary>
+        /// <param name="_"></param>
+        /// <returns></returns>
+        private Negotiator TeaGetDormExchangeList(dynamic _)
+        {
+            try
+            {
+                var watch = CommonHelper.TimerStart();//开始计时
+                var recdata = this.GetModule<ReceiveModule<PaginationModule>>();
+                bool resValidation = this.DataValidation(recdata.userid, recdata.token);//看是否登录
+                if (!resValidation)
+                {
+                    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                }
+                else
+                {
+                    Pagination pagination = new Pagination
+                    {
+                        page = recdata.data.page,
+                        rows = recdata.data.rows,
+                        sidx = recdata.data.sidx,
+                        sord = recdata.data.sord
+                    };
+                    var data = AppChangeBedBLL.TeaGetDormExchangeList(pagination);
+                    DataPageList<IEnumerable<M_BK_AppChangeBedEntity>> dataPageList = new DataPageList<IEnumerable<M_BK_AppChangeBedEntity>>
+                    {
+                        rows = data,
+                        total = pagination.total,
+                        page = pagination.page,
+                        records = pagination.records,
+                        costtime = CommonHelper.TimerEnd(watch)
+                    };
+                    return this.SendData<DataPageList<IEnumerable<M_BK_AppChangeBedEntity>>>(dataPageList, recdata.userid, recdata.token, ResponseType.Success);
+                }
+            }
+            catch (System.Exception e)
+            {
+                return this.SendData(ResponseType.Fail, "异常" + e.Message);
+            }
+        }
+
+
+        //教师端获取宿舍交换申请记录数
+        private Negotiator TeaDormExchangeNumber(dynamic _)
+        {
+            var watch = CommonHelper.TimerStart();//开始计时
+            var recdata = this.GetModule<ReceiveModule<QueryWhere>>();
+            try
+            {
+                bool resValidation = this.DataValidation(recdata.userid, recdata.token);
+                if (!resValidation)
+                {
+                    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                }
+                else
+                {
+                    var data = AppChangeBedBLL.TeaNumber();
+                    var q = data.ToJson().ToList<LeaRun.Application.Entity.CollegeMIS.M_BK_NumberEntity>();
+                    M_BK_NumberEntity stuEntity = q.Count >= 1 ? q[0] : new M_BK_NumberEntity();
+
+                    return this.SendData<M_BK_NumberEntity>(stuEntity, recdata.userid, recdata.token, ResponseType.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.SendData(ResponseType.Fail, ex.Message);
+            }
+        }
+
+        //宿舍交换双方学生信息
+        private Negotiator TeaGetDormExchangeStuInfo(dynamic _)
+        {
+            var watch = CommonHelper.TimerStart();//开始计时
+            var recdata = this.GetModule<ReceiveModule<QueryWhere>>();
+            try
+            {
+                bool resValidation = this.DataValidation(recdata.userid, recdata.token);
+                if (!resValidation)
+                {
+                    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                }
+                else
+                {
+                    var data = AppChangeBedBLL.DormExchangeStuInfo(recdata.data.queryData);
+                    var q = data.ToJson().ToList<LeaRun.Application.Entity.CollegeMIS.M_BK_AppChangeBedEntity>();
+                    M_BK_AppChangeBedEntity stuEntity = q.Count >= 1 ? q[0] : new M_BK_AppChangeBedEntity();
+
+                    return this.SendData<M_BK_AppChangeBedEntity>(stuEntity, recdata.userid, recdata.token, ResponseType.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.SendData(ResponseType.Fail, ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// 保存教师宿舍交换审核信息
+        /// </summary>
+        /// <param name="_"></param>
+        /// <returns></returns>
+        private Negotiator saveTeaDormExchangeReview(dynamic _)
+        {
+            try
+            {
+                //获得页面提交的数据
+                var recdata = this.GetModule<ReceiveModule<BK_AppChangeBedEntity>>();
+                bool resValidation = this.DataValidation(recdata.userid, recdata.token);
+                if (!resValidation)
+                {
+                    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                }
+                else
+                {
+                    AppChangeBedBLL.SaveForm(recdata.data.ID, recdata.data);
+                    return this.SendData(ResponseType.Success);
+                }
+            }
+            catch
+            {
+                return this.SendData(ResponseType.Fail, "异常");
+            }
+        }
+
         #endregion 教师端用
 
         #region 学生端用
@@ -1886,6 +2023,156 @@ Plugins插件：会生成到另外一个单独的目录
                 return this.SendData(ResponseType.Fail, "出现异常");
             }
 
+        }
+
+        //查询原床位号
+        private Negotiator SelectOldBedId(dynamic _)
+        {
+            var watch = CommonHelper.TimerStart();//开始计时
+            var recdata = this.GetModule<ReceiveModule<QueryWhere>>();
+            try
+            {
+                bool resValidation = this.DataValidation(recdata.userid, recdata.token);
+                if (!resValidation)
+                {
+                    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                }
+                else
+                {
+                    var data = dormBedBLL.SelectOldBedId(recdata.data.queryData);
+                    var q = data.ToJson().ToList<LeaRun.Application.Entity.CollegeMIS.BK_DormBedEntity>();
+                    BK_DormBedEntity stuEntity = q.Count >= 1 ? q[0] : new BK_DormBedEntity();
+
+                    return this.SendData<BK_DormBedEntity>(stuEntity, recdata.userid, recdata.token, ResponseType.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.SendData(ResponseType.Fail, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 保存宿舍交换申请信息
+        /// </summary>
+        /// <param name="_"></param>
+        /// <returns></returns>
+        private Negotiator saveDormExchangeAppRemark(dynamic _)
+        {
+            try
+            {
+                //获得页面提交的数据
+                var recdata = this.GetModule<ReceiveModule<BK_AppChangeBedEntity>>();
+                bool resValidation = this.DataValidation(recdata.userid, recdata.token);
+                if (!resValidation)
+                {
+                    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                }
+                else
+                {
+                    AppChangeBedBLL.SaveForm(recdata.data.ID, recdata.data);
+                    return this.SendData(ResponseType.Success);
+                }
+            }
+            catch
+            {
+                return this.SendData(ResponseType.Fail, "异常");
+            }
+        }
+
+
+        //查询宿舍交换记录信息或取已有记录id
+        private Negotiator SelectAppChangeBed(dynamic _)
+        {
+            var watch = CommonHelper.TimerStart();//开始计时
+            var recdata = this.GetModule<ReceiveModule<QueryWhere>>();
+            try
+            {
+                bool resValidation = this.DataValidation(recdata.userid, recdata.token);
+                if (!resValidation)
+                {
+                    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                }
+                else
+                {
+                    var data = AppChangeBedBLL.SelectAppChangeBed(recdata.data.queryData);
+                    var q = data.ToJson().ToList<LeaRun.Application.Entity.CollegeMIS.BK_AppChangeBedEntity>();
+                    BK_AppChangeBedEntity stuEntity = q.Count >= 1 ? q[0] : new BK_AppChangeBedEntity();
+
+                    return this.SendData<BK_AppChangeBedEntity>(stuEntity, recdata.userid, recdata.token, ResponseType.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.SendData(ResponseType.Fail, ex.Message);
+            }
+        }
+
+
+        //查询我的宿舍交换记录信息
+        private Negotiator SelectMyDromExchagnge(dynamic _)
+        {
+            var watch = CommonHelper.TimerStart();//开始计时
+            var recdata = this.GetModule<ReceiveModule<QueryWhere>>();
+            try
+            {
+                bool resValidation = this.DataValidation(recdata.userid, recdata.token);
+                if (!resValidation)
+                {
+                    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                }
+                else
+                {
+                    var data = AppChangeBedBLL.DormExchangeGetMyInfo(recdata.data.queryData);
+                    var q = data.ToJson().ToList<LeaRun.Application.Entity.CollegeMIS.M_BK_AppChangeBedEntity>();
+                    M_BK_AppChangeBedEntity stuEntity = q.Count >= 1 ? q[0] : new M_BK_AppChangeBedEntity();
+
+                    return this.SendData<M_BK_AppChangeBedEntity>(stuEntity, recdata.userid, recdata.token, ResponseType.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.SendData(ResponseType.Fail, ex.Message);
+            }
+        }
+
+        //对我的交换申请
+        private Negotiator StuGetMyExchangeList(dynamic _)
+        {
+            try
+            {
+                var watch = CommonHelper.TimerStart();
+                var recdata = this.GetModule<ReceiveModule<PaginationModule>>();
+                //bool resValidation = this.DataValidation(recdata.userid, recdata.token);
+                //if (!resValidation)
+                //{
+                //    return this.SendData(ResponseType.Fail, "后台无登录信息");
+                //}
+                //else
+                //{
+                Pagination pagination = new Pagination
+                {
+                    page = recdata.data.page,
+                    rows = recdata.data.rows,
+                    sidx = recdata.data.sidx,
+                    sord = recdata.data.sord
+                };
+                var data = AppChangeBedBLL.GetMyExchangeList(pagination, recdata.data.queryData);
+                DataPageList<IEnumerable<M_BK_AppChangeBedEntity>> dataPageList = new DataPageList<IEnumerable<M_BK_AppChangeBedEntity>>
+                {
+                    rows = data,
+                    total = pagination.total,
+                    page = pagination.page,
+                    records = pagination.records,
+                    costtime = CommonHelper.TimerEnd(watch)
+                };
+                return this.SendData<DataPageList<IEnumerable<M_BK_AppChangeBedEntity>>>(dataPageList, recdata.userid, recdata.token, ResponseType.Success);
+                //}
+            }
+            catch
+            {
+                return this.SendData(ResponseType.Fail, "出现异常");
+            }
         }
 
         #endregion 学生端用

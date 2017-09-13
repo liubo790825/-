@@ -66,6 +66,11 @@ angular.module('starter.config', [])
         StuCaoXingCheXiaoNumberApi: rootUrl + '/baodaoYuyueManage/StuCancelAppNumber',
         //宿舍交换
         dormExchangeBedListApi: rootUrl + '/baodaoYuyueManage/GetExchangeDormListAndChildList',
+        SelectOldBedIdApi: rootUrl + '/baodaoYuyueManage/SelectOldBedId',
+        SaveAppRemarkApi: rootUrl + '/baodaoYuyueManage/saveDormExchangeAppRemark',
+        AppChangeBedApi: rootUrl + '/baodaoYuyueManage/SelectAppChangeBed',
+        SelectMyDromExchagngeApi: rootUrl + '/baodaoYuyueManage/SelectMyDromExchagnge',
+        GetMyExchangeListApi: rootUrl + '/baodaoYuyueManage/StuGetMyExchangeList',
   };
   return apiUrl;
 });

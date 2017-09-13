@@ -1349,9 +1349,25 @@ AngModule//angular.module('starter.modules', [])
 
     //返回
     return {
-        editSubmit: function (editData, callback) {
+        editSubmit: function (stuexchangedorm, callback) {
             $learunHttp.post({
-                "url": ApiUrl.SaveCancelAppApi,
+                "url": ApiUrl.SaveAppRemarkApi,
+                "data": stuexchangedorm,
+                "isverify": true,
+                "success": function (data) {
+                    $learunTopAlert.show({ text: "保存成功！" });
+                },
+                "error": function () {
+                    $learunTopAlert.show({ text: "保存失败！" });
+                },
+                "finally": function () {
+                    callback();
+                }
+            });
+        },
+        editTargetPassedSubmit: function (editData, callback) {
+            $learunHttp.post({
+                "url": ApiUrl.SaveAppRemarkApi,
                 "data": editData,
                 "isverify": true,
                 "success": function (data) {
@@ -1364,6 +1380,9 @@ AngModule//angular.module('starter.modules', [])
                     callback();
                 }
             });
+        },
+        getEditDataEx: function () {
+            return editDataEx;
         }
     };
 }])

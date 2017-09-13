@@ -353,7 +353,70 @@ AngCtrl//angular.module('starter.controllers', [])
               });   
           }
 
+          if (viewpage == "DormExchangeGetMyInfo.html") {//我的宿舍交换申请记录
+              $scope.DormExchangeGetMyInfo = {};
+              var queryData = { "AppStuNo": $scope.stuinfo.stuNo };
+              $learunHttp.post({
+                  "url": ApiUrl.SelectMyDromExchagngeApi,
+                  "data": { "queryData": JSON.stringify(queryData) },
+                  "success": function (data) {
+                      $scope.DormExchangeGetMyInfo = data.result;
+                      if ($scope.DormExchangeGetMyInfo.targetPassed == "0") {
+                          $scope.DormExchangeGetMyInfo.targetPassed = "未查看"
+                      }
+                      else if ($scope.DormExchangeGetMyInfo.targetPassed == "1") {
+                          $scope.DormExchangeGetMyInfo.targetPassed = "同意"
+                      }
+                      else {
+                          $scope.DormExchangeGetMyInfo.targetPassed = "不同意"
+                      }
+                      if ($scope.DormExchangeGetMyInfo.passed == "1") {
+                          $scope.DormExchangeGetMyInfo.passed = "申请中"
+                      }
+                      else if ($scope.DormExchangeGetMyInfo.passed == "2") {
+                          $scope.DormExchangeGetMyInfo.passed = "通过"
+                      }
+                      else {
+                          $scope.DormExchangeGetMyInfo.passed = "未通过"
+                      }
+                  }
+              });
+          }
+
+
+          if (viewpage == "DormExchangeMyList.html") {//对我的交换申请
+              $scope.GetMyExchangeList = {};
+              var queryData = {"page": 1, "rows": 10, "sidx": "AppStuName", "sord": "desc" , "TargetStuNo": $scope.stuinfo.stuNo };
+              $learunHttp.post({
+                  "url": ApiUrl.GetMyExchangeListApi,
+                  "data": { "queryData": JSON.stringify(queryData)},
+                  "success": function (data) {
+                      $scope.GetMyExchangeList = data.result.rows;
+                      for (i in $scope.GetMyExchangeList) {
+                          if ($scope.GetMyExchangeList[i].passed == "2") {
+                              $scope.GetMyExchangeList[i].status = "已通过";
+                              $scope.GetMyExchangeList[i].passed = "false";
+                          }
+                          else if ($scope.GetMyExchangeList[i].passed == "1") {
+                          
+                              if ($scope.GetMyExchangeList[i].targetPassed == "0") {
+                                  $scope.GetMyExchangeList[i].status = "未处理";
+                              }
+                              else if ($scope.GetMyExchangeList[i].targetPassed == "1") {
+                                  $scope.GetMyExchangeList[i].status = "等待老师审核";
+                              }
+                          }
+                      }
+                  }
+              });
+          }
+          if (viewpage == "DormExchangeMyListDetails.html") {
+              $scope.GetMyExchangeList = obj;
+          }
           
+
+
+
 
           if ($scope.detailsModal != null) {
               $scope.detailsModal.remove();
@@ -888,6 +951,8 @@ AngCtrl//angular.module('starter.controllers', [])
                   $scope.dormexchange = data;
               }
           });
+
+
           $scope.openDormSelectModal('DormExchangeSelect.html', 'right', standard);//跳转到详细页面
       }
       $scope.ExchangeDormInfodoRefresh = function () {
@@ -897,8 +962,36 @@ AngCtrl//angular.module('starter.controllers', [])
 
       $scope.openDormExchangeDetailsModal = function (viewpage, direction, a,b){//交换申请页面信息
           if (viewpage == "DormExchangeDetails.html") {
+              $scope.OldBedId = {};
+              $scope.exchangedorminfo = {};
+              var queryData = { "StuId": $scope.stuinfo.stuInfoId };
+              $learunHttp.post({
+                  "url": ApiUrl.SelectOldBedIdApi,
+                  "data": { "queryData": JSON.stringify(queryData) },
+                  "success": function (data) {
+                      $scope.OldBedId = data;
+                      $scope.exchangedorminfo.oldBedId = $scope.OldBedId.result.bedId;
+                  }
+              });
               $scope.exchangedorminfo = a;
               $scope.exchangedorminfo.dormName = b;
+
+
+
+              var queryData = { "StuNo": $scope.stuinfo.stuNo };//查询修改
+              $learunHttp.post({
+                  "url": ApiUrl.AppChangeBedApi,
+                  "data": { "queryData": JSON.stringify(queryData) },
+                  "success": function (data) {
+                      if (data.result != undefined) {
+                      $scope.exchangedorminfo.iD = data.result.iD;
+                      $scope.exchangedorminfo.appRemark = data.result.appRemark;
+                          $scope.stuexchangedorm.appRemark = data.result.appRemark;
+                          $scope.stuexchangedorm.iD = data.result.iD;
+                      }
+                  }
+              });
+
           }
 
           if ($scope.detailsModal != null) {
@@ -915,33 +1008,37 @@ AngCtrl//angular.module('starter.controllers', [])
       $scope.closeDormExchangeDetailsModal = function () {
           $scope.detailsModal.remove();
       };
+      $scope.dormExchangeInputActive = function (name) {
+          return ($scope.exchangedorminfo[name] != null && $scope.exchangedorminfo[name] != "" && $scope.exchangedorminfo[name] != undefined);
+      };
 
 
 
 
+      $scope.stuexchangedorm = {};
       $scope.saveExchangeDorm = function () {// 保存交换申请
-          var res = $learunDataIsAll.isAll($scope.editData, ExchangeDorm.getEditDataEx());
+          var res = $learunDataIsAll.isAll($scope.stuexchangedorm, ExchangeDorm.getEditDataEx());
           if (res != null) {
               $learunTopAlert.show({ text: res.name + "不能为空" });
           } else {
               $ionicLoading.show();
-              $scope.stuexchangedorm = {};
               $scope.stuexchangedorm.appStuId = $scope.stuinfo.stuInfoId;
               $scope.stuexchangedorm.appClassId = $scope.stuinfo.classNo;
               $scope.stuexchangedorm.appStuNo = $scope.stuinfo.stuNo;
               $scope.stuexchangedorm.appStuName = $scope.stuinfo.stuName;
               $scope.stuexchangedorm.appStuPhone = $scope.stuinfo.telephone;
-              $scope.stuexchangedorm.appStuName = $scope.stuinfo.stuName;//原床位id号
+              $scope.stuexchangedorm.oldBedId = $scope.exchangedorminfo.oldBedId;//原床位id号
               $scope.stuexchangedorm.targetStuId = $scope.exchangedorminfo.stuInfoId;
               $scope.stuexchangedorm.targetClassId = $scope.exchangedorminfo.classNo;
               $scope.stuexchangedorm.targetStuNo = $scope.exchangedorminfo.stuNo;
               $scope.stuexchangedorm.targetStuName = $scope.exchangedorminfo.stuName;
               $scope.stuexchangedorm.targetStuPhone = $scope.exchangedorminfo.telephone;
-              $scope.stuexchangedorm.tewBedId = $scope.exchangedorminfo.bedId;
+              $scope.stuexchangedorm.newBedId = $scope.exchangedorminfo.bedId;
+              $scope.stuexchangedorm.targetPassed = "0";
               $scope.stuexchangedorm.passed = "1";
               $scope.stuexchangedorm.AppDatetime = new Date();
 
-              ExchangeDorm.editSubmit($scope.editData, function () {
+              ExchangeDorm.editSubmit($scope.stuexchangedorm, function () {
                   $ionicLoading.hide();
                   $scope.detailsModal.remove();
                   $learunTriggerRefresh.triggerRefresh('DormExchange-content');
@@ -949,6 +1046,24 @@ AngCtrl//angular.module('starter.controllers', [])
           }
       }
       
+      $scope.saveExchangeDormTargetPassed = function () {// 保存学生是否同意交换申请
+          var res = $learunDataIsAll.isAll($scope.editData, ExchangeDorm.getEditDataEx());
+          if (res != null) {
+              $learunTopAlert.show({ text: res.name + "不能为空" });
+          } else {
+              $ionicLoading.show();
+              $scope.editData.iD = $scope.GetMyExchangeList.iD;
+
+              ExchangeDorm.editTargetPassedSubmit($scope.editData, function () {
+                  $ionicLoading.hide();
+                  $scope.detailsModal.remove();
+                  $learunTriggerRefresh.triggerRefresh('DormExchangeTargetPassed-content');
+              });
+          }
+      }
+
+
+
      
       //床位交换end===============================================================
 

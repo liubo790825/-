@@ -238,6 +238,20 @@
     }
 
 
+    ///导入 url: "/Utility/ExcelImportForm?btnId=" + n.EnCode,
+    function btn_import() {
+        dialogOpen({
+            id: 'ExcelImportForm',
+            title: '导入学生信息',
+            url: '/Utility/ExcelImportForm?btnId=ExcelImportForm',
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+
 
 </script>
 <div class="titlePanel">
@@ -260,6 +274,7 @@
             <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
             <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
             <a id="lr-delete" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>详细</a>
+            <a id="lr-import" class="btn btn-default" onclick="btn_import()"><i class="fa fa-list-alt"></i>导入测试</a>
         </div>
         <script>$('.toolbar').authorizeButton()</script>
     </div>

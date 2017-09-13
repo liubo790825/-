@@ -1,6 +1,6 @@
 ﻿<ion-modal-view >
     <ion-header-bar class="bar-stable nav-title-slide-ios7">
-        <button class="button button-clear " ng-click="closeBaodaoFuncModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <button class="button button-clear " ng-click="closeWorkFuncModal()"><i class="icon ion-ios-arrow-left"></i></button>
         <h1 class="title">学生请假审批结果</h1>
         <!--<button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>-->
     </ion-header-bar>
@@ -17,7 +17,7 @@
 
         <div class="list mt5">
             <ion-list>
-                <ion-item ng-repeat="x in ReviewStuLeaveList" class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('qingjiaResult.html','up',x)">
+                <ion-item ng-repeat="x in ReviewStuLeaveList" class="item-icon-right lr-iconitem item" ng-click="openWorkFuncModal('qingjiaResult.html','up',x)">
                     <i class="icon ion-ios-list-outline positive-bg"></i>
                     {{x.stuName}}{{x.createDate|date:"yyyy-MM-dd"}}
                     <i class="icon ion-chevron-right icon-accessory"></i>
