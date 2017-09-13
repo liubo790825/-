@@ -1,0 +1,209 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_OrderForm.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        InitialPage();
+        //GetOrderEntryGrid();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+{ label: '序号', name: 'BedId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '宿舍ID号', name: 'DormId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '楼层ID号', name: 'DormFloorsId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '宿舍楼单元ID号', name: 'DormUnitId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '宿舍楼ID号', name: 'DormBuildingId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '床位名称', name: 'BedName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '床位编号', name: 'BedNo', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '价格', name: 'BedPrice', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '是否占用', name: 'IsDwell', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'BedOther', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'BedOther1', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'BedOther2', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'BedOther3', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'BedOther4', width: 80, align: '', sortable: false, resizable: false  },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+BedId: '<input name="BedId" type="text" class="editable center" />',
+DormId: '<input name="DormId" type="text" class="editable center" />',
+DormFloorsId: '<input name="DormFloorsId" type="text" class="editable center" />',
+DormUnitId: '<input name="DormUnitId" type="text" class="editable center" />',
+DormBuildingId: '<input name="DormBuildingId" type="text" class="editable center" />',
+BedName: '<input name="BedName" type="text" class="editable center" />',
+BedNo: '<input name="BedNo" type="text" class="editable center" />',
+BedPrice: '<input name="BedPrice" type="text" class="editable center" />',
+IsDwell: '<input name="IsDwell" type="text" class="editable center" />',
+BedOther: '<input name="BedOther" type="text" class="editable center" />',
+BedOther1: '<input name="BedOther1" type="text" class="editable center" />',
+BedOther2: '<input name="BedOther2" type="text" class="editable center" />',
+BedOther3: '<input name="BedOther3" type="text" class="editable center" />',
+BedOther4: '<input name="BedOther4" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_Dorm/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data.entity);
+                    //明细
+                    //var childEntity = data.childEntity;
+                    //$('#gridTable').find('[role=row]').each(function (i) {
+                    //    var row = childEntity[i - 1];
+                    //    if (row != undefined) {
+                    //        $(this).find('input[name="BedId"]').val(row.BedId);
+                    //        $(this).find('input[name="DormId"]').val(row.DormId);
+                    //        $(this).find('input[name="DormFloorsId"]').val(row.DormFloorsId);
+                    //        $(this).find('input[name="DormUnitId"]').val(row.DormUnitId);
+                    //        $(this).find('input[name="DormBuildingId"]').val(row.DormBuildingId);
+                    //        $(this).find('input[name="BedName"]').val(row.BedName);
+                    //        $(this).find('input[name="BedNo"]').val(row.BedNo);
+                    //        $(this).find('input[name="BedPrice"]').val(row.BedPrice);
+                    //        $(this).find('input[name="IsDwell"]').val(row.IsDwell);
+                    //        $(this).find('input[name="BedOther"]').val(row.BedOther);
+                    //        $(this).find('input[name="BedOther1"]').val(row.BedOther1);
+                    //        $(this).find('input[name="BedOther2"]').val(row.BedOther2);
+                    //        $(this).find('input[name="BedOther3"]').val(row.BedOther3);
+                    //        $(this).find('input[name="BedOther4"]').val(row.BedOther4);
+                    //    }
+                    //});
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+        //$('#gridTable').find('[role=row]').each(function (i) {
+        //    if (!!$(this).find('input[name="BedId"]').val()) {
+        //        childEntryJson.push({
+        //            BedId: $(this).find('input[name="BedId"]').val(),
+        //            DormId: $(this).find('input[name="DormId"]').val(),
+        //            DormFloorsId: $(this).find('input[name="DormFloorsId"]').val(),
+        //            DormUnitId: $(this).find('input[name="DormUnitId"]').val(),
+        //            DormBuildingId: $(this).find('input[name="DormBuildingId"]').val(),
+        //            BedName: $(this).find('input[name="BedName"]').val(),
+        //            BedNo: $(this).find('input[name="BedNo"]').val(),
+        //            BedPrice: $(this).find('input[name="BedPrice"]').val(),
+        //            IsDwell: $(this).find('input[name="IsDwell"]').val(),
+        //            BedOther: $(this).find('input[name="BedOther"]').val(),
+        //            BedOther1: $(this).find('input[name="BedOther1"]').val(),
+        //            BedOther2: $(this).find('input[name="BedOther2"]').val(),
+        //            BedOther3: $(this).find('input[name="BedOther3"]').val(),
+        //            BedOther4: $(this).find('input[name="BedOther4"]').val(),
+        //        });
+        //    }
+        //});
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_Dorm/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="height:190px;overflow-y:auto;margin:10px 10px;">
+     <table class="form" style="width: 100%;">
+         <tr>
+             <th class="formTitle" style="width: 60px;">宿舍楼</th>
+             <td class="formValue"><input id="DormBuildingId" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">单元</th>
+             <td class="formValue"><input id="DormUnitId" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">楼层</th>
+             <td class="formValue"><input id="DormFloorsId" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">宿舍名称</th>
+             <td class="formValue"><input id="DormName" type="text" class="form-control"></td>
+
+             <th class="formTitle" style="width: 60px;">宿舍编号</th>
+             <td class="formValue"><input id="DormNo" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">标准</th>
+             <td class="formValue"><input id="standard" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+
+             <th class="formTitle" style="width: 60px;">价格</th>
+             <td class="formValue"><input id="Price" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">床位总和</th>
+             <td class="formValue"><input id="Beds" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">星级</th>
+             <td class="formValue"><input id="StarLevel" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">带卫生间</th>
+             <td class="formValue"><input id="AdvancedMark" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">宿舍电话</th>
+             <td class="formValue"><input id="DormTel" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">宿舍IP地址</th>
+             <td class="formValue"><input id="DormIp" type="text" class="form-control"></td>
+         </tr>
+        
+     </table>
+ </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

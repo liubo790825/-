@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "高基312报表";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        InitialPage();
+        GetGrid();
+    })
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../CollegeMIS/TempGjTable/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                {
+                    label: '专业分类', name: 'MajorType', index: 'MajorType', width: 100, align: 'left', formatter: function () {
+                        return '&nbsp;'
+                    }
+                },
+                { label: '专业名称', name: 'MajorName', index: 'MajorName', width: 200, align: 'left', sortable: true },
+                { label: '自主专业名称', name: 'MajorName', index: 'MajorName', width: 200, align: 'left', sortable: true },
+                { label: '专业代码', name: 'MajorNo', index: 'MajorNo', width: 80, align: 'left', sortable: true },
+                {
+                    label: '是否师范专业', name: 'isTeacherMajor', index: 'isTeacherMajor', width: 30, align: 'left', formatter: function () {
+                        return '&nbsp;';
+                    }
+                },
+                { label: '年制', name: 'years', index: 'years', width: 80, align: 'left' },
+                { label: '毕业生数', name: 'outStuCount', index: 'outStuCount', width: 50, align: 'left', formatter: function () { return '';} },
+                { label: '授予学位数', name: 'xwStuCount', index: 'xwStuCount', width: 80, align: 'left' },
+                { label: '计', name: 'newStuCount', index: 'newStuCount', width: 50, align: 'left', formatter: function () { return ''; } },
+                { label: '应届毕业生', name: 'outStuCount', index: 'outStuCount', width: 50, align: 'left', formatter: function () { return ''; } },
+                {
+                    label: '春季招生', name: 'SpringStuCount', index: 'SpringStuCount', width: 50, align: 'left', formatter: function () {
+                        return '&nbsp;';
+                    }
+                },
+                {
+                    label: '预科生转入', name: 'beginStuCount', index: 'beginStuCount', width: 50, align: 'left', formatter: function () {
+                        return '&nbsp;'
+                    }
+                },
+
+                 { label: '合计', name: 'StuCountTotal', index: 'StuCountTotal', width: 50, align: 'left', formatter: function () { return ''; } },
+                 { label: '一年级', name: 'StuCount1', index: 'StuCount1', width: 50, align: 'left', formatter: function () { return ''; } },
+                 { label: '二年级', name: 'StuCount2', index: 'StuCount2', width: 50, align: 'left', formatter: function () { return ''; } },
+                 { label: '三年级', name: 'StuCount3', index: 'StuCount3', width: 50, align: 'left', formatter: function () { return ''; } },
+                 { label: '四年级', name: 'StuCount4', index: 'StuCount4', width: 50, align: 'left', formatter: function () { return ''; } },
+                 { label: '五年级', name: 'StuCount5', index: 'StuCount5', width: 50, align: 'left', formatter: function () { return ''; } },
+                { label: '预计毕业生数', name: 'StuCount3', index: 'StuCount3', width: 50, align: 'left', formatter: function () { return ''; } },
+                { label: '', name: '', index: '', width: 50, align: 'left' },
+
+            ],
+            viewrecords: true,
+            rowNum: 300,
+            rowList: [300, 500, 1000],
+            //pager: "#gridPager",
+            sortname: 'Rowid',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+
+        //表头合并
+        $gridTable.jqGrid('setGroupHeaders', {
+            useColSpanStyle: true,
+            groupHeaders: [
+              { startColumnName: 'newStuCount', numberOfColumns: 4, titleText: '招生数' },
+              { startColumnName: 'StuCountTotal', numberOfColumns: 6, titleText: '在校生数' }
+              //{ startColumnName: 'outStuCount', numberOfColumns: 3, titleText: '其中' }
+            ]
+        });
+    }
+    //打印
+    function btn_print() {
+        $("#gridPanel").printTable();
+    }
+    //导出
+    function btn_export() {
+        dialogOpen({
+            id: "ExcelIExportDialog",
+            title: '导出高基312报表',
+            url: '/Utility/ExcelExportForm?gridId=gridTable',
+            width: "500px",
+            height: "380px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }, btn: ['导出Excel', '关闭']
+        });
+    }
+</script>
+
+<div class="titlePanel">
+    <!--
+    <div class="title-search">
+
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+
+
+    </div> -->
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-print" class="btn btn-default" onclick="btn_print()"><i class="fa fa-print"></i>&nbsp;打印</a>
+            <a id="lr-export" class="btn btn-default" onclick="btn_export()"><i class="fa fa-sign-out"></i>&nbsp;导出</a>
+        </div>
+    </div>
+</div>
+
+<div class="gridPanel" id="gridPanel">
+    <div class="printArea">
+        <div class="grid-title" style="text-align:center;font-family:'黑体';font-size:x-large;">普通本科分专业学生数</div>
+        <div class="grid-subtitle">高基312</div>
+        <table id="gridTable"></table>
+        <!--<div id="gridPager"></div>-->
+    </div>
+</div>

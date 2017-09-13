@@ -1,0 +1,22 @@
+﻿<ion-view hide-nav-bar="true" view-title="课表">
+    <ion-content>
+        <ion-header-bar class="bar-stable nav-title-slide-ios7">
+            <button class="button button-clear " ng-click="closeBaodaoFuncModal()"><i class="icon ion-ios-close-empty"></i></button>
+            <h1 class="title">操行扣分与撤销</h1>
+
+        </ion-header-bar>
+        <div class="banner">
+            <img src="img/2.jpg" />
+        </div>
+        <ion-list>
+            <ion-item ng-repeat="x in ReviewStuCaoxingKoufenList" class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('TeaChakanCaoxingChexiaoShenqing.html','up',x)">
+
+                <p style="margin-top:-10px;margin-left:-35px;">
+                    <b>{{x.stuName}}</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>{{x.checkerTime|date:"yyyy-MM-dd"}}</b>
+                </p>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    
+</ion-view>
+

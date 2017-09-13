@@ -1,0 +1,29 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">通知公告</h1>
+        
+    </ion-header-bar>
+
+
+    <div class="list bulletin">
+        <div class="item item-divider" style="margin-top:34px">
+            <i class="icon ion-ios-bell-outline"></i>公告
+        </div>
+        <ion-item class="item-icon-right" type="item-text-wrap" ng-repeat="announce in announces" href="#/tab/home/{{announce.viewid}}">
+            <span>{{announce.name}}</span>
+            <i class="icon ion-ios-arrow-right icon-accessory "></i>
+        </ion-item>
+
+        <div class="item item-divider">
+            <i class="icon ion-ios-bell-outline"></i>通知
+        </div>
+        <ion-item class="item-icon-right" type="item-text-wrap" ng-repeat="announce in announces" href="#/tab/home/{{announce.viewid}}">
+            <span>{{announce.name}}</span>
+            <i class="icon ion-ios-arrow-right icon-accessory "></i>
+        </ion-item>
+    </div>
+
+
+</ion-modal-view>
+

@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>柱状图</title>
+    <!--框架必需start-->
+    <link href="../Content/Styles/Qjkjui-framework.css" rel="stylesheet" />
+    <script src="../Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="../Content/Scripts/Qjkjui-framework.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    <script src="../Content/Scripts/highcharts/highcharts.js"></script>
+    <!--第三方统计图end-->
+    <script>
+        $(function () {
+            $('#container').highcharts({
+                chart: {
+                    type: 'column',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: '专业统计表'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                        '框选放大' :
+                        '手势放大'
+                },
+                xAxis: {
+                    categories: [
+                        '2013-2014',
+                        '2014-2015',
+                        '2015-2016'
+                    ]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '专业数 (个)'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span>{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} 个</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '经济学',
+                    data: [8, 17, 8]
+
+                }, {
+                    name: '法学',
+                    data: [8, 16, 9]
+
+                }, {
+                    name: '教育学',
+                    data: [8, 15, 10]
+
+                }, {
+                    name: '文学',
+                    data: [8, 14, 11]
+
+                }, {
+                    name: '历史学',
+                    data: [8, 13, 12]
+
+                }, {
+                    name: '理学',
+                    data: [8, 12, 13]
+
+                }, {
+                    name: '工学',
+                    data: [8, 11, 14]
+
+                }, {
+                    name: '农学',
+                    data: [8, 10, 15]
+
+                }, {
+                    name: '医学',
+                    data: [8, 9, 16]
+
+                }, {
+                    name: '管理学',
+                    data: [8, 8, 17]
+
+                }]
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+</body>
+</html>

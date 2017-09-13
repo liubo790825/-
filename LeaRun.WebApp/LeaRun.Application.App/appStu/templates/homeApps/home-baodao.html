@@ -1,0 +1,183 @@
+﻿<ion-modal-view ng-controller="BaodaoCtrl">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">新生报到</h1>
+    </ion-header-bar>
+
+    <ion-content delegate-handle="Baodaolist-content">
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+                            <div class="col-40"><span class="lr-title">{{stuinfo.stuName}}</span></div>
+                            <div class="col-60">
+                                <span class="lr-title" style="text-align: right; margin-right: 15px">
+                                    <i class="icon ion-card positive"></i>
+                                    {{stuinfo.identityCardNo}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-33 lr-item-content">
+                                <img width="80px" height="100px" ng-src="{{stuinfo.headImg}}" name="StuPhoto" />
+
+                                <!--<div class="list card" style="height:100px;"></div>-->
+                            </div>
+                            
+                            <!--<div class="col-33 lr-item-content">
+                                <p>性别：<span>男</span></p>
+                                <p>民族：<span>汉族</span></p>
+                                <p>所在地：<span>北京-朝阳</span></p>
+                                <p>生日：<span>1999-3-2</span></p>
+                                <p>电话：<span>18986645554</span></p>
+                            </div>-->
+
+                            <div class="col-75 lr-item-content">
+                                <p>&nbsp;&nbsp;录取院系：<span>{{stuinfo.deptName}}</span></p>
+                                <p>&nbsp;&nbsp;录取专业：<span>{{stuinfo.majorName}}</span></p>
+                                <p>&nbsp;&nbsp;班级：<span>{{stuinfo.className}}</span></p>
+                                <p>&nbsp;&nbsp;学号：<span>{{stuinfo.stuNo}}</span></p>
+                                <p>&nbsp;&nbsp;考生号：<span>{{stuinfo.ksh}}</span></p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--<ion-option-button ng-click="doDelete(customer)">
+                        <span class="lr-trash-circled"><i class="icon ion-ios-trash-outline"></i></span>
+                    </ion-option-button>-->
+                </ion-item>
+            </ion-list>
+        </div>
+        <!--<ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>-->
+
+
+
+        <div class="list mt5">
+
+
+            <div class="item item-divider">
+                入学办理
+            </div>
+            <ion-list>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    报到预约
+                    <span class="badge badge-assertive">未办理</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+
+                <!--<ion-item class="item-icon-right lr-iconitem item" ng-click="submitSelect()">
+                    <i class="icon ion-person bgcolor_e"></i>
+                    test
+                    <span class="badge bgcolor_f">已办理</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>-->
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('JunxunfuDetails.html','up')">
+                    <i class="icon ion-person bgcolor_e"></i>
+                    军训服信息
+                    <span class="badge bgcolor_f">已办理</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('BaodaodanDetails.html','up')">
+                    <i class="icon ion-ios-list-outline bgcolor_a"></i>
+                    我的报到单
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('lvsetongdaoEdit.html','up')">
+                    <i class="icon ion-ios-arrow-right bgcolor_f"></i>
+                    绿色通道
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory  "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('TuichiBaodao.html','up')">
+                    <i class="icon ion-ios-clock-outline bgcolor_c"></i>
+                    推迟报到
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('ask.html','up')">
+                    <i class="icon ion-chatbubble-working bgcolor_g"></i>
+                    我要咨询
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDormStandardModal('DormStandard.html','up')">
+                    <i class="icon ion-ios-cart-outline bgcolor_b"></i>
+                    宿舍预订
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('Jiaofei.html','up')">
+                    <i class="icon ion-ios-paperplane-outline bgcolor_c"></i>
+                    网上缴费
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+            <div class="item item-divider">
+                认识新同学
+            </div>
+
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="document.location.href = 'tel:18983377679'">
+                    <i class="icon ion-ios-telephone assertive-bg"></i>
+                    联系辅导员
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('MyClassmates.html','up')">
+                    <i class="icon ion-ios-people-outline calm-bg"></i>
+                    我的同学
+                    <span class="badge badge-assertive">30</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('MyRoommates.html','up')">
+                    <i class="icon ion-person-stalker bgcolor_c"></i>
+                    我的室友
+                    <span class="badge badge-assertive">4</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+
+            <div class="item item-divider">
+                入学指南
+            </div>
+
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('RuxueXuzhi.html','up')">
+                    <i class="icon ion-alert assertive-bg"></i>
+                    入学须知
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('TongzhiGonggaoList.html','up')">
+                    <i class="icon ion-ios-bell-outline bgcolor_b"></i>
+                    通知公告
+                    <span class="badge badge-assertive">6</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('Luxian.html','up')">
+                    <i class="icon ion-ios-location bgcolor_g"></i>
+                    到校路线
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+
+
+        </div>
+
+
+
+
+
+    </ion-content>
+    <!--<div class="lr-plug-btn">
+        <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+    </div>-->
+
+
+
+</ion-modal-view>

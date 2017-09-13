@@ -1,0 +1,103 @@
+﻿<ion-modal-view ng-controller="BaodaoYueyueCtrl">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <!--调用HomeCtrl里的closeCommDetailsModal（）-->
+        <button class="button button-clear " ng-click="closeCommDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">{{yuyue.stuName}}接站信息</h1>
+        <div class="buttons">
+            <!--<button class="button button-clear" ng-click="openEditModal('baodaoEdit.html','right',detailsData)"><i class="icon ion-ios-compose-outline"></i></button>-->
+        </div>
+    </ion-header-bar>
+
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content delegate-handle="baodaoDetailHandle-content">
+
+        <!--<div class="list mt5" style="background-color:white">-->
+        <ion-list>
+
+            <!--<div class="item item-divider bgcolor_b">
+                报到预约信息
+            </div>-->
+
+
+
+
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>姓名</span>
+                </div>
+                <span>{{yuyue.stuName}}</span>
+            </ion-item>
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    到校方式
+                </div>
+                <span>{{yuyue.arrivalMode}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    到校时间
+                </div>
+                <span>{{yuyue.arrivalDate|date:"yyyy-MM-dd"}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    到站名称
+                </div>
+                <span>{{yuyue.arrivalPosition}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    随同人数
+                </div>
+                <span>{{yuyue.number}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    紧急联系人
+                </div>
+                <span>{{yuyue.parentsName}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    联系电话
+                </div>
+                <span>{{yuyue.telephone}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    备用电话
+                </div>
+                <span>{{yuyue.spareTelephone}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    附言
+                </div>
+                <span>{{yuyue.massage}}</span>
+            </ion-item>
+
+
+
+        </ion-list>
+
+        <div>
+            <!--调用HomeCtrl里的closeCommDetailsModal（）-->
+            <button class="button button-block button-positive" ng-click="closeCommDetailsModal()">
+                关闭
+            </button>
+        </div>
+        <!--</div>-->
+
+    </ion-content>
+
+
+</ion-modal-view>
+
+

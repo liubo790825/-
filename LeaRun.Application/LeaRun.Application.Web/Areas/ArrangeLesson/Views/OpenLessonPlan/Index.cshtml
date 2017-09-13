@@ -1,0 +1,214 @@
+@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 108.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 108.5,
+            url: "../../ArrangeLesson/OpenLessonPlan/GetListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'ID', name: 'PlanId', index: 'PlanId', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '学年', name: 'Xuenian', index: 'Xuenian', width: 90, align: 'left', sortable: true },
+                { label: '学期', name: 'Xueqi', index: 'Xueqi', width: 40, align: 'left', sortable: true },
+                { label: '学院', name: 'College', index: 'College', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '专业', name: 'MajorName', index: 'MajorName', width: 100, align: 'left', sortable: true },
+                { label: '第几学期', name: 'Semester', index: 'Semester', width: 60, align: 'left', sortable: true },
+                { label: '年级', name: 'Grade', index: 'Grade', width: 40, align: 'left',sortable: true  },
+                { label: '课程号', name: 'LessonNo', index: 'LessonNo', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '班级号', name: 'ClassNo', index: 'ClassNo', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '教师号', name: 'TeacherCode', index: 'TeacherCode', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '周课时', name: 'WeekHours', index: 'WeekHours', width: 60, align: 'left',sortable: true  },
+                { label: '单双周', name: 'DanShuangZhou', index: 'DanShuangZhou', width: 60, align: 'left',sortable: true  },
+                { label: '授课地点', name: 'DefaultPlace', index: 'DefaultPlace', width: 100, align: 'left',sortable: true  },
+                { label: '学生数', name: 'StuNum', index: 'StuNum', width: 60, align: 'left',sortable: true  },
+                { label: '合班号', name: 'HeBanHao', index: 'HeBanHao', width: 60, align: 'left',sortable: true  },
+                { label: '课程名称', name: 'LessonName', index: 'LessonName', width: 100, align: 'left',sortable: true  },
+                { label: '上课单位', name: 'DeptName', index: 'DeptName', width: 100, align: 'left',sortable: true  },
+                { label: '班级名称', name: 'ClassName', index: 'ClassName', width: 100, align: 'left',sortable: true  },
+                { label: '教师名称', name: 'TeacherName', index: 'TeacherName', width: 100, align: 'left',sortable: true  },
+                { label: '课程类型', name: 'LessonType', index: 'LessonType', width: 100, align: 'left',sortable: true  },
+                { label: '学分', name: 'Credits', index: 'Credits', width: 60, align: 'left',sortable: true  },
+                { label: '理论学时', name: 'TheoryHours', index: 'TheoryHours', width: 100, align: 'left',sortable: true  },
+                { label: '实践学时', name: 'PracticeHours', index: 'PracticeHours', width: 60, align: 'left',sortable: true  },
+                { label: '教学方式', name: 'TeachingType', index: 'TeachingType', width: 100, align: 'left',sortable: true  },
+                { label: '场地类型', name: 'PlaceType', index: 'PlaceType', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '校区', name: 'Campus', index: 'Campus', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '连上节数', name: 'ContinueLessons', index: 'ContinueLessons', width: 60, align: 'left',sortable: true  },
+                { label: '属性', name: 'Priority', index: 'Priority', width: 100, align: 'left',sortable: true  },
+                { label: '教室名', name: 'PlaceName', index: 'PlaceName', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '教室号', name: 'PlaceNo', index: 'PlaceNo', width: 100, align: 'left',sortable: true ,hidden: true },
+                
+                { label: '状态', name: 'Status', index: 'Status', width: 60, align: 'left',sortable: true  },
+                { label: '已排课时', name: 'ArrangedHours', index: 'ArrangedHours', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '剩余课时', name: 'LeftHours', index: 'LeftHours', width: 100, align: 'left', sortable: true, hidden: true },
+                
+                { label: '状态', name: 'OpMark', index: 'OpMark', width: 100, align: 'left', sortable: true, hidden: true },//标识删除
+                { label: '是否合班', name: 'IsHeban', index: 'IsHeban', width: 100, align: 'left',sortable: true ,hidden: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'PlanId',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加OpenLessonPlan',
+            url: '/ArrangeLesson/OpenLessonPlan/Form',
+            width: '700px',
+            height: '500px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'PlanId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑OpenLessonPlan',
+                url: '/ArrangeLesson/OpenLessonPlan/Form?keyValue=' + keyValue,
+                width: '700px',
+                height: '500px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'PlanId');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../ArrangeLesson/OpenLessonPlan/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的OpenLessonPlan！', 0);
+        }
+    }
+    //详细
+    function btn_detail() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'PlanId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Detail',
+                title: 'OpenLessonPlan',
+                url: '/ArrangeLesson/OpenLessonPlan/Form?keyValue=' + keyValue,
+                width: '700px',
+                height: '500px',
+                btn:null
+                });
+        }
+    }
+    //* 根据需要启用
+    //导出
+    function btn_export() {
+        dialogOpen({
+        id: 'ExcelIExportDialog',
+        title: '导出OpenLessonPlan数据',
+        url: '/Utility/ExcelExportForm?gridId=gridTable&filename=OpenLessonPlan',
+        width: '700px',
+        height: '500px',
+        callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }, btn: ['导出Excel', '关闭']
+            })
+    }
+    //查询条件
+    $("#queryCondition .dropdown-menu li").click(function() {
+        var text = $(this).find('a').html();
+        var value = $(this).find('a').attr('data-value');
+        $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+     });
+    //查询事件
+    $("#btn_Search").click(function() {
+        var queryJson = {
+             condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+             keyword: $("#txt_Keyword").val()
+        }
+        $gridTable.jqGrid('setGridParam', {
+             postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+        }).trigger('reloadGrid');
+     });
+    //查询回车
+    $('#txt_Keyword').bind('keypress', function (event) {
+        if (event.keyCode == "13") {
+             $('#btn_Search').trigger("click");
+        }
+     });
+    //打印
+    function btn_print(){
+        $("#gridPanel").printTable();
+     }
+    //根据需要启用*/
+</script>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+            <!--参考例子在此做灵活的查询-->                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a id="lr-print" class="btn btn-default" onclick="btn_print()"><i class="fa fa-print"></i>&nbsp;打印</a>
+            <a id="lr-export" class="btn btn-default" onclick="btn_export()"><i class="fa fa-sign-out"></i>&nbsp;导出</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

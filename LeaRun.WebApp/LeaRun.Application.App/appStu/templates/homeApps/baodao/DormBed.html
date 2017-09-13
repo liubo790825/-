@@ -1,0 +1,94 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">选择房间和床位</h1>
+        
+    </ion-header-bar>
+
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+    
+    
+
+    <ion-content delegate-handle="sushelist-content">
+        <ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>
+        <ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>
+
+
+        <div class="item item-divider bgcolor_d">
+            重要说明
+        </div>
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;margin-bottom:10px">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+
+                            <div class="col-99">
+                                <div class="col-99 item-note">
+                                    <p>
+                                        缴费完成后学生可以在8月12日后进行网上选择宿舍，根据您缴纳的住宿费和学工处宿管科安排的范围进行选择床位，床位选择完后学生报道时可以直接到楼栋管理处领取入住钥匙和房间内的公用物品。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+
+        <div class="item item-divider">
+            <h3 align="center" ;style="color:green;font-weight:700;">选择房间和床位</h3>
+        </div>
+
+        <div class="item item-divider">
+            楼栋
+        </div>
+        <a class="item">沁雅楼（01）幢A座</a>
+        <div class="item item-divider">
+            房间（剩余床位数/总位数）
+        </div>
+        <a class="item">306：4/4</a>
+        <div class="list card" style="height:100px;">
+            <img ng-src="{{imgSrc}}" name="AssistImageName" />
+        </div>
+        <div class="item item-divider">
+            床位号：1
+        </div>
+        <a class="item">姓名：<button class="button button-positive">选择</button></a>
+        <a class="item">专业：</a>
+        <a class="item">生源地：</a>
+        <div class="item item-divider">
+            床位号：2
+        </div>
+        <a class="item">姓名：<button class="button button-positive">选择</button></a>
+        <a class="item">专业：</a>
+        <a class="item">生源地：</a>
+        <div class="item item-divider">
+            床位号：3
+        </div>
+        <a class="item">姓名：<button class="button button-positive">选择</button></a>
+        <a class="item">专业：</a>
+        <a class="item">生源地：</a>
+        <div class="item item-divider">
+            床位号：4
+        </div>
+        <a class="item">姓名：<button class="button button-positive">选择</button></a>
+        <a class="item">专业：</a>
+        <a class="item">生源地：</a>
+        <div>
+            <button class="button button-block button-positive">
+                刷新
+            </button>
+        </div>
+        <span>如果没有住宿标准可以选择，请8月14号后在登录系统进行选择并缴费。宿舍类型选择后请及时缴费，没有交费将在......</span>
+
+    </ion-content>
+
+
+</ion-modal-view>
+

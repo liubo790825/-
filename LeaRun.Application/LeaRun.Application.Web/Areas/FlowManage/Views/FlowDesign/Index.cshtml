@@ -1,0 +1,275 @@
+﻿@{
+    ViewBag.Title = "流程设计管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel">
+            <div class="panel-Title">流程类别</div>
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="center-Panel">
+            <div class="panel-Title">流程管理</div>
+            <div class="titlePanel">
+                <div class="title-search">
+                    <table>
+                        <tr>
+                            <td>
+                                <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                            </td>
+                            <td style="padding-left: 5px;">
+                                <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="toolbar">
+                    <div class="btn-group">
+                        <a id="lr-replace" class="btn btn-default" onclick="learun.reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+                        <a id="lr-add" class="btn btn-default" onclick="$.indexJs.btn.add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+                        <a id="lr-edit" class="btn btn-default" onclick="$.indexJs.btn.edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+                        <a id="lr-delete" class="btn btn-default" onclick="$.indexJs.btn.deleteBtn()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+                        <a id="lr-more" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-reorder"></i>&nbsp;更多<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu pull-right" aria-labelledby="lr-more">
+                            <li id="lr-preview"><a onclick="$.indexJs.btn.preview()"><i></i>&nbsp;预览流程</a></li>
+                            <li id="lr-disabled"><a onclick="$.indexJs.btn.disabled()"><i></i>&nbsp;停用流程</a></li>
+                            <li id="lr-enabled"><a onclick="$.indexJs.btn.enabled()"><i></i>&nbsp;启用流程</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="gridPanel">
+                <table id="gridTable"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    (function ($) {
+        "use strict";
+        $.indexJs = {
+            initialPage: function () {//初始化页面
+                //layout布局
+                $('#layout').layout({
+                    applyDemoStyles: true,
+                    onresize: function () {
+                        $(window).resize()
+                    }
+                });
+                //resize重设(表格、树形)宽高
+                $(window).resize(function (e) {
+                    window.setTimeout(function () {
+                        $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                        $("#gridTable").setGridHeight($(window).height() - 169.5);
+                        $("#itemTree").setTreeHeight($(window).height() - 52);
+                    }, 200);
+                    e.stopPropagation();
+                });
+            },
+            loadLeftTree: function () {//加载左侧树
+                var item = {
+                    height: $(window).height() - 52,
+                    param: { EnCode: "FlowSort" },
+                    url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+                    onnodeclick: function (item) {
+                        var queryJson = { SchemeType: item.id };
+                        searchGrid(queryJson);
+                    }
+                };
+                //初始化
+                $("#itemTree").treeview(item);
+            },
+            loadGrid: function () {//加载表格
+                var selectedRowIndex = 0;
+                $("#gridTable").jqGrid({
+                    url: "../../FlowManage/FlowDesign/GetPageListJson",
+                    datatype: "json",
+                    height: $(window).height() - 169.5,
+                    autowidth: true,
+                    colModel: [
+                        { label: '主键', name: 'id', hidden: true },
+                        { label: '流程编号', name: 'schemecode', index: 'schemecode', width: 100, align: 'left' },
+                        { label: '流程名称', name: 'schemename', index: 'schemename', width: 150, align: 'left' },
+                        { label: '分类', name: 'schemetypename', index: 'schemetypename', width: 80, align: 'left' },
+                        { label: '状态Id', name: 'enabledmark', index: 'enabledmark', hidden: true },
+                        {
+                            label: "状态", name: "enabledmarklabel", index: "enabledmarklabel", width: 50, align: "center",
+                            formatter: function (cellvalue, options, rowObject) {
+                                if (rowObject.enabledmark == 1) {
+                                    return '<span  class=\"label label-success\">启用</span>';
+                                } else if (rowObject.enabledmark == 0) {
+                                    return '<span  class=\"label label-danger\">停用</span>';
+                                } else {
+                                    return '<span  class=\"label label-info\">草稿</span>';
+                                }
+                            }
+                        },
+                        {
+                            label: "权限类型", name: "authorizetype", index: "authorizetype", width: 70, align: "center",
+                            formatter: function (cellvalue, options, rowObject) {
+                                if (cellvalue == 0) {
+                                    return '<span  class=\"label label-primary\">所有成员</span>';
+                                } else {
+                                    return '<span  class=\"label label-warning\">指定成员</span>';
+                                }
+                            }
+                        },
+                        { label: "最近编辑用户", name: "modifyusername", index: "modifyusername", width: 90, align: "left" },
+                        {
+                            label: "最近编辑时间", name: "modifydate", index: "modifydate", width: 150, align: "left",
+                            formatter: function (cellvalue, options, rowObject) {
+                                return formatDate(cellvalue, 'yyyy-MM-dd hh:mm:ss');
+                            }
+                        },
+                        { label: "创建用户", name: "createusername", index: "createusername", width: 80, align: "left" },
+                        {
+                            label: "创建时间", name: "createdate", index: "createdate", width: 150, align: "left",
+                            formatter: function (cellvalue, options, rowObject) {
+                                return formatDate(cellvalue, 'yyyy-MM-dd hh:mm:ss');
+                            }
+                        },
+                        { label: "备注", name: "description", index: "description", width: 200, align: "left" }
+                    ],
+                    viewrecords: true,
+                    rowNum: 30,
+                    rowList: [30, 50, 100],
+                    pager: "#gridPager",
+                    sortname: 'CreateDate desc',
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    gridview: true,
+                    onSelectRow: function () {
+                        selectedRowIndex = $("#" + this.id).getGridParam('selrow');
+                    },
+                    gridComplete: function () {
+                        $("#" + this.id).setSelection(selectedRowIndex, false);
+                    }
+                });
+                //查询事件
+                $("#btn_Search").click(function () {
+                    var queryJson = { Keyword: $("#txt_Keyword").val() };
+                    searchGrid(queryJson);
+                });
+
+            },
+            btn: {
+                add: function () {
+                    learun.dialogOpen({
+                        id: "FlowSchemeDesigner",
+                        title: '流程创建',
+                        url: '/FlowManage/FlowDesign/FlowSchemeDesigner',
+                        width: "1100px",
+                        height: "700px",
+                        btn: null,
+                        callBack: function (iframeId) {
+                            top.frames[iframeId].AcceptClick();
+                        }
+                    });
+                },
+                edit: function () {//编辑
+                    var keyValue = $("#gridTable").jqGridRowValue("id");
+                    if (learun.checkedRow(keyValue)) {
+                        learun.dialogOpen({
+                            id: "FlowSchemeDesigner",
+                            title: '修改流程',
+                            url: '/FlowManage/FlowDesign/FlowSchemeDesigner?keyValue=' + keyValue,
+                            width: "1100px",
+                            height: "700px",
+                            btn: null,
+                            callBack: function (iframeId) {
+                                top.frames[iframeId].AcceptClick();
+                            }
+                        });
+                    }
+                },
+                deleteBtn: function () {//删除
+                    var keyValue = $("#gridTable").jqGridRowValue("id");
+                    if (keyValue) {
+                        learun.removeForm({
+                            url: "../../FlowManage/FlowDesign/RemoveForm",
+                            param: { keyValue: keyValue },
+                            success: function (data) {
+                                $("#gridTable").trigger("reloadGrid");
+                            }
+                        });
+                    } else {
+                        learun.dialogMsg({ msg: '请选择需要删除的流程！', type: 0 });
+                    }
+                },
+                disabled: function () {//禁用
+                    var keyValue = $("#gridTable").jqGridRowValue("id");
+                    var enabledmark = $("#gridTable").jqGridRowValue("enabledmark");
+                    if (keyValue) {
+                        if (enabledmark == 3) {
+                            learun.dialogMsg({ msg: '草稿不能被禁用！', type: 0 });
+                            return;
+                        }
+                        learun.confirmAjax({
+                            msg: "请确认是否要【禁用】流程？",
+                            url: "../../FlowManage/FlowDesign/SubmitUpdateState",
+                            param: { keyValue: keyValue, State: 0 },
+                            success: function (data) {
+                                $("#gridTable").trigger("reloadGrid");
+                            }
+                        });
+                    } else {
+                        learun.dialogMsg({ msg: '请选择要禁用的流程！', type: 0 });
+                    }
+                },
+                enabled: function () {//启用
+                    var keyValue = $("#gridTable").jqGridRowValue("id");
+                    var enabledmark = $("#gridTable").jqGridRowValue("enabledmark");
+                    if (keyValue) {
+                        if (enabledmark == 3) {
+                            learun.dialogMsg({ msg: '草稿不能被启用！', type: 0 });
+                            return;
+                        }
+                        learun.confirmAjax({
+                            msg: "请确认是否要【启用】流程？",
+                            url: "../../FlowManage/FlowDesign/SubmitUpdateState",
+                            param: { keyValue: keyValue, State: 1 },
+                            success: function (data) {
+                                $("#gridTable").trigger("reloadGrid");
+                            }
+                        });
+                    } else {
+                        learun.dialogMsg({ msg: '请选择要启用的流程！', type: 0 });
+                    }
+                },
+                preview: function () {//预览当前版本
+                    var schemeInfoId = $("#gridTable").jqGridRowValue("id");
+                    var schemeName = $("#gridTable").jqGridRowValue("schemename");
+                    if (!!schemeInfoId) {
+                        top.tablist.newTab({ id: schemeInfoId, title: '流程预览【' + schemeName + '】', isNoLog: true, closed: true, icon: "fa fa fa-eye", url: top.contentPath + '/FlowManage/FlowDesign/FlowPreviewIndex?schemeInfoId=' + schemeInfoId });
+                    }
+                    else {
+                        learun.dialogMsg({ msg: '请选择需要预览的流程！', type: 0 });
+                    }
+                }
+            }
+        };
+
+        $(function () {
+            $.indexJs.initialPage();
+            $.indexJs.loadLeftTree();
+            $.indexJs.loadGrid();
+        });
+
+
+        //查询函数
+        function searchGrid(queryJson) {
+            $("#gridTable").jqGrid('setGridParam', {
+                url: "../../FlowManage/FlowDesign/GetPageListJson",
+                postData: { queryJson: JSON.stringify(queryJson) },
+            }).trigger('reloadGrid');
+        }
+    })(window.jQuery);
+</script>
+

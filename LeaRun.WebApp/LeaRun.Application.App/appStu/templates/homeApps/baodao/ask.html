@@ -1,0 +1,74 @@
+﻿<ion-modal-view ng-init="MyQuestiondoRefresh()">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">我要咨询</h1>
+
+    </ion-header-bar>
+
+
+    <ion-content delegate-handle="MyQuestionHandle">
+        <div class="list mt5" style="background-color:white">
+
+            <ion-refresher pulling-text="下拉刷新" on-refresh="MyQuestiondoRefresh()"></ion-refresher>
+            <ion-list style="border-width: 0px">
+                <ion-item ng-repeat="question in MyQuestionData.businesss">
+
+
+                    <div class="item item-divider">
+                        <b>我：{{question.qtime|date:"yyyy-MM-dd"}}</b><br />{{question.questions}}
+                    </div>
+                </ion-item>
+            </ion-list>
+
+
+            
+
+            <ion-list style="border-width: 0px">
+                <div class="item item-divider">
+                    回复信息
+                </div>
+                <ion-item ng-repeat="data in answer.result.rows">
+
+                    <item-content>
+                        <div class="list list-inset lr-list-type2 " style="margin-top:0px;">
+                            <div class="row">
+                                <div class="col-99">
+                                    <p>
+                                        <b>{{data.atime|date:"yyyy-MM-dd"}}:</b><br />{{data.answer}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </item-content>
+
+                </ion-item>
+            </ion-list>
+
+
+            <ion-infinite-scroll ng-if="data.moredata" on-infinite="MyQuestiondoLoadMore()" distance="1%"></ion-infinite-scroll>
+
+
+        </div>
+
+        <ion-list class="lr-list-form">
+            <div class="item item-divider">
+                咨询问题
+            </div>
+            <ion-item class="item-input">
+                <!--<div class="lr-form-input"></div>-->
+                <input type="text" ng-model="Question.questions" ng-class="{'active' : isInputActive('questions')}" />
+            </ion-item>
+
+        </ion-list>
+        <div>
+            <button class="button button-block button-positive" ng-click="submitMyQuestion()">
+                提交
+            </button>
+        </div>
+
+
+    </ion-content>
+
+
+</ion-modal-view>
+

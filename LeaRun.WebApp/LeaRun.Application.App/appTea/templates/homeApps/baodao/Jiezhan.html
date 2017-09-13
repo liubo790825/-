@@ -1,0 +1,64 @@
+﻿<ion-modal-view ng-controller="BaodaoYueyueCtrl">
+  <ion-header-bar class="bar-stable nav-title-slide-ios7">
+      <button class="button button-clear " ng-click="closeBaodaoFuncModal()"><i class="icon ion-ios-arrow-left"></i></button>
+    <h1 class="title">学生接站管理</h1>
+    <button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>
+  </ion-header-bar>
+  <div class="bar bar-subheader lr-subheader">
+      <div class="lr-left-tool">
+          <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}条</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+      </div>
+      <div class="lr-right-tool">
+          <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+          <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+      </div>
+  </div>
+  <ion-content delegate-handle="yystudentslist-content">
+      <ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>
+      <div class="list  list-inset lr-list-type2" style="margin-top:40px;">
+          <ion-list>
+              <!--调用HomeCtrl里的openCommDetailsModal（）-->
+
+              <!--http://ionicons.com/ icon-->
+
+              <ion-item ng-repeat="yystudents in data.yuyueStudents" class="item-remove-animate mt10" ng-click="openCommDetailsModal('JiezhanstuDetails.html','up',yystudents)">
+                  <div class="row">
+                      <div class="col-40"><span class="lr-title">{{yystudents.stuName}}</span></div>
+                      <div class="col-60"><span class="lr-title" style="text-align:right;">{{yystudents.arrivalDate|date:"yyyy-MM-dd hh:mm"}}到站</span></div>
+                  </div>
+                  <div class="row">
+                      <div class="col-10"><!--<div class="lr-label">{{yystudents.baodaoStatus}}</div>-->
+                          <div class="col-35 lr-item-content">
+                              <img src="{{yystudents.headImg}}" />
+                              <!--<img width="60px" height="80px" ng-src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497333818987&di=08cba5c5ea76376c42695f6df558bc9f&imgtype=0&src=http%3A%2F%2Fproc.iifs.ifeng.com%2Fblog%2F2016%2F03%2F05%2Fl6KhypeTaqR5aIy0xrGfnty50ZLSg5GHsqWdn2VrbphmameWamyQwm2XZ5aX3mRmlJLCZJWPYZLBo6eX.jpg" name="StuPhoto" />-->
+
+                              <!--<div class="list card" style="height:100px;"></div>-->
+                          </div>
+                      
+                      </div>
+                      <div class="col-40 lr-item-content">
+                          <p><i class="icon ion-ios-people positive"></i><span>{{yystudents.number}}人同行</span></p>
+
+                      <p><i class="icon ion-android-bus positive"></i><span>{{yystudents.arrivalPosition}}</span></p>
+                          <!--ion-android-boat ion-android-train ion-android-bus ion-android-car-->
+                      <p><i class="icon ion-social-pinterest positive"></i><span>{{yystudents.arrivalMode}}</span></p></div>
+                      <div class="col-50 lr-item-content">
+                      
+                      <p><i class="icon ion-android-call royal"></i><span>{{yystudents.telephone}}</span></p>
+                      <p><i class="icon ion-android-call energized"></i><span>{{yystudents.spareTelephone}}</span></p>
+                          <p><i class="icon ion-ios-chatbubble-outline positive"></i><span>{{yystudents.massage}}</span></p>
+                      </div>
+                  </div>
+
+                 
+
+                  <ion-option-button ng-click="doDelete(yystudents)"><span class="lr-trash-circled"><i class="icon ion-ios-trash-outline"></i></span></ion-option-button>
+              </ion-item>
+          </ion-list>
+      </div>
+      <ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>
+  </ion-content>
+  <!--<div class="lr-plug-btn">
+      <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+  </div>-->
+</ion-modal-view>

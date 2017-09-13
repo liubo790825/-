@@ -1,0 +1,57 @@
+﻿<ion-modal-view >
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear" ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">{{stuinfo.stuName}}</h1>
+    </ion-header-bar>
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right mt5 lr-headimgitem" type="item-text-wrap">
+                <img ng-src="{{stuinfo.headImg}}" style="left:auto;right:30px;" />
+                <span>头像</span>
+                <i class="icon ion-chevron-right icon-accessory">{{stuinfo.headImg}}</i>
+            </ion-item>
+            <div class="P13">
+                <ion-item type="item-text-wrap">
+                    <span>账号</span>
+                    <span class="item-note">{{stuinfo.identityCardNo}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>姓名</span>
+                    <span class="item-note">{{stuinfo.stuName}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>性别</span>
+                    <span class="item-note">{{stuinfo.gender}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>院系</span>
+                    <span class="item-note">{{stuinfo.deptName}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>专业</span>
+                    <span class="item-note">{{stuinfo.majorName}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>班级</span>
+                    <span class="item-note">{{stuinfo.className}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>籍贯</span>
+                    <span class="item-note">{{stuinfo.regionNo}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>出生日期</span>
+                    <span class="item-note">{{stuinfo.birthday}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>年级</span>
+                    <span class="item-note">{{stuinfo.grade}}</span>
+                </ion-item>
+                <ion-item type="item-text-wrap">
+                    <span>学号</span>
+                    <span class="item-note">{{stuinfo.stuNo}}</span>
+                </ion-item>
+                <div>
+        </ion-list>
+    </ion-content>
+    </>

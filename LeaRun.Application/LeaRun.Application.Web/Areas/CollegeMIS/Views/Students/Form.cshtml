@@ -1,0 +1,173 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/Students/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../CollegeMIS/Students/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">学号</td>
+            <td class="formValue">
+                <input id="StuNo" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">姓名</td>
+            <td class="formValue">
+                <input id="StuName" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">院系</td>
+            <td class="formValue">
+                <input id="DeptName" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">专业</td>
+            <td class="formValue">
+                <input id="MajorName" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">年级</td>
+            <td class="formValue">
+                <input id="Grade" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">生日</td>
+            <td class="formValue">
+                <input id="Birthday" type="text" class="form-control input-datepicker" isvalid="yes" checkexpession="NotNull"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">民族</td>
+            <td class="formValue">
+                <input id="Nationality" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">政治面貌</td>
+            <td class="formValue">
+                <input id="PartyFace" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">省份</td>
+            <td class="formValue">
+                <input id="ProvinceName" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">毕业中学</td>
+            <td class="formValue">
+                <input id="HighSchoolName" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">入校时间</td>
+            <td class="formValue">
+                <input id="EntranceDate" type="text" class="form-control input-datepicker" />
+            </td>
+            <td class="formTitle">身份证号</td>
+            <td class="formValue">
+                <input id="IdentityCardNo" type="text" class="form-control" isvalid="yes" checkexpession="IDCard" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">校内住址</td>
+            <td class="formValue">
+                <input id="InSchoolAddress" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">电话</td>
+            <td class="formValue">
+                <input id="mobile" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">父姓名</td>
+            <td class="formValue">
+                <input id="FatherName" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">父单位</td>
+            <td class="formValue">
+                <input id="FatherUnit" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">父电话</td>
+            <td class="formValue">
+                <input id="FatherPhone" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">母姓名</td>
+            <td class="formValue">
+                <input id="MatherName" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">母单位</td>
+            <td class="formValue">
+                <input id="MatherUnit" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">母电话</td>
+            <td class="formValue">
+                <input id="MatherPhone" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">性别</td>
+            <td class="formValue">
+                <input id="Gender" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">班级名称</td>
+            <td class="formValue">
+                <input id="ClassName" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">学制</td>
+            <td class="formValue">
+                <input id="LengthOfSchooling" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">专业方向名称</td>
+            <td class="formValue">
+                <input id="MajorDetailName" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">政府专业名</td>
+            <td class="formValue">
+                <input id="GovMajorName" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">Photo</td>
+            <td class="formValue">
+                <input id="Photo" type="text" class="form-control"  />
+            </td>
+        </tr>
+       
+    </table>
+</div>

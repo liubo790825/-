@@ -1,0 +1,376 @@
+@{;
+    ViewBag.Title = "打印通知书首页";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<script src="~/Content/scripts/plugins/Lodop/LodopFuncs.js"></script>
+
+
+<script>    
+    var LODOP; //声明为全局变量
+
+
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+
+    var subgrid_table_id;
+    var secrow;
+    //根据ID号返回数据字典的名称
+    function GetName(itemdetailid)
+    {
+        var getitemdata;
+        $.ajax({
+            url: "/ClientData/GetDataItemModel",
+            data: { ItemDetailId: itemdetailid },
+            type: "post",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                getitemdata = data;
+            }
+        });
+        if (getitemdata==null) {
+            return "";
+        }
+        return getitemdata.ItemName;
+    }
+
+
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 146.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 146.5,
+            url: "../../CollegeMIS/BK_StuInfo/GetPageListJson",
+            postData: { queryJson: '{"NewStuReport":"0"}' },
+            datatype: "json",
+            colModel: [
+                { label: 'stuInfoId', name: 'stuInfoId', index: 'stuInfoId', width: 80, align: '', sortable: true, hidden: true },
+                { label: '照片', name: 'HeadImg', index: 'HeadImg', width: 50, align: 'center',
+                    formatter: function (cellvalue, options, rowObject)
+                    {
+                        if (cellvalue!=null && cellvalue!="" ) {
+                            return '<img src="' + cellvalue + '" alt="头像" style="width:40px;height:40px;" />';
+                        }
+                        return "";
+                    }
+                },
+                  { label: '姓名', name: 'StuName', index: 'StuName', width: 80, align: '' },
+                   { label: '通知书号', name: 'NoticeNo', index: 'NoticeNo', width: 150, align: '' },
+                   {
+                       label: '院系', name: 'DeptNo', index: 'DeptNo', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                           return top.bk_deptlist[cellvalue] == null ? "" : top.bk_deptlist[cellvalue].FullName;
+                       }
+                   },
+                {
+                    label: '专业', name: 'MajorNo', index: 'MajorNo', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                        return top.bk_majorlist[cellvalue] == null ? "" : top.bk_majorlist[cellvalue].FullName;
+                    }
+                },
+
+                 { label: '身份证号', name: 'IdentityCardNo', index: 'IdentityCardNo', width: 180, align: '' },
+                 // { label: '性别', name: 'Gender', index: 'Gender', width: 30, align: '', sortable: true },
+                  /*{
+                      label: '出生日期', name: 'Birthday', index: 'Birthday', width: 90, align: '',
+                      formatter: function (cellvalue, options, rowObject) {
+                          return formatDate(cellvalue, 'yyyy-MM-dd');
+                      }
+                  },*/
+                  { label: '学号', name: 'StuNo', index: 'StuNo', width: 150, align: '', sortable: true },
+               
+                //{ label: '考生号', name: 'ksh', index: 'ksh', width: 150, align: ''  },
+               // { label: '准考证号', name: 'zkzh', index: 'zkzh', width: 150, align: ''  },               
+                
+                //{ label: '专业方向号（如0，1，2，3，4，5）   0代表无专业方向细分', name: 'MajorDetailNok', index: 'MajorDetailNok', width: 80, align: ''  },
+                //{ label: '专业方向名', name: 'MajorDetailName', index: 'MajorDetailName', width: 80, align: ''  },                
+                //{ label: '政治面貌', name: 'PartyFaceNo', index: 'PartyFaceNo', width: 80, align: ''  },
+                //{ label: '家庭出身', name: 'FamilyOriginNo', index: 'FamilyOriginNo', width: 80, align: ''  },
+                {
+                    label: '民族', name: 'NationalityNo', index: 'NationalityNo', width: 80, align: '',
+                    formatter: GetName                    
+                },
+                //{ label: '户口类别', name: 'ResidenceNo', index: 'ResidenceNo', width: 80, align: '', formatter: GetName },
+                //{ label: '考生类别', name: 'TestStuSortNo', index: 'TestStuSortNo', width: 80, align: ''  },
+                //{ label: '健康状况', name: 'HealthStatusNo', index: 'HealthStatusNo', width: 80, align: ''  },
+                //{ label: '第几志愿', name: 'WillNo', index: 'WillNo', width: 80, align: ''  },
+                //{ label: '考生科类', name: 'TestStuSubjectNo', index: 'TestStuSubjectNo', width: 80, align: ''  },
+                { label: '本专科', name: 'GraduateNo', index: 'GraduateNo', width: 50, align: ''  },
+                //{ label: '计划形式', name: 'PlanFormNo', index: 'PlanFormNo', width: 80, align: ''  },
+                //{ label: '录取类别', name: 'MatriculateSort', index: 'MatriculateSort', width: 80, align: ''  },
+                //{ label: '原中学', name: 'HighSchoolNo', index: 'HighSchoolNo', width: 80, align: ''  },
+                //{ label: '籍贯', name: 'RegionNo', index: 'RegionNo', width: 80, align: ''  },
+                //{ label: '备注', name: 'Remark', index: 'Remark', width: 80, align: '' },
+                { label: '招生年度', name: 'RecruitYearDate', index: 'RecruitYearDate', width: 80, align: '' },
+                //{ label: 'ClassNo', name: 'ClassNo', index: 'ClassNo', width: 80, align: ''  },                
+               // { label: '原中学', name: 'HighSchoolName', index: 'HighSchoolName', width: 80, align: '' },
+              
+               // { label: '档案号', name: 'ArchivesNo', index: 'ArchivesNo', width: 80, align: ''  },
+                { label: '电话', name: 'telephone', index: 'telephone', width: 120, align: ''  },
+                /*{
+                    label: '生源地', name: 'StuFromProvince', index: 'StuFromProvince', width: 280,  sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var prv = top.clientareaItem[cellvalue] == null ? "" : top.clientareaItem[cellvalue].FullName;//省
+                        var ct = top.clientareaItem[rowObject.StuFromCity] == null ? "" : top.clientareaItem[rowObject.StuFromCity].FullName;//市
+                        var dt = top.clientareaItem[rowObject.StuFromDestrict] == null ? "" : top.clientareaItem[rowObject.StuFromDestrict].FullName;//区
+                        return prv+ct+dt;
+                    }
+                },
+               
+                {
+                    label: '详细通讯地址（父母居住地为主）', name: 'FamliyProvince', index: 'FamliyProvince', width: 280, align: '', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var prv = top.clientareaItem[cellvalue] == null ? "" : top.clientareaItem[cellvalue].FullName;//省
+                        var ct = top.clientareaItem[rowObject.FamliyCity] == null ? "" : top.clientareaItem[rowObject.FamliyCity].FullName;//市
+                        var dt = top.clientareaItem[rowObject.FamliyDistrict] == null ? "" : top.clientareaItem[rowObject.FamliyDistrict].FullName;//区
+                        return prv + ct + dt + rowObject.FamilyAddress;
+                    }
+                },*/
+               
+               // { label: '是否报到注册', name: 'RegisterStatus', index: 'RegisterStatus', width: 80, align: ''  },               
+                //{ label: '邮政编码', name: 'PostalCode', index: 'PostalCode', width: 80, align: ''  },
+                //{ label: '归档', name: 'TransMark', index: 'TransMark', width: 80, align: '', sortable: true },                
+                //{ label: '家庭总人数', name: 'FamliyPeoples', index: 'FamliyPeoples', width: 80, align: ''  },
+                //{ label: '家长联系电话手机', name: 'ParentPhone', index: 'ParentPhone', width: 180, align: ''  },
+                //{ label: '家长联系电话座机', name: 'ParentTel', index: 'ParentTel', width: 180, align: ''  },              
+                { label: '打印次数', name: 'PrintNotice', index: 'PrintNotice', width: 50, align: '' },
+                { label: '最后打印时间', name: 'LastPrintTime', index: 'LastPrintTime', width: 150, align: '' },
+                 { label: '最后打印者', name: 'WhoPrint', index: 'WhoPrint', width: 80, align: '' },
+                  {
+                      label: '通知书快递', name: '通知书快递', index: '通知书快递', width: 90, align: 'center', formatter: function (celvalue, options, rowObj) {
+                          return '<a  class="btn btn-info" onclick="expInfo(\'' + rowObj.stuInfoId + '\')" ><i class="fa fa-envelope-o"></i>&nbsp;&nbsp;快递</a>';
+                      }
+                  },
+
+
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'StuName',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            multiselect: true,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+
+        //查询条件
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value);
+            if (value == "StuNo" || value == "StuName") {
+                var keyword = $('#txt_Keyword')
+                $('#txt_Keyword').hide();
+            }
+            else {
+                $('#txt_Keyword').show();
+            }
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = {
+                condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                keyword: $("#txt_Keyword").val()
+            }
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+
+    }
+   
+    function expInfo(stuid)
+    {
+        dialogOpen({
+            id: 'Form',
+            title: '学生通知书快递信息',
+            url: '/CollegeMIS/BK_ExpressInfo/Form?stuid='+stuid,
+            width: '500px',
+            height: '450px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+
+
+    //打开打印学生通知单的页面
+    function btn_print() {
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);
+            //if (row.DistributeBeds > 0) {//
+            rowIds.push(row.stuInfoId);
+            //}
+        }
+        if (rowIds.length == 0) {
+            dialogMsg('请选择需要打印通知书的学生！', 0);
+            return false;
+        }
+        dialogOpen({
+            id: "Form",
+            title: '打印学生通知书',
+            url: '/CollegeMIS/BK_StuInfo/PrintForm?stuids=' + rowIds,
+            width: "1000px",
+            height: "800px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+
+    //打印通知书
+    function MyPreview() {
+        LODOP = getLodop();
+        LODOP.PRINT_INITA(0, 0, 972, 688, "打印学生录取通知书");
+        CreatePages();
+        LODOP.PREVIEW();
+    };
+
+    //打开打印设置界面
+    function prn_Design() {
+        CreatePages();
+        LODOP.PRINT_DESIGN();
+    };
+
+    ///打印学生通知书
+    function CreatePages() {
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);
+            rowIds.push(row.stuInfoId);
+        }
+        if (rowIds.length == 0) {
+            dialogMsg('请选择需要打印通知书的学生！', 0);
+            return false;
+        }
+
+        var dt = new Date();
+        var locapath = window.location.host;
+
+
+        $.SetForm({
+            url: "/CollegeMIS/BK_StuInfo/GetStuInfoListByStuIds",
+            param: { stuids: rowIds.toString() },
+            success: function (data) {
+                if (data.length>0) {
+                    for (i = 0; i < data.length; i++) {
+                        LODOP.NewPage();
+                        LODOP.SET_PRINT_PAGESIZE(2, 0, 0, "B5(JIS)");
+                        if (data[i].NoticeNo != "") {
+                            LODOP.ADD_PRINT_BARCODE("20.64mm", "21.43mm", "81.23mm", "12.44mm", "128A", data[i].NoticeNo);//如果通知书号
+                        }
+                        else {
+                            LODOP.ADD_PRINT_BARCODE("20.64mm", "21.43mm", "81.23mm", "12.44mm", "128A", data[i].IdentityCardNo);
+                        }                       
+                        LODOP.SET_PRINT_STYLE("FontSize", 36);
+                        LODOP.SET_PRINT_STYLE("FontName", "楷体");   
+                        LODOP.ADD_PRINT_TEXT("42.6mm", "90.49mm", "68.26mm", "14.02mm", "录取通知书");//增加纯文本项
+                        LODOP.SET_PRINT_STYLE("FontSize", 16);
+                        LODOP.ADD_PRINT_TEXT("65.62mm", "23.81mm", "123.03mm", "10.58mm", data[i].StuName + "同学（准考证号:" + data[i].ksh + "）");
+                        LODOP.ADD_PRINT_TEXT("86.25mm", "22.75mm", "230mm", "21.43mm", "    通过全国普通高等学校入学考试，你已被新疆农业大学科学技术学院"
+                            + top.bk_deptlist[data[i].DeptNo].FullName + top.bk_majorlist[data[i].MajorNo].FullName + "专业录取，请于"
+                            + dt.getFullYear() + "年9月13日到" +
+                            dt.getFullYear() + "年9月14日间，到该院办理入学手续。");
+
+                        LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
+                        // LODOP.ADD_PRINT_IMAGE(430, 685, 153, 153, "<img border='0' width='150px' heigth='150px' src='http://" + locapath + "/Content/images/sign.png' />");//公章
+                        LODOP.ADD_PRINT_IMAGE(430, 685, 153, 153, "<img border='0'  src='http://" + locapath + "/Content/images/sign.gif' />");//公章
+                        LODOP.ADD_PRINT_TEXT("121.18mm", "164.31mm", "75.41mm", "10.58mm", "新疆农业大学科学技术学院");
+                        LODOP.ADD_PRINT_TEXT("138.64mm", "177.8mm", "48.15mm", "10.58mm", dt.getFullYear() + "年" + dt.getMonth() + "月" + dt.getDay() + "日");
+                       
+                        
+                        if (LODOP.CVERSION) {
+                            LODOP.On_Return = function (TaskID, Value) {
+                                console.log("LODOP.On_Return_" + i + ":" + Value + "_" + TaskID);
+                            };
+                        } else {
+                            
+                        }
+                    }
+                }
+
+            }
+        });
+
+    };
+
+
+</script>
+<object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+    <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+</object>
+
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <div id="queryCondition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="StuNo">学号</a></li>
+                            <li><a data-value="StuName">姓名</a></li>
+                            <li><a data-value="DeptName">院系</a></li>
+                            <li><a data-value="MajorName">专业</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div>
+
+                    </div>
+
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+            <a id="lr-print" class="btn btn-default" onclick="MyPreview()"><i class="fa fa-print"></i>打印</a>
+            <a id="lr-setprint" class="btn btn-default" onclick="prn_Design()"><i class="fa fa-cog"></i>打印设置</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

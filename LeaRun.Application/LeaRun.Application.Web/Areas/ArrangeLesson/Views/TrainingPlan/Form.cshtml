@@ -1,0 +1,113 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../ArrangeLesson/TrainingPlan/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../ArrangeLesson/TrainingPlan/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">方案编号</td>
+            <td class="formValue">
+                <input id="TrainingPlanCode" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">方案名称</td>
+            <td class="formValue">
+                <input id="TrainingPlanName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">介绍</td>
+            <td class="formValue" colspan='3'>
+                <textarea id="TrainingPlanIntro" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">学院</td>
+            <td class="formValue">
+                <input id="College" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">专业</td>
+            <td class="formValue">
+                <input id="Major" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">第几学期</td>
+            <td class="formValue">
+                <input id="Semester" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">课程号</td>
+            <td class="formValue">
+                <input id="LessonNo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">课程名</td>
+            <td class="formValue">
+                <input id="LessonName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">课程类型</td>
+            <td class="formValue">
+                <input id="LessonType" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">考核方式</td>
+            <td class="formValue">
+                <input id="TestType" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">理论学时</td>
+            <td class="formValue">
+                <input id="TheoryHours" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">实践学时</td>
+            <td class="formValue">
+                <input id="PracticeHourse" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">总学时</td>
+            <td class="formValue">
+                <input id="TotalHours" type="text" class="form-control" isvalid="yes" checkexpession="Num" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">学分</td>
+            <td class="formValue">
+                <input id="Xuefen" type="text" class="form-control" isvalid="yes" checkexpession="Num" />
+            
+    </table>
+</div>

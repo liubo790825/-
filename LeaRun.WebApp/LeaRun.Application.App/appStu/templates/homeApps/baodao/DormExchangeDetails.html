@@ -1,0 +1,53 @@
+﻿<ion-modal-view ng-init="LvseTongdaodoRefresh()">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDormExchangeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">详细信息</h1>
+        <button class="button button-clear" ng-click="saveExchangeDorm()">提交</button>
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content delegate-handle="DormExchange-content">
+
+        <ion-list class="lr-list-form">
+
+            <div class="item item-divider bgcolor_c">
+                床位信息
+            </div>
+            <ion-item class="lr-item-htitle">
+                <span>房间号：</span>
+                <span class="positive ng-binding">{{exchangedorminfo.dormName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>床位号：</span>
+                <span class="positive ng-binding">{{exchangedorminfo.bedName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>学生姓名：</span>
+                <span class="positive ng-binding">{{exchangedorminfo.stuName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>联系电话：</span>
+                <span class="positive ng-binding">{{exchangedorminfo.telephone}}</span>
+            </ion-item>
+            <div class="item item-divider">
+                申请交换理由<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加交换理由</div>
+                <input type="text" ng-model="editData.AppRemark" ng-class="{'active' : isInputActive('AppRemark')}" />
+            </ion-item>
+
+        </ion-list>
+
+
+        <div>
+            <button class="button button-block button-positive" ng-click="saveExchangeDorm()">
+                提交
+            </button>
+        </div>
+    </ion-content>
+</ion-modal-view>

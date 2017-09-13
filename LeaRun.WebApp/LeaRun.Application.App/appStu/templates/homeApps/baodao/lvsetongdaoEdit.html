@@ -1,0 +1,247 @@
+﻿<ion-modal-view ng-init="LvseTongdaodoRefresh()">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">绿色通道</h1>
+        <button class="button button-clear" ng-click="submitLvseTongdao()">提交</button>
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content delegate-handle="LvseTongdaoInfo-content">
+
+
+        <div class="item item-divider bgcolor_d">
+            重要说明
+        </div>
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;margin-bottom:10px">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+
+                            <div class="col-99">
+                                <div class="col-99 item-note">
+                                    <p>
+                                        如果办理了助学贷款，可进入绿色通道上传助学贷款信息，学工处会在1-2天内审核提交的信息；审核通过后才可以缴费，否则贷款金额不能作为入学减免学费使用。审核通过后，学生来校时需带贷款证明文件的原件到学校盖章，否则银行无法放款。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+
+        <ion-list class="lr-list-form">
+
+
+
+            <div class="item item-divider bgcolor_c">
+                基本信息
+            </div>
+            <ion-item class="lr-item-htitle">
+                <span>学生姓名：</span>
+                <span class="positive ng-binding">{{stuinfo.stuName}}</span>
+            </ion-item>
+
+
+
+
+            <div class="item item-divider">
+                户口类别<span>*</span>
+            </div>
+            <ion-item ng-click="openHujiLeibieSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.hujiLeibie != null"><i class="icon ion-ios-drag"></i>选择户口类别</div>
+                <div class="item-icon-right" ng-hide="editData.hujiLeibie == null">
+                    <div class="lr-form-label royal-bg">{{editData.hujiLeibie}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+
+            </ion-item>
+
+            <div class="item item-divider">
+                家庭类型<span>*</span>
+            </div>
+            <ion-item ng-click="openFamilyTypeSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.familyType != null"><i class="icon ion-ios-drag"></i>选择家庭类型</div>
+                <div class="item-icon-right" ng-hide="editData.familyType == null">
+                    <div class="lr-form-label royal-bg">{{editData.familyType}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+
+            </ion-item>
+
+            <div class="item item-divider bgcolor_c">
+                家庭主要成员的社会关系
+            </div>
+            <div class="item item-divider">
+                姓名1<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加姓名</div>
+                <input type="text" ng-model="editData.name1" ng-class="{'active' : isInputActive('name1')}" />
+            </ion-item>
+            <div class="item item-divider">
+                关系1<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加关系</div>
+                <input type="text" ng-model="editData.relationship1" ng-class="{'active' : isInputActive('relationship1')}" />
+            </ion-item>
+            <div class="item item-divider">
+                政治面貌1<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加政治面貌</div>
+                <input type="text" ng-model="editData.zhengZhiMianMao1" ng-class="{'active' : isInputActive('zhengZhiMianMao1')}" />
+            </ion-item>
+            <div class="item item-divider">
+                工作单位1<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加工作单位</div>
+                <input type="text" ng-model="editData.gongZuoDanWei1" ng-class="{'active' : isInputActive('gongZuoDanWei1')}" />
+            </ion-item>
+            <div class="item item-divider">
+                职位1<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加职位</div>
+                <input type="text" ng-model="editData.position1" ng-class="{'active' : isInputActive('position1')}" />
+            </ion-item>
+            <div class="item item-divider">
+                姓名2<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加姓名</div>
+                <input type="text" ng-model="editData.name2" ng-class="{'active' : isInputActive('name2')}" />
+            </ion-item>
+            <div class="item item-divider">
+                关系2<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加关系</div>
+                <input type="text" ng-model="editData.relationship2" ng-class="{'active' : isInputActive('relationship2')}" />
+            </ion-item>
+            <div class="item item-divider">
+                政治面貌2<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加政治面貌</div>
+                <input type="text" ng-model="editData.zhengZhiMianMao2" ng-class="{'active' : isInputActive('zhengZhiMianMao2')}" />
+            </ion-item>
+            <div class="item item-divider">
+                工作单位2<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加工作单位</div>
+                <input type="text" ng-model="editData.gongZuoDanWei2" ng-class="{'active' : isInputActive('gongZuoDanWei2')}" />
+            </ion-item>
+            <div class="item item-divider">
+                职位2<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加职位</div>
+                <input type="text" ng-model="editData.position2" ng-class="{'active' : isInputActive('position2')}" />
+            </ion-item>
+
+            <div class="item item-divider bgcolor_c">
+                家庭情况
+            </div>
+            <div class="item item-divider">
+                家庭总人口<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加家庭总人口</div>
+                <input type="text" ng-model="editData.familyNumber" ng-class="{'active' : isInputActive('familyNumber')}" />
+            </ion-item>
+            <div class="item item-divider">
+                家庭月收入<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加家庭月收入</div>
+                <input type="text" ng-model="editData.familyMonthIncome" ng-class="{'active' : isInputActive('familyMonthIncome')}" />
+            </ion-item>
+            <div class="item item-divider">
+                人均月收入<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加人均月收入</div>
+                <input type="text" ng-model="editData.oneMonthIncome" ng-class="{'active' : isInputActive('oneMonthIncome')}" />
+            </ion-item>
+
+            <div class="item item-divider">
+                家庭经济困难情况具体说明<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加困难情况说明</div>
+                <input type="text" ng-model="editData.jingjiKunnan" ng-class="{'active' : isInputActive('jingjiKunnan')}" />
+            </ion-item>
+
+
+            <div class="item item-divider bgcolor_c">
+                请填写生源地贷款信息
+            </div>
+            <div class="item item-divider">
+                生源地贷款银行<span>*</span>
+            </div>
+            <ion-item ng-click="openLoanBankSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.loanBank != null"><i class="icon ion-ios-drag"></i>选择贷款银行</div>
+                <div class="item-icon-right" ng-hide="editData.loanBank == null">
+                    <div class="lr-form-label royal-bg">{{editData.loanBank}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+
+            </ion-item>
+            <div class="item item-divider">
+                贷款金额<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加贷款金额</div>
+                <input type="text" ng-model="editData.loanAmount" ng-class="{'active' : isInputActive('loanAmount')}" />
+            </ion-item>
+
+
+
+            <div class="item item-divider">
+                回执单或证明函件图片<span>*</span>
+            </div>
+            <div class="list card" style="height:300px;">
+                <img ng-src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497779293979&di=db1fd925c7796e0929d548bdf2e85b9c&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fexp%2Fw%3D500%2Fsign%3D5683f1bca786c91708035239f93c70c6%2F962bd40735fae6cdb8c0be250fb30f2442a70f79.jpg" name="AssistImageName" />
+            </div>
+            <button class="button button-block button-royal" ng-click="pickImage()">
+                选择文件
+            </button>
+
+            <div class="item item-divider">
+                国开行回执校验码<span>*</span>
+            </div>
+            <ion-item ng-click="openDegreeSelectModal()">
+                <div class="lr-form-input" ng-hide="editData.huiZhiMa != null"><i class="icon ion-ios-drag"></i>添加回执校验码</div>
+                <input type="text" ng-model="editData.huiZhiMa" ng-class="{'active' : isInputActive('huiZhiMa')}" />
+
+                <div class="item-icon-right" ng-hide="editData.huiZhiMa == null">
+                    <div class="lr-form-label balanced-bg">{{editData.huiZhiMa}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+            </ion-item>
+
+        </ion-list>
+
+
+        <div>
+            <button class="button button-block button-positive" ng-click="submitLvseTongdao()">
+                提交
+            </button>
+        </div>
+        <div>
+            <button class="button button-block button-positive" ng-click="openDetailsModal('DormStandard.html','right',detailsData)">
+                没有办理，去选择住宿费标准
+            </button>
+        </div>
+    </ion-content>
+</ion-modal-view>

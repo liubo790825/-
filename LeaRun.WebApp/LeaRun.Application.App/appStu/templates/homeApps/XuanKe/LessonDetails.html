@@ -1,0 +1,100 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">XX课程详情</h1>
+        <div class="buttons">
+            <p style="margin-top:5px; color:white;">确定</p>
+            <!--<button class="button button-clear" ng-click="openEditModal(detailsData)"><i class="icon ion-ios-compose-outline"></i></button>
+            <button class="button button-clear" style="margin-left:5px;" ng-click="doDelete(detailsData)"><i class="icon ion-ios-trash-outline"></i></button>-->
+        </div>
+    </ion-header-bar>
+    <ion-content delegate-handle="businessDetailHandle">
+        <ion-list>
+            <!--<ion-item style="color: rgba(0, 0, 0, 0.5);font-size: 12px;padding: 2px 10px;">
+                <div><span class="balanced">{{detailsData.createUserName}}</span> 创建于 {{detailsData.createDate}}</div>
+                <div ng-hide="!detailsData.modifyUserName"><span class="balanced">{{detailsData.modifyUserName}}</span> 修改于 {{detailsData.modifyDate}}</div>
+            </ion-item>-->
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>课程名</span>
+                </div>
+                <span>语文</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>课程号</span>
+                </div>
+                <span>10001</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>学分</span>
+                </div>
+                <span>2</span>
+            </ion-item>
+            <!--<ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>学生类别</span>
+                </div>
+                <span class="lr-label positive-bg">{{detailsData.chanceTypeId}}</span>
+            </ion-item>-->
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>教学班</span>
+                </div>
+                <span class="lr-label royal-bg">01班</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>上机课时</span>
+                </div>
+                <span class="lr-label royal-bg">0</span>
+            </ion-item>
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>理论课时</span>
+                </div>
+                <span class ="lr-label royal-bg">4</spanclass>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>分类详细</span>
+                </div>
+                <span>素质基础课</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>系所部门</span>
+                </div>
+                <span>计算机系</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>专业</span>
+                </div>
+                <span>软件编程</span>
+            </ion-item>
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>分类名</span>
+                </div>
+                <span>选修</span>
+            </ion-item>
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>上课时间</span>
+                </div>
+                <span>上课时间：周二1、2和周四3、4</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>备注</span>
+                </div>
+                <span><!--{{detailsData.description}}--></span>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-modal-view>

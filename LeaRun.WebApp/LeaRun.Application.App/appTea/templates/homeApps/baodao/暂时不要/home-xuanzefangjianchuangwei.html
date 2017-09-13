@@ -1,0 +1,64 @@
+﻿<ion-header-bar class="bar-stable nav-title-slide-ios7">
+    <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+    <h1 class="title">选择房间和床位</h1>
+    <!--<button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>-->
+</ion-header-bar>
+    
+    <ion-content delegate-handle="customerlist-content">
+        <!--<ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>-->
+     
+        <!--<ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>-->
+
+        <div class="item item-divider">
+            <h3 align="center";style="color:green;font-weight:700;">选择房间和床位</h3>
+        </div>
+
+        <div class="item item-divider">
+            楼栋
+        </div>
+        <a class="item">沁雅楼（01）幢A座</a>
+        <div class="item item-divider">
+            房间（剩余床位数/总位数）
+        </div>
+        <a class="item">306：4/4</a>
+        <div class="list card" style="height:100px;">
+            <img ng-src="{{imgSrc}}" name="AssistImageName" />
+        </div>
+        <div class="item item-divider">
+            床位号：1
+        </div>
+        <a class="item">姓名：<button class="button button-positive">选择</button></a>
+        <a class="item">专业：</a>
+        <a class="item">生源地：</a>
+        <div class="item item-divider">
+            床位号：2
+        </div>
+        <a class="item">姓名：<button class="button button-positive">选择</button></a>
+        <a class="item">专业：</a>
+        <a class="item">生源地：</a>
+        <div class="item item-divider">
+            床位号：3
+        </div>
+        <a class="item">姓名：<button class="button button-positive">选择</button></a>
+        <a class="item">专业：</a>
+        <a class="item">生源地：</a>
+        <div class="item item-divider">
+            床位号：4
+        </div>
+        <a class="item">姓名：<button class="button button-positive">选择</button></a>
+        <a class="item">专业：</a>
+        <a class="item">生源地：</a>
+        <div>
+            <button class="button button-block button-positive">
+                刷新
+            </button>
+        </div>
+        <span>如果没有住宿标准可以选择，请8月14号后在登录系统进行选择并缴费。宿舍类型选择后请及时缴费，没有交费将在......</span>
+
+</ion-content>
+    <!--<div class="lr-plug-btn">
+        <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+    </div>-->
+
+
+

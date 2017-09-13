@@ -1,0 +1,94 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">选择宿舍标准</h1>
+        
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content>
+
+        
+        <div class="item item-divider bgcolor_d">
+            说明
+        </div>
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;margin-bottom:10px">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+
+                            <div class="col-99">
+                                <div class="col-99 item-note">
+                                    <p>
+                                        请自主选择宿舍类型，每个房间都标配了空调和热水器。学校根据同一专业相对集中居住的原则进行宿舍的安排，部分专业只有一种宿舍标准可以选择。选好宿舍标准后需及时缴纳全额费用，否则24小时之后选择的标准将失效。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+
+
+        <div class="item item-divider bgcolor_c">
+            选择宿舍标准
+        </div>
+    <ion-list>
+        <ion-radio ng-model="standard" ng-value="800">标准一：&nbsp;&nbsp;四人间(余{{$scope.left}})&nbsp;&nbsp;¥800</ion-radio>
+        <ion-radio ng-model="standard" ng-value="500">标准二：&nbsp;&nbsp;六人间(余{{$scope.DormStandard.left6}})&nbsp;&nbsp;¥500</ion-radio>
+    </ion-list>
+    <!--div class="item item-divider">
+        第一项
+    </div>
+    <a class="item">类别：四人间</a>
+    <a class="item">收费标准：1680</a>
+    <a class="item">剩余数量：32个</a>
+    <div class="item item-divider">
+        第二项
+    </div>
+    <a class="item">类别：六人间</a>
+    <a class="item">收费标准：1480</a>
+    <a class="item">剩余数量：12个</a>
+    <div class="item item-divider">
+        项目名称
+        <p>应缴金额：<span style="font-size:24px;color:red">¥{{standard}}</span></p>
+
+    </div>-->
+
+        <div ng-switch="standard" style="margin:10px">
+            <div ng-switch-when="800">
+                <!--<p>已选四人间</p>-->
+                <p>应缴金额：<span style="font-size:24px;color:red">¥800</span></p>
+            </div>
+            <div ng-switch-when="500">
+                <!--<p>已选六人间</p>-->
+                <p>应缴金额：<span style="font-size:24px;color:red">¥500</span></p>
+            </div>
+            <!--<div ng-switch-when="biaozhun3">
+            <h1>-</h1>
+            <p>应缴金额：1480</p>
+        </div>-->
+        </div>
+
+    <!--<a class="item">应缴金额：1480</a>
+    <a class="item">实缴金额：0</a>-->
+
+        <div>
+            <button class="button button-block button-positive" ng-click="submitDormExchangeStandard(standard)">
+                下一步
+            </button>
+        </div>
+
+
+    </ion-content>
+
+
+</ion-modal-view>
+

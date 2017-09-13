@@ -1,0 +1,295 @@
+﻿@{
+    ViewBag.Title = "生成学号规则页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+
+    $(function () {
+        $(".sys_spec_text li").addClass("active");
+        $(".sys_spec_text li").click(function () {
+            if (!!$(this).hasClass("active")) {
+                $(this).removeClass("active");
+            } else {
+                $(this).addClass("active").siblings("li");
+            }
+        });
+
+        $("#secyear").ComboBox({
+            id: "ItemValue",
+            text: "ItemName",
+            data: [{ "ItemValue": "4", "ItemName": "4位数" }, { "ItemValue": "2", "ItemName": "后2位数" }]
+        });
+        $('#useyear').click(function () {
+            if ($(this).prop("checked")) {
+                $('#ur').show();
+                $('#secyear').show();
+                $("#secyear").removeAttr("disabled");
+            }
+            else {
+                $('#ur').hide();
+                $('#secyear').hide();
+                $("#secyear").attr("disabled", "disabled");
+            }
+        })
+
+
+        //学号前置,
+        $('#chfrant').click(function () {//.prop("checked"
+            if ($(this).prop("checked")) {
+                $('#frantno').show();
+                $('#frantno').attr("isvalid", "yes").attr("checkexpession", "NotNull").removeAttr("disabled");
+            }
+            else {
+                $('#frantno').hide();
+                $('#frantno').removeAttr("isvalid").removeAttr("checkexpession").attr("disabled", "disabled");
+            }
+        });
+
+        //院系号及位数
+        $('#chkdeptno').click(function () {
+            if ($(this).prop("checked")) {
+                $('#deptnocount').show();
+                $('#deptnocount').attr("isvalid", "yes").attr("checkexpession", "NotNull").removeAttr("disabled");;
+            }
+            else {
+                $('#deptnocount').hide();
+                $('#deptnocount').removeAttr("isvalid").removeAttr("checkexpession").attr("disabled", "disabled");
+            }
+        });
+        //专业号及位数
+        $('#majorno').click(function () {
+            if ($(this).prop("checked")) {
+                $('#majornocount').show();
+                $('#majornocount').attr("isvalid", "yes").attr("checkexpession", "NotNull").removeAttr("disabled");;
+            }
+            else {
+                $('#majornocount').hide();
+                $('#majornocount').removeAttr("isvalid").removeAttr("checkexpession").attr("disabled", "disabled");
+            }
+        });
+
+        //班级号及位数
+        $('#chkclsno').click(function () {
+            if ($(this).prop("checked")) {
+                $('#clsnocount').show();
+                $('#clsnocount').attr("isvalid", "yes").attr("checkexpession", "NotNull").removeAttr("disabled");;
+            }
+            else {
+                $('#clsnocount').hide();
+                $('#clsnocount').removeAttr("isvalid").removeAttr("checkexpession").attr("disabled", "disabled");
+            }
+        });
+
+    });
+
+    function showexample() {
+        $('.ts').empty();
+        var dt = new Date();
+        var showexa = "";
+        var snolength = 0;
+
+        if ($('#chfrant').prop("checked")) {//学号前值
+            showexa += $.trim($('#frantno').val());
+            snolength += $.trim($('#frantno').val()).length;
+        }
+
+        if ($('#useyear').prop("checked")) {//使用年份
+            var dtyear = dt.getFullYear().toString();
+            var chkyear = $("#secyear").attr('data-value');// 得到年的值
+            if (chkyear=="4") {
+                showexa += dtyear;
+                snolength += 4;
+            }
+            if (chkyear == "2") {
+                showexa += dtyear.substr(2, 2);//只要后两位就可以了
+                snolength += 2;
+            }
+        }
+
+        if ($('#chkdeptno').prop("checked")) {//使用院系号
+            var deptcount = $.trim($('#deptnocount').val());
+            if (!isNaN(deptcount)) {
+                for (i = 0; i < Number(deptcount) ; i++) {
+                    showexa += i;
+                    snolength += 1;
+                }
+            }
+        }
+
+        if ($('#majorno').prop("checked")) {//使用专业号
+            var deptcount = $.trim($('#majornocount').val());
+            if (deptcount!="" && !isNaN(deptcount)) {
+                for (i = 0; i < Number(deptcount) ; i++) {
+                    showexa += i;
+                    snolength += 1;
+                }
+            }
+        }
+
+        if ($('#chkclsno').prop("checked")) {//使用班级号
+            var deptcount = $.trim($('#clsnocount').val());
+            if (deptcount != "" && !isNaN(deptcount)) {
+                for (i = 0; i < Number(deptcount) ; i++) {
+                    showexa += i;
+                    snolength += 1;
+                }
+            }
+        }
+
+        var lastcon = $.trim($('#lastnocount').val());
+        if (lastcon != "" && !isNaN(lastcon)) {
+            for (i = 0; i < Number(lastcon) ; i++) {
+                showexa += i;
+                snolength += 1;
+            }
+        }
+        $('.ts').html("按您的选择方式，学号示例：<span style=\"color:red;font-size:24px;\">" + showexa + "</span>,总共有<span style=\"color:red;font-size:24px;\">" + snolength + "</span>位！");
+    }
+
+    //保存
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls();
+        var lstlength = $.trim($('#lastnocount').val());
+        if (lstlength == "") {
+            dialogMsg('尾号长度不能为空！', 0);
+            return false;
+        }
+        else {
+            if (isNaN(lstlength)) {
+                dialogMsg('尾号长度只能是数字！', 0);
+                return false;
+            }
+            var lstno = Number(lstlength);
+            if (lstno<3 || lstno>5) {
+                dialogMsg('尾号长度只能是3-5位！', 0);
+                return false;
+            }
+        }
+
+
+        showexample();
+
+        if (confirm("你确定要使用这样的规则来生成新生的学号吗？")) {
+            $.SaveForm({
+                url: "/CollegeMIS/BK_ClassInfo/CreateStuNo",
+                param: { "stunorule": JSON.stringify(postData) },
+                loading: "正在生成学号，请稍等...",
+                success: function (result) {
+                    if (result.type == 1) {
+                        dialogMsg('学号生成完成！', 1);
+                    }
+                }
+            });
+        }
+
+    }
+</script>
+
+<div class="bills">
+    <div style="overflow-y:auto;margin:10px 10px;">
+        <table class="form" style="width: 100%;">
+            <tr>
+                <th class="formTitle" style="width: 120px;">学号前置(数字或字母)</th>
+                <td class="formValue">
+                    <div class="form-group">
+                        <div class="col-sm-1">
+                            <span>
+                                <input id="chfrant" type="checkbox" class="form-control">
+                            </span>
+                        </div>
+                        <div class="col-sm-6">
+                            <input id="frantno" type="text" class="form-control" style="display:none" disabled="disabled" placeholder="请输入学号前置">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 120px;">年份(当前年)</th>
+                <td class="formValue">
+                    <div class="col-sm-1">
+                        <span>
+                            <input id="useyear" type="checkbox" class="form-control">
+                        </span>
+                    </div>
+                    <div class="col-sm-6" id="ur" style="display:none">
+                        <div id="secyear" type="select" class="ui-select"  disabled="disabled" ></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 60px;">院系号及位数</th>
+                <td class="formValue">
+                    <div class="form-group">
+                        <div class="col-sm-1">
+                            <span>
+                                <input id="chkdeptno" type="checkbox" class="form-control">
+                            </span>
+                        </div>
+                        <div class="col-sm-6">
+                            <input id="deptnocount" type="text" class="form-control" style="display:none" disabled="disabled" placeholder="请输入院系号使用的位数">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 60px;">专业号及位数</th>
+                <td class="formValue">
+                    <div class="form-group">
+                        <div class="col-sm-1">
+                            <span>
+                                <input id="majorno" type="checkbox" class="form-control">
+                            </span>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <input id="majornocount" type="text" class="form-control" style="display:none" disabled="disabled" placeholder="请输入专业号使用的位数">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 60px;">班级号及位数</th>
+                <td class="formValue">
+                    <div class="col-sm-1">
+                        <span>
+                            <input id="chkclsno" type="checkbox" class="form-control">
+                        </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <input id="clsnocount" type="text" class="form-control" style="display:none" disabled="disabled" placeholder="请输入班级号使用的位数">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 60px;">尾号位数<font face="宋体">*</font></th>
+                <td class="formValue">
+                    <div class="col-sm-12">
+                        <input id="lastnocount" type="text" class="form-control" isvalid="yes" value="3" checkexpession="NotNull" placeholder="请输入尾号位数,输入的数字为3-5">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="ts"  style="overflow-y:auto;margin:10px 10px;">
+
+    </div>
+
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+</style>

@@ -1,0 +1,41 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeBaodaoFuncModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">新生住宿信息</h1>
+        
+    </ion-header-bar>
+
+    <style>
+        .item-avatar > img:first-child, .item-avatar .item-image, .item-avatar .item-content > img:first-child, .item-avatar .item-content .item-image, .item-avatar-left > img:first-child, .item-avatar-left .item-image, .item-avatar-left .item-content > img:first-child, .item-avatar-left .item-content .item-image {
+            max-height: 105px;
+            max-width: 90px;
+        }
+         .item-avatar {
+            padding-left: 122px;            
+        }
+    </style>
+    <ion-content>
+        <ng-list>
+            <ng-item ng-repeat="Data in ruzhu.result">
+                <div class="list mt5">
+                    <div class="item item-divider bgcolor_b">
+                        {{Data.entity.dormName}}
+                    </div>
+                    <ng-item ng-repeat="x in Data.childEntity">
+                            <a class=" item item-avatar" href="#">
+                        <img src="{{x.headImg}}" />
+                        <h2>{{x.stuName}}</h2>
+                        <p>床位：{{x.bedName}}</p>
+                        <p>民族：{{x.nationnalityNo}}</p>
+                        <p>电话：{{x.telephone}}</p>
+                        <p>来源地：{{x.provinceNo}}</p>
+                        </a>
+                    </ng-item>
+                </div>
+            </ng-item>
+        </ng-list>
+    </ion-content>
+
+
+</ion-modal-view>
+

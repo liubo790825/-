@@ -1,0 +1,125 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeCommDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">请假申请</h1>
+        <button class="button button-clear" ng-click="submitStuLeave()">提交</button>
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content delegate-handle="StuLeave-content">
+
+
+        <div class="item item-divider bgcolor_d">
+            重要说明
+        </div>
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;margin-bottom:10px">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+
+                            <div class="col-99">
+                                <div class="col-99 item-note">
+                                    <p>
+                                        需本班班主任审核后才能生效。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+
+        <ion-list class="lr-list-form">
+
+
+
+            <div class="item item-divider bgcolor_c">
+                请假申请单
+            </div>
+            <ion-item class="lr-item-htitle">
+                <span>学生姓名：</span>
+                <span class="positive ng-binding">{{stuinfo.stuName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>专业：</span>
+                <span class="positive ng-binding">{{stuinfo.majorName}}</span>
+            </ion-item>
+            <ion-item class="lr-item-htitle">
+                <span>班级：</span>
+                <span class="positive ng-binding">{{stuinfo.className}}</span>
+            </ion-item>
+
+
+
+            <div class="item item-divider">
+                请假开始日期<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>开始日期</div>
+                <input type="text" ng-model="editData.beginTime" ng-class="{'active' : isInputActive('beginTime')}" />
+            </ion-item>
+            <!--<ion-item ng-click="openTypeSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.custTypeId != null"><i class="icon ion-ios-drag"></i>请假开始日期</div>
+                <div class="item-icon-right" ng-hide="editData.custTypeId == null">
+                    <div class="lr-form-label royal-bg">{{editData.custTypeName}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+
+            </ion-item>-->
+
+            <div class="item item-divider">
+                请假结束日期<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>结束日期</div>
+                <input type="text" ng-model="editData.endTime" ng-class="{'active' : isInputActive('endTime')}" />
+            </ion-item>
+            <!--<ion-item ng-click="openTypeSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.custTypeId != null"><i class="icon ion-ios-drag"></i>请假结束日期</div>
+                <div class="item-icon-right" ng-hide="editData.custTypeId == null">
+                    <div class="lr-form-label royal-bg">{{editData.custTypeName}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+
+            </ion-item>-->
+
+            <div class="item item-divider">
+                请假天数<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>请假天数</div>
+                <input type="text" ng-model="editData.days" ng-class="{'active' : isInputActive('days')}" />
+            </ion-item>
+            <div class="item item-divider">
+                请假类型<span>*</span>
+            </div>
+            <ion-item ng-click="openLeaveTypeSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.leaveTypeId != null"><i class="icon ion-ios-drag"></i>选择请假类型</div>
+                <div class="item-icon-right" ng-hide="editData.leaveTypeId == null">
+                    <div class="lr-form-label royal-bg">{{editData.leaveType}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+
+            </ion-item>
+
+            <!--<ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>事假/病假......</div>
+                <input type="text" ng-model="editData.leaveType" ng-class="{'active' : isInputActive('leaveType')}" />
+            </ion-item>-->
+            <div class="item item-divider">
+                请假原因<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>请假原因</div>
+                <input type="text" ng-model="editData.leaveRemark" ng-class="{'active' : isInputActive('leaveRemark')}" />
+            </ion-item>
+
+    </ion-content>
+</ion-modal-view>

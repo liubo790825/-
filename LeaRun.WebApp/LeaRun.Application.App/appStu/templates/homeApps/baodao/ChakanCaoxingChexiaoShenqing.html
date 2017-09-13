@@ -1,0 +1,100 @@
+﻿<ion-modal-view >
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">请求撤销记录</h1>
+        <button class="button button-clear" ng-click="submitReviewCancelApp()">提交</button>
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content delegate-handle="ReviewCancelApp-content">
+
+
+        <ion-list class="lr-list-form">
+
+
+
+            <div class="item item-divider bgcolor_c">
+                基本信息
+            </div>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    姓名：
+                </div><br />
+                <span>{{cancelAppInfo.stuName}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    学号：
+                </div><br />
+                <span>{{cancelAppInfo.stuNo}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    违规类型：
+                </div><br />
+                <span>{{cancelAppInfo.breachBehavior}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    院系：
+                </div><br />
+                <span>{{cancelAppInfo.deptName}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    专业：
+                </div><br />
+                <span>{{cancelAppInfo.majorName}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    班级：
+                </div><br />
+                <span>{{cancelAppInfo.className}}</span>
+            </ion-item>
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    时间：
+                </div><br />
+                <span>{{cancelAppInfo.breachTime|date:"yyyy-MM-dd"}}</span>
+            </ion-item>
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    撤销申请缘由：
+                </div><br />
+                <span>{{cancelAppInfo.remark}}</span>
+            </ion-item>
+
+            <div class="item item-divider">
+                原因<span>*</span>
+            </div>
+            <label class="item item-input item-select mt10">
+                <div class="input-label">
+                    审批结果
+                </div>
+                <select ng-model="editData.checkState" ng-class="{'active' : isInputActive('checkState')}">
+                    <option value="学生会同意撤消" selected="selected">同意</option>
+                    <option value="学生会不同意撤消">不同意</option>
+                </select>
+            </label>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加同意或驳回理由</div>
+                <input type="text" ng-model="editData.remark" ng-class="{'active' : isInputActive('remark')}" />
+            </ion-item>
+
+        </ion-list>
+
+
+        <div>
+            <button class="button button-block button-positive" ng-click="submitReviewCancelApp()">
+                提交
+            </button>
+        </div>
+    </ion-content>
+</ion-modal-view>

@@ -1,0 +1,215 @@
+@{;
+    ViewBag.Title = "换班级页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    var stuid = request('stuid');
+
+    $(function () {
+        InitialPage();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+
+    //初始化控件
+    function initControl() {
+
+        //院系专业的选择
+        $("#New_DeptNo").ComboBox({
+            url: "/CollegeMIS/BK_Dept/GetListJson",
+            description: "==请选择==",
+            id: "DeptNo",
+            text: "DeptName",
+            height: "230px",
+            allowSearch: true
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            if (value != "" && value!="==请选择==") {
+                $("#New_MajorNo").removeAttr("disabled");
+            }
+            else {
+                $("#New_MajorNo").attr("disabled", "disabled");
+            }
+            $("#New_MajorNo").ComboBox({
+                url: "/CollegeMIS/BK_Major/GetListJson",
+                param: { queryJson: "{\"DeptNo\":\"" + value + "\"}" },
+                description: "==请选择==",
+                id: "MajorNo",
+                text: "MajorName",
+                disabled: false,
+                height: "230px",
+                allowSearch: true
+            }).bind("change", function () {
+                var majno = $(this).attr('data-value');
+                if (majno != "" && majno != "==请选择==") {
+                    $("#New_ClassNo").removeAttr("disabled");
+                }
+                else {
+                    $("#New_ClassNo").attr("disabled", "disabled");
+                }
+                $("#New_ClassNo").ComboBox({
+                    url: "/CollegeMIS/BK_ClassInfo/GetListJson",
+                    param: { queryJson: "{\"MajorNo\":\"" + majno + "\"}" },
+                    description: "==请选择==",
+                    id: "ClassNo",
+                    text: "ClassName",
+                    disabled: false,
+                    height: "230px",
+                    allowSearch: true
+                }).bind("change", function () {
+                })
+            });
+        });
+
+        if (!!stuid) {
+            var queryJson = {
+                stuInfoId: stuid
+            }
+            $('#StuId').val(stuid);
+            $.SetForm({
+                url: "../../CollegeMIS/BK_StuInfo/GetEntityList",
+                param: { queryJson: JSON.stringify(queryJson) },
+                success: function (data) {
+                    if (data.length > 0 && data[0].Table.length > 0)
+                    {
+                        var row = data[0].Table[0];
+                        $('#StuName').val(row.stuname);
+                        $('#StuNo').val(row.stuno);
+
+                        $('#Old_DeptId').val(row.deptid);
+                        $('#Old_DeptName').val(row.deptname);
+                        $('#Old_DeptNo').val(row.deptno);
+
+                        $('#Old_MajorName').val(row.majorname);
+                        $('#Old_MajorId').val(row.majorid);
+                        $('#Old_MajorNo').val(row.majorno);
+
+                        $('#Old_ClassName').val(row.classname);
+                        $('#Old_ClassId').val(row.classid);
+                        $('#Old_ClassNo').val(row.classno);
+
+                    }
+
+                }
+            })
+        }
+
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('.bills').Validform()) {
+            return false;
+        }
+        var postData = $(".bills").GetWebControls(keyValue);
+
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_StuChangeClassRec/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="overflow-y:auto;margin:10px 10px;">
+     <table class="form" style="width: 100%;">
+         <tr>
+             <th class="formTitle" style="width: 90px;">姓名</th>
+             <td class="formValue">                 
+                 <input id="StuName" type="text" class="form-control" readonly="readonly">
+                 <input id="StuId" type="hidden"/>
+             </td>
+             <th class="formTitle" style="width: 90px;">学号</th>
+             <td class="formValue">
+                 <input id="StuNo" type="text" class="form-control" readonly="readonly" >
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">现院系</th>
+             <td class="formValue">
+                 <input id="Old_DeptName" type="text" class="form-control" readonly="readonly" >
+                 <input id="Old_DeptId" type="hidden" class="form-control" />
+                 <input id="Old_DeptNo" type="hidden" class="form-control" />
+             </td>
+             <th class="formTitle" style="width: 60px;">转到院系<font face="宋体">*</font></th>
+             <td class="formValue">
+                 <div id="New_DeptNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+         </tr>
+
+
+         <tr>
+             <th class="formTitle" style="width: 60px;">现专业</th>
+             <td class="formValue">
+                 <input id="Old_MajorName" type="text" class="form-control" readonly="readonly">
+                 <input id="Old_MajorId" type="hidden" class="form-control" />
+                 <input id="Old_MajorNo" type="hidden"  class="form-control" />
+             </td>
+             <th class="formTitle" style="width: 60px;">转到专业<font face="宋体">*</font></th>
+             <td class="formValue">
+                 <div id="New_MajorNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull" disabled="disabled"></div>
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">
+                 现班级
+             </th>
+             <td class="formValue">
+                 <input id="Old_ClassName" type="text" class="form-control" readonly="readonly">
+                 <input id="Old_ClassId" type="hidden" class="form-control" />
+                 <input id="Old_ClassNo" type="hidden" class="form-control" />
+             </td>
+             <th class="formTitle" style="width: 60px;">转到班级<font face="宋体">*</font></th>
+             <td class="formValue">
+                 <div id="New_ClassNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull" disabled="disabled"></div>
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" colspan="4">
+                 <div style="width:100%;text-align:center">
+                     换班说明
+                 </div>
+             </th>
+         </tr>
+
+         <tr>
+             <td class="formValue" colspan="4">
+                 <textarea id="ChangeRemark" class="form-control" rows="5"></textarea>
+             </td>
+         </tr>
+     </table>
+ </div>
+
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>柱状图</title>
+    <!--框架必需start-->
+    <link href="../Content/Styles/Qjkjui-framework.css" rel="stylesheet" />
+    <script src="../Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="../Content/Scripts/Qjkjui-framework.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    <script src="../Content/Scripts/highcharts/highcharts.js"></script>
+    <!--第三方统计图end-->
+    <script>
+        $(function () {
+            $('#container').highcharts({
+                chart: {
+                    type: 'column',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: '各学年学生人数统计表'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                        '框选放大' :
+                        '手势放大'
+                },
+                xAxis: {
+                    categories: [
+                        '2013-2014',
+                        '2014-2015',
+                        '2015-2016'
+                    ]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '学生人数 (名)'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span>{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} 名</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '折合在校生',
+                    data: [12700, 18710, 13075]
+
+                }, {
+                    name: '全日制在校生',
+                    data: [12300, 18250, 12975]
+
+                }, {
+                    name: '普通本科生',
+                    data: [10000, 15900, 12005]
+
+                }, {
+                    name: '普通专科（高职专科）生',
+                    data: [2000, 1500, 560]
+
+                }, {
+                    name: '少数民族预科生',
+                    data: [300, 550, 360]
+
+                }, {
+                    name: '外国留学生',
+                    data: [200, 230, 500]
+
+                }]
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<link href="~/Content/scripts/plugins/simditor/css/simditor.css" rel="stylesheet" />
+<script src="~/Content/scripts/plugins/simditor/js/module.min.js"></script>
+<script src="~/Content/scripts/plugins/simditor/js/uploader.min.js"></script>
+<script src="~/Content/scripts/plugins/simditor/js/hotkeys.min.js"></script>
+<script src="~/Content/scripts/plugins/simditor/js/simditor.min.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var editor = null;
+    $(function () {
+        editor = new Simditor({
+            textarea: $('#AE_Content'),
+            placeholder: '这里输入文章内容...',
+            toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent']
+        });
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/Alumni_Events/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    editor.setValue(data.AE_Content);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../CollegeMIS/Alumni_Events/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">活动主题</td>
+            <td class="formValue">
+                <input id="AE_Title" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">活动开始时间</td>
+            <td class="formValue">
+                <input id="AE_BeginDate" type="text" class="form-control input-datepicker" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">活动详细内容</td>
+            <td class="formValue">
+                <textarea id="AE_Content" class="form-control" isvalid="yes" checkexpession="NotNull" rows="5"></textarea>
+            </td>
+        </tr>
+       
+    </table>
+</div>

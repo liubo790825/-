@@ -1,0 +1,70 @@
+﻿
+
+<ion-view hide-nav-bar="true" view-title="校园服务大厅">
+    <ion-content>
+        <ion-header-bar class="bar-stable nav-title-slide-ios7">
+            <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+            <h1 class="title">校园服务大厅</h1>
+            <button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>
+        </ion-header-bar>
+        <style>
+            .color1 {
+                color: black !important;
+            }
+        </style>
+       
+        <!--首页图片轮询-->
+        <div class="banner">
+            <img src="img/2.jpg" />
+        </div>
+
+
+        <div class="button-bar bar-balanced mt10" style="padding:0;">
+            <a class="button button-positive">智能填表</a>
+            <a class="button button-balanced">表单预览</a>
+            <a class="button button-calm">流程</a>
+            <a class="button " style="background-color:grey">审核流程</a>
+        </div>
+
+        <div class="list mt5">
+            <div class="item item-divider">
+                *标题
+            </div>
+            <div class="list list-inset">
+                <label class="item item-input">
+                    <input type="text" placeholder="标题">
+                </label>
+            </div>
+            <div class="list card" style="height:300px;">
+                <img ng-src="{{imgSrc}}" name="AssistImageName" />
+            </div>
+            <div class="list mt5">
+                <label class="item item-input item-stacked-label mt10">
+                    <span class="input-label">填表人姓名</span>
+                    <input type="text" placeholder="John">
+                </label>
+                </div>
+            <div class="list mt5">
+                <label class="item item-input item-stacked-label mt10">
+                    <span class="input-label">填表人工号</span>
+                    <input type="text" placeholder="143212124425">
+                </label>
+            </div>
+            <div class="list mt5">
+                <label class="item item-input item-stacked-label mt10">
+                    <span class="input-label">填表日期</span>
+                    <input type="text" placeholder="2017-09-01">
+                </label>
+            </div>
+            <label class="item item-input mt10">
+                <span class="input-label">姓名：</span>
+                <input type="text">
+            </label>
+            <div>
+                <button class="button button-block button-positive">
+                    确认提交
+                </button>
+            </div>
+</ion-content>
+</ion-view>
+

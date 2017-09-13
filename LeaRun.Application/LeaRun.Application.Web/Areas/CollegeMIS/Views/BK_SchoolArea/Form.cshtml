@@ -1,0 +1,175 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_OrderForm.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        InitialPage();
+       // GetOrderEntryGrid();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+                { label: '系所ID', name: 'DeptId', width: 80, align: '', sortable: false, resizable: false, hidden: true },
+                { label: '校区ID', name: 'AreaId', width: 80, align: '', sortable: false, resizable: false },
+                { label: '系所代码（部门号）', name: 'DeptNo', width: 80, align: '', sortable: false, resizable: false },
+                { label: '系所名称(部门名）', name: 'DeptName', width: 80, align: '', sortable: false, resizable: false },
+                { label: '系所（部门）简称   Attr', name: 'DeptShortName', width: 80, align: '', sortable: false, resizable: false },
+                { label: '系所英文简称', name: 'DeptEnBrief', width: 80, align: '', sortable: false, resizable: false },
+                { label: '所属科类', name: 'DeptSort', width: 80, align: '', sortable: false, resizable: false },
+                { label: '系所英文简称', name: 'DeptEnShort', width: 80, align: '', sortable: false, resizable: false },
+                { label: '系主任的职工号', name: 'DeptDirector', width: 80, align: '', sortable: false, resizable: false },
+                { label: '教学秘书的职工号', name: 'TeachSecretary', width: 80, align: '', sortable: false, resizable: false },
+                { label: '曾用名', name: 'DeptOldName', width: 80, align: '', sortable: false, resizable: false },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+                DeptId: '<input name="DeptId" type="text" class="editable center" />',
+                AreaId: '<input name="AreaId" type="text" class="editable center" />',
+                DeptNo: '<input name="DeptNo" type="text" class="editable center" />',
+                DeptName: '<input name="DeptName" type="text" class="editable center" />',
+                DeptShortName: '<input name="DeptShortName" type="text" class="editable center" />',
+                DeptEnBrief: '<input name="DeptEnBrief" type="text" class="editable center" />',
+                DeptSort: '<input name="DeptSort" type="text" class="editable center" />',
+                DeptEnShort: '<input name="DeptEnShort" type="text" class="editable center" />',
+                DeptDirector: '<input name="DeptDirector" type="text" class="editable center" />',
+                TeachSecretary: '<input name="TeachSecretary" type="text" class="editable center" />',
+                DeptOldName: '<input name="DeptOldName" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_SchoolArea/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data.entity);
+                    //明细
+                    //var childEntity = data.childEntity;
+                    //$('#gridTable').find('[role=row]').each(function (i) {
+                    //    var row = childEntity[i - 1];
+                    //    if (row != undefined) {
+                    //        $(this).find('input[name="DeptId"]').val(row.DeptId);
+                    //        $(this).find('input[name="AreaId"]').val(row.AreaId);
+                    //        $(this).find('input[name="DeptNo"]').val(row.DeptNo);
+                    //        $(this).find('input[name="DeptName"]').val(row.DeptName);
+                    //        $(this).find('input[name="DeptShortName"]').val(row.DeptShortName);
+                    //        $(this).find('input[name="DeptEnBrief"]').val(row.DeptEnBrief);
+                    //        $(this).find('input[name="DeptSort"]').val(row.DeptSort);
+                    //        $(this).find('input[name="DeptEnShort"]').val(row.DeptEnShort);
+                    //        $(this).find('input[name="DeptDirector"]').val(row.DeptDirector);
+                    //        $(this).find('input[name="TeachSecretary"]').val(row.TeachSecretary);
+                    //        $(this).find('input[name="DeptOldName"]').val(row.DeptOldName);
+                    //    }
+                    //});
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+        //$('#gridTable').find('[role=row]').each(function (i) {
+        //    if (!!$(this).find('input[name="AreaId"]').val()) {
+        //        childEntryJson.push({
+        //            DeptId: $(this).find('input[name="DeptId"]').val(),
+        //            AreaId: $(this).find('input[name="AreaId"]').val(),
+        //            DeptNo: $(this).find('input[name="DeptNo"]').val(),
+        //            DeptName: $(this).find('input[name="DeptName"]').val(),
+        //            DeptShortName: $(this).find('input[name="DeptShortName"]').val(),
+        //            DeptEnBrief: $(this).find('input[name="DeptEnBrief"]').val(),
+        //            DeptSort: $(this).find('input[name="DeptSort"]').val(),
+        //            DeptEnShort: $(this).find('input[name="DeptEnShort"]').val(),
+        //            DeptDirector: $(this).find('input[name="DeptDirector"]').val(),
+        //            TeachSecretary: $(this).find('input[name="TeachSecretary"]').val(),
+        //            DeptOldName: $(this).find('input[name="DeptOldName"]').val(),
+        //        });
+        //    }
+        //});
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_SchoolArea/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+    <div style="height:190px;overflow-y:auto;margin:10px 10px;">
+        <table class="form" style="width: 100%;">
+            <tr>
+                <th class="formTitle" style="width: 60px;">校区名称<font face="宋体">*</font></th>
+                <td class="formValue">
+                    <input id="AreaName" type="text" class="form-control"isvalid="yes" checkexpession="NotNull">
+                </td>
+               
+            </tr>
+            <tr>
+                <th class="formTitle" style="width: 60px;">校区地址</th>
+                <td class="formValue">
+                    <input id="AreaAddress" type="text" class="form-control">
+                </td>
+            </tr>
+        </table>
+    </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

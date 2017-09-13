@@ -1,0 +1,64 @@
+﻿<ion-modal-view >
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">违规登记</h1>
+        <button class="button button-clear" ng-click="submitBehaviorRecode()">提交</button>
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content delegate-handle="BehaviorRecodeDetails-content">
+
+
+        <ion-list class="lr-list-form">
+
+
+
+            <div class="item item-divider bgcolor_c">
+                基本信息
+            </div>
+            <div class="item item-divider">
+                姓名<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加姓名</div>
+                <input type="text" ng-model="editData.stuName" ng-class="{'active' : isInputActive('stuName')}" />
+            </ion-item>
+            <div class="item item-divider">
+                学号<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加学号</div>
+                <input type="text" ng-model="editData.stuNo" ng-class="{'active' : isInputActive('stuNo')}" />
+            </ion-item>
+            <div class="item item-divider">
+                违规类型<span>*</span>
+            </div>
+            <ion-item ng-click="openHujiLeibieSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.breachBehavior != null"><i class="icon ion-ios-drag"></i>选择违规类型</div>
+                <div class="item-icon-right" ng-hide="editData.breachBehavior == null">
+                    <div class="lr-form-label royal-bg">{{editData.breachBehavior}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+            </ion-item>
+            <div class="item item-divider">
+                时间<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加时间</div>
+                <input type="text" ng-model="editData.breachTime" ng-class="{'active' : isInputActive('breachTime')}" />
+            </ion-item>
+
+        </ion-list>
+
+
+        <div>
+            <button class="button button-block button-positive" ng-click="submitBehaviorRecode()">
+                提交
+            </button>
+        </div>
+    </ion-content>
+</ion-modal-view>

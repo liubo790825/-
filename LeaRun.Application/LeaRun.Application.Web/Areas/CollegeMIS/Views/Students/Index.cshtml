@@ -1,0 +1,222 @@
+@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../CollegeMIS/Students/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: '学号', name: 'StuNo', index: 'StuNo', width: 100, align: 'left',sortable: true  },
+                { label: '姓名', name: 'StuName', index: 'StuName', width: 100, align: 'left',sortable: true  },
+                //{ label: '通知书号', name: 'NoticeNo', index: 'NoticeNo', width: 110, align: 'left', sortable: true, hidden: true },
+                { label: '性别', name: 'Gender', index: 'Gender', width: 40, align: 'left', sortable: true },
+                { label: '院系', name: 'DeptName', index: 'DeptName', width: 100, align: 'left', sortable: true },
+                { label: '专业', name: 'MajorName', index: 'MajorName', width: 120, align: 'left', sortable: true },
+                { label: '年级', name: 'Grade', index: 'Grade', width: 60, align: 'left', sortable: true },
+                { label: '班级', name: 'ClassName', index: 'ClassName', width: 100, align: 'left', sortable: true },
+                { label: '学制', name: 'LengthOfSchooling', index: 'LengthOfSchooling', width: 40, align: 'left', sortable: true },
+                
+                //{ label: '班号', name: 'ClassNo', index: 'ClassNo', width: 60, align: 'left',sortable: true  },
+                { label: '民族', name: 'Nationality', index: 'Nationality', width: 100, align: 'left', sortable: true },
+                {
+                    label: '生日', name: 'Birthday', index: 'Birthday', width: 90, align: 'left', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                        return formatDate(cellvalue, 'yyyy-MM-dd');
+                    }
+                },
+                { label: '政治面貌', name: 'PartyFace', index: 'PartyFace', width: 80, align: 'left',sortable: true  },
+                { label: '身份证号', name: 'IdentityCardNo', index: 'IdentityCardNo', width: 155, align: 'left', sortable: true },
+                { label: '电话', name: 'mobile', index: 'mobile', width: 130, align: 'left', sortable: true },
+                { label: '省份', name: 'ProvinceName', index: 'ProvinceName', width: 100, align: 'left',sortable: true  },
+                
+                {
+                    label: '入校时间', name: 'EntranceDate', index: 'EntranceDate', width: 90, align: 'left', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                        return formatDate(cellvalue, 'yyyy-MM-dd');
+                    }
+                },
+                
+                //{ label: '入党时间', name: 'JoinPartyDate', index: 'JoinPartyDate', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '入团时间', name: 'JoinLeagueDate', index: 'JoinLeagueDate', width: 100, align: 'left',sortable: true ,hidden: true },
+                { label: '毕业中学', name: 'HighSchoolName', index: 'HighSchoolName', width: 100, align: 'left', sortable: true },
+                
+                { label: '校内住址', name: 'InSchoolAddress', index: 'InSchoolAddress', width: 100, align: 'left', sortable: true },
+                //{ label: '父姓名', name: 'FatherName', index: 'FatherName', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '父单位', name: 'FatherUnit', index: 'FatherUnit', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '父电话', name: 'FatherPhone', index: 'FatherPhone', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '母姓名', name: 'MatherName', index: 'MatherName', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '母单位', name: 'MatherUnit', index: 'MatherUnit', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '母电话', name: 'MatherPhone', index: 'MatherPhone', width: 100, align: 'left',sortable: true ,hidden: true },
+                
+                //{ label: '考生号', name: 'ksh', index: 'ksh', width: 130, align: 'left',sortable: true ,hidden: true },
+                //{ label: '政府专业号', name: 'GovMajorNo', index: 'GovMajorNo', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '政府专业名', name: 'GovMajorName', index: 'GovMajorName', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '专业方向号', name: 'MajorDetailNo', index: 'MajorDetailNo', width: 100, align: 'left',sortable: true ,hidden: true },
+                //{ label: '专业方向名称', name: 'MajorDetailName', index: 'MajorDetailName', width: 100, align: 'left',sortable: true ,hidden: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'StuNo',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加Students',
+            url: '/CollegeMIS/Students/Form',
+            width: '700px',
+            height: '500px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'StuNo');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑Students',
+                url: '/CollegeMIS/Students/Form?keyValue=' + keyValue,
+                width: '700px',
+                height: '500px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'StuNo');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../CollegeMIS/Students/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的Students！', 0);
+        }
+    }
+    //详细
+    function btn_detail() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'StuNo');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Detail',
+                title: 'Students',
+                url: '/CollegeMIS/Students/Form?keyValue=' + keyValue,
+                width: '700px',
+                height: '500px',
+                btn:null
+                });
+        }
+    }
+    //* 根据需要启用
+    //导出
+    function btn_export() {
+        dialogOpen({
+        id: 'ExcelIExportDialog',
+        title: '导出Students数据',
+        url: '/Utility/ExcelExportForm?gridId=gridTable&filename=Students',
+        width: '700px',
+        height: '500px',
+        callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }, btn: ['导出Excel', '关闭']
+            })
+    }
+    //查询条件
+    $("#queryCondition .dropdown-menu li").click(function() {
+        var text = $(this).find('a').html();
+        var value = $(this).find('a').attr('data-value');
+        $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+     });
+    //查询事件
+    $("#btn_Search").click(function() {
+        var queryJson = {
+             condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+             keyword: $("#txt_Keyword").val()
+        }
+        $gridTable.jqGrid('setGridParam', {
+             postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+        }).trigger('reloadGrid');
+     });
+    //查询回车
+    $('#txt_Keyword').bind('keypress', function (event) {
+        if (event.keyCode == "13") {
+             $('#btn_Search').trigger("click");
+        }
+     });
+    //打印
+    function btn_print(){
+        $("#gridPanel").printTable();
+     }
+    //根据需要启用*/
+</script>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+            <!--参考例子在此做灵活的查询-->                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a id="lr-print" class="btn btn-default" onclick="btn_print()"><i class="fa fa-print"></i>&nbsp;打印</a>
+            <a id="lr-export" class="btn btn-default" onclick="btn_export()"><i class="fa fa-sign-out"></i>&nbsp;导出</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

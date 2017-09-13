@@ -1,0 +1,135 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">绿色通道</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="openEditModal(detailsData)"><i class="icon ion-ios-compose-outline"></i></button>
+        </div>
+    </ion-header-bar>
+
+
+    <ion-content delegate-handle="customerlist-content">
+        <!--<ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>-->
+        <!--<ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>-->
+
+        <div class="item item-divider">
+            基本信息
+        </div>
+
+        <div class="list mt5">
+            <h3 style="color:red;">注：*为必填项目</h3>
+            <label class="item item-input item-select mt10">
+                <div class="item item-divider">
+                    *户口类别
+                </div>
+                <select>
+                    <option>城市</option>
+                    <option selected>农村</option>
+                </select>
+            </label>
+
+            <label class="item item-input item-select mt10">
+                <div class="item item-divider">
+                    *家庭类型
+                </div>
+                <select>
+                    <option>健全</option>
+                    <option>孤儿</option>
+                    <option>单亲</option>
+                    <option>离异</option>
+                    <option>重病</option>
+                    <option>残疾</option>
+                    <option selected>军家属</option>
+                </select>
+            </label>
+
+            <div class="item item-divider">
+                *家庭主要成员的社会关系
+            </div>
+            <label class="item item-input mt10">
+                <span class="input-label">姓名：</span>
+                <input type="text">
+            </label>
+            <label class="item item-input mt10">
+                <span class="input-label">关系：</span>
+                <input type="text">
+            </label>
+            <label class="item item-input mt10">
+                <span class="input-label">政治面貌：</span>
+                <input type="text">
+            </label>
+            <label class="item item-input mt10">
+                <span class="input-label">单位：</span>
+                <input type="text">
+            </label>
+            <label class="item item-input mt10">
+                <span class="input-label">职位：</span>
+                <input type="text">
+            </label>
+
+            <label class="item item-input mt10">
+                <span class="input-label">家庭总人口：</span>
+                <input type="text">
+            </label>
+            <label class="item item-input mt10">
+                <span class="input-label">家庭月收入：</span>
+                <input type="text">
+            </label>
+            <label class="item item-input mt10">
+                <span class="input-label">人均月收入：</span>
+                <input type="text">
+            </label>
+
+            <div class="item item-divider">
+                *家庭经济困难情况具体说明
+            </div>
+            <label class="item item-input item-stacked-label mt10">
+                <input type="text" placeholder="家庭经济困难情况具体说明">
+            </label>
+
+            <div class="item item-divider">
+                *请填写生源地贷款信息
+            </div>
+            <label class="item item-input item-select mt10">
+                <div class="input-label">
+                    生源地贷款银行
+                </div>
+                <select>
+                    <option selected>国家开发银行</option>
+                    <option>江西省内农村商业银行</option>
+                    <option>江西省外农村商业银行</option>
+                    <option>其他银行</option>
+                </select>
+            </label>
+            <label class="item item-input mt10">
+                <span class="input-label">贷款金额：</span>
+                <input type="text">
+            </label>
+
+            <div class="item item-divider">
+                *回执单或证明函件图片
+            </div>
+            <div class="list card" style="height:300px;">
+                <img ng-src="{{imgSrc}}" name="AssistImageName" />
+            </div>
+            <button class="button button-block button-positive" ng-click="pickImage()">
+                选择文件
+            </button>
+            <label class="item item-input mt10">
+                <span class="input-label">国开行回执校验码：</span>
+                <input type="text">
+            </label>
+            <div class="mt10">
+                <button class="button button-block button-positive">
+                    提&nbsp;&nbsp;&nbsp;&nbsp;交
+                </button><button class="button button-block button-positive">
+                    重&nbsp;&nbsp;&nbsp;&nbsp;置
+                </button>
+
+                </ion-list>
+            </div>
+    </ion-content>
+    <!--<div class="lr-plug-btn">
+        <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+    </div>-->
+</ion-modal-view>

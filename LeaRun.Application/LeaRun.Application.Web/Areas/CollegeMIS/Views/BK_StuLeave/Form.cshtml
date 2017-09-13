@@ -1,0 +1,114 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_StuLeave/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_StuLeave/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">姓名</td>
+            <td class="formValue">
+                <input id="StuName" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">学号</td>
+            <td class="formValue">
+                <input id="StuNo" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">预留电话</td>
+            <td class="formValue">
+                <input id="Telephone" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">请假类型</td>
+            <td class="formValue">
+                <input id="LeaveType" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">开始时间</td>
+            <td class="formValue">
+                <input id="BeginTime" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">结束时间</td>
+            <td class="formValue">
+                <input id="EndTime" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">天数</td>
+            <td class="formValue">
+                <input id="Days" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">请假原因</td>
+            <td class="formValue">
+                <input id="LeaveRemark" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">允许</td>
+            <td class="formValue">
+                @*<div id="BeAllow" type="select" class="ui-select" >
+                    
+                </div>*@
+                <select id="BeAllow">
+                    <option value="1" selected>允许</option>
+                    <option value="2">不允许</option>
+                </select>
+            </td>
+            <td class="formTitle">消假</td>
+            <td class="formValue">
+                @*<div id="BeAllow" type="select" class="ui-select">
+                    
+</td>*@
+            <select id="BeAllow">
+                <option value="0" selected>未销假</option>
+                <option value="1">已销假</option>
+            </select>
+        </tr>
+        <tr>
+            <td class="formTitle">消假时间</td>
+            <td class="formValue">
+                <input id="BeCancelDate" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">不允许原因</td>
+            <td class="formValue">
+                <input id="NotBeAllowRemarkable" type="text" class="form-control"  />
+            </td>
+        </tr>
+       
+    </table>
+</div>

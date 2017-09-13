@@ -1,0 +1,360 @@
+@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        addBuilding();
+        //GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('.gridPanel').height($(window).height() - 136.5);
+                //$('#gridTable').setGridWidth(($('.gridPanel').width()));
+                //$('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+
+    function addBuilding()
+    {
+        $('.buildlist').empty();
+        var buildhtml = "";
+
+        $.ajax({
+            url: "../../CollegeMIS/BK_DormBuilding/GetListJson",
+            dataType: "json",
+            type: "get",
+            async:false,
+            success: function (data)
+            {
+                if (data.length>0) {
+                    for (var i = 0; i < data.length; i++) {
+                        buildhtml += "<div class=\"div\">";
+
+                        buildhtml += "<input type='hidden' name='buid' value='" + data[i].DormBuildingId + "'>";
+
+                        buildhtml += "  <div class=\"tip\" style=\"display:none\">";
+                        buildhtml += "<p>宿舍楼信息</p>";
+                        buildhtml += "<p>编号:" + data[i].DormBuildingNo + "</p>";
+                        buildhtml += "<p>名称：" + data[i].DormBuildingName + "</p>";
+                        buildhtml += "<p>管理员:" + data[i].BuildingManager + "</p>";
+                        buildhtml += "<p>面积:" + data[i].BuildingArea + "平方米</p>";
+                        buildhtml += "</div>";
+
+                        buildhtml += " <div style=\"text-align:center\">" + data[i].DormBuildingName + "</div>";
+                        buildhtml += " <div style=\"width:100%;height:100%;\">";
+                        buildhtml += " <img src=\"/Content/images/DormBuilding.png\" style=\"width:100%;height:180px;margin-bottom:5px;\" />";
+                        buildhtml += " </div>";
+                        buildhtml += "</div>";
+                    }
+                }
+            }
+        })
+        
+
+
+        
+        $('.buildlist').html(buildhtml);
+    }
+
+
+
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../CollegeMIS/BK_DormBuilding/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: '序号', name: 'DormBuildingId', index: 'DormBuildingId', width: 80, align: '',sortable: false ,hidden: true },
+                { label: '宿舍楼编号', name: 'DormBuildingNo', index: 'DormBuildingNo', width: 80, align: '',sortable: true  },
+                { label: '宿舍楼名称', name: 'DormBuildingName', index: 'DormBuildingName', width: 80, align: '',sortable: true  },
+                { label: '宿舍楼制度', name: 'BedRule', index: 'BedRule', width: 80, align: '',sortable: true  },
+                { label: '男生或女生', name: 'BuildType', index: 'BuildType', width: 80, align: '',sortable: true  },
+                { label: '楼长或管理员', name: 'BuildingManager', index: 'BuildingManager', width: 80, align: '',sortable: true  },
+                { label: '建筑面积', name: 'BuildingArea', index: 'BuildingArea', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther', index: 'DormBuildingOther', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther1', index: 'DormBuildingOther1', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther2', index: 'DormBuildingOther2', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther3', index: 'DormBuildingOther3', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther4', index: 'DormBuildingOther4', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther5', index: 'DormBuildingOther5', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther6', index: 'DormBuildingOther6', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther7', index: 'DormBuildingOther7', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther8', index: 'DormBuildingOther8', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormBuildingOther9', index: 'DormBuildingOther9', width: 80, align: '',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'DormBuildingId',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            },
+            subGrid: true,
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var keyValue = $gridTable.jqGrid('getRowData', row_id)['DormBuildingId'];
+                var subgrid_table_id = subgrid_id + "_t";
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "'></table>");
+                $("#" + subgrid_table_id).jqGrid({
+                    url: "../../CollegeMIS/BK_DormBuilding/GetDetailsJson",
+                    postData: { keyValue: keyValue },
+                    datatype: "json",
+                    height: "100%",
+                    colModel: [
+                { label: '序号', name: 'DormUnitId', index: 'DormUnitId', width: 80, align: '',sortable: false ,hidden: true },
+                { label: '宿舍楼ID号', name: 'DormBuildingId', index: 'DormBuildingId', width: 80, align: '',sortable: false  },
+                { label: '单元名称', name: 'DormUnitName', index: 'DormUnitName', width: 80, align: '',sortable: true  },
+                { label: '单元编号', name: 'DormUnitNo', index: 'DormUnitNo', width: 80, align: '',sortable: true  },
+                { label: '管理员姓名', name: 'DormUnitManager', index: 'DormUnitManager', width: 80, align: '',sortable: false  },
+                { label: '男生或女生', name: 'DormUnitType', index: 'DormUnitType', width: 80, align: '',sortable: true  },
+                //{ label: '备用', name: 'DormUnitOther', index: 'DormUnitOther', width: 80, align: '',sortable: false  },
+                //{ label: '备用', name: 'DormUnitOther1', index: 'DormUnitOther1', width: 80, align: '',sortable: false  },
+                //{ label: '备用', name: 'DormUnitOther2', index: 'DormUnitOther2', width: 80, align: '',sortable: false  },
+                //{ label: '备用', name: 'DormUnitOther3', index: 'DormUnitOther3', width: 80, align: '',sortable: false  },
+                //{ label: '备用', name: 'DormUnitOther4', index: 'DormUnitOther4', width: 80, align: '',sortable: false  },
+                    ],
+                    caption: "明细",
+                    rowNum: "1000",
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    gridview: true,
+                    hidegrid: false
+                });
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加宿舍楼信息',
+            url: '/CollegeMIS/BK_DormBuilding/Form',
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+               
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('DormBuildingId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑宿舍楼信息',
+                url: '/CollegeMIS/BK_DormBuilding/Form?keyValue=' + keyValue,
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'DormBuildingId');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../CollegeMIS/BK_DormBuilding/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的宿舍楼信息！', 0);
+        }
+    }
+    //详细
+    function btn_details() {
+        var keyValue = $('#gridTable').jqGridRowValue('DormBuildingId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '详细宿舍楼信息',
+                url: '/CollegeMIS/BK_DormBuilding/Form?keyValue=' + keyValue+'&isDeltail=true',
+                width: '1000px',
+                height: '750px',
+                btn:null,
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+</script>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>详细</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+<div class="gridPanel">
+
+    <div class="buildlist">
+    </div>
+    <!--
+        <div id="tip" style="display:none">
+        <p>
+            宿舍楼信息
+        </p>
+        <p>
+            编号：5号楼
+        </p>
+        <p>
+            名称：5号楼
+        </p>
+        <p>
+            管理员：张兵
+        </p>
+        <p>
+            面积：3500平方米
+        </p>
+     </div>
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>-->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('.buildlist').delegate(".div", "mouseover", function () {
+        //    $(this).find('.tip').fadeIn('slow');
+        //});
+        //$('.buildlist').delegate(".div", "mouseover", function () {
+            
+        //    var top = e.pageY + 5;
+        //    var left = e.pageX + 5;
+        //    $(this).find('.tip').css({
+        //        'top': top + 'px',
+        //        'left': left + 'px'
+        //    });
+        //});
+        //$('.buildlist').delegate(".div", "mouseout", function () {
+        //    var top = e.pageY + 5;
+        //    var left = e.pageX + 5;
+        //    $(this).find('.tip').css({
+        //        'top': top + 'px',
+        //        'left': left + 'px'
+        //    });
+        //});
+        //$('.buildlist').delegate(".div", "mouseout", function () {
+        //    $(this).find('.tip').hide();
+        //});
+        
+        $('.div').click(function(){
+            var buid = $(this).find('input[name=buid]').val();
+        });
+
+
+     $('.div').hover(
+      function () {
+          $(this).find('.tip').fadeIn('slow');
+      }
+     );
+     $(".div").mouseenter(function () {
+         var top = e.pageY + 5;
+         var left = e.pageX + 5;
+        $(this).find('.tip').css({
+             'top': top + 'px',
+             'left': left + 'px'
+         });
+     });
+     $('.div').mousemove(function (e) {
+         var top = e.pageY + 5;
+         var left = e.pageX + 5;
+         $(this).find('.tip').css({
+             'top': top + 'px',
+             'left': left + 'px'
+         });
+     });
+
+     $('.div').mouseout(function () {
+         $(this).find('.tip').hide();
+     });
+
+
+
+
+
+ });
+</script>
+
+<style type="text/css">
+    .gridPanel {
+        margin-top:10px;
+        border: 1px solid #ccc;
+        background-color:#ffffff;
+        width:100%;
+    }
+
+
+    .div {
+        border: 1px solid #0000FF;
+        float: left;
+        width: 200px;
+        height: 210px;
+        margin: 10px;
+    }
+
+    .tip {
+        position: absolute;
+        width: 120px;
+        height: auto;
+        border: 1px solid #00CC66;
+    }
+
+    #tip {
+        position: absolute;
+        width: 120px;
+        height: auto;
+        border: 1px solid #00CC66;
+    }
+
+    .div1 {
+        border: 0;
+        cursor: pointer;
+        width: auto;
+        height: auto;
+    }
+</style>
+
+

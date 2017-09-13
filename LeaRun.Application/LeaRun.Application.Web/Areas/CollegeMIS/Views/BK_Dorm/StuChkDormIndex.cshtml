@@ -1,0 +1,282 @@
+@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<link href="~/Content/styles/learun-bill.css" rel="stylesheet" />
+<style>
+    .price-box {
+        width: 960px;
+    }
+        .disabled { 
+        /*pointer-events: none; */
+        cursor:not-allowed;
+    }
+</style>
+<script>
+   
+    $(function () {
+        InitialPage();
+        GetGrid();
+        $('.toolbar').authorizeButton()
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        $('#NoticeNo').focus();
+        $('#NoticeNo').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                if ($('#NoticeNo').val() == "") {
+                    return;
+                }
+                regstu("NoticeNo", $('#NoticeNo').val());
+            }
+        });
+    }
+    //根据输入的通知书号去查询学生的信息
+    function regstu(stutype, keyword) {
+        var queryJson = {
+            condition: stutype,
+            keyword: keyword
+        }
+        $('#stuinfotb').find('tbody').empty();
+        $('#btns').empty();
+        var suthtml = "";
+        var btnhtml = "";
+        $.SetForm({
+            url: "../../CollegeMIS/BK_StuInfo/GetEntityList",
+            param: { queryJson: JSON.stringify(queryJson) },
+            success: function (data) {
+                if (data.length > 0 && data[0].Table.length > 0) {
+                    $("#price-box").SetWebControls(data[0].Table[0]);
+                    $('#stuname').val(data[0].Table[0].stuname + "      (电话：" + data[0].Table[0].telephone+ ")");
+                    $('#identitycardno').val(data[0].Table[0].identitycardno);
+                    $('#stuno').val(data[0].Table[0].stuno);
+
+               
+
+                    suthtml += " <tr>";
+                    suthtml += " <th class=\"\">考生号</th>";
+                    suthtml += "  <td class=\"formValue\">" + data[0].Table[0].ksh + "</td>";
+                    suthtml += " <th class=\"\">籍贯</th>";
+                    suthtml += "  <td class=\"formValue\">" + data[0].Table[0].regionno + "</td>";
+                    suthtml += " <th class=\"\">民族</th>";
+                    suthtml += "  <td class=\"formValue\">" + data[0].Table[0].nationalityno + "</td>";                   
+                    suthtml += " <th class=\"\">出生日期</th>";
+                    suthtml += "  <td class=\"formValue\">" + dataformat(data[0].Table[0].birthday) + "</td>";
+
+                    suthtml += "  <td class=\"formTitle\" rowspan='4' colspan='2'><img src=\"" + data[0].Table[0].headimg + "\" alt=\"头像\" style=\"width:100%;\" /></td>";
+
+
+                    suthtml += " </tr>";
+
+                    suthtml += " <tr>";
+                    suthtml += " <th class=\"\">院系</th>";
+                    suthtml += "  <td class=\"formValue\">" + data[0].Table[0].deptname + "</td>";
+                    suthtml += " <th class=\"\">专业</th>";
+                    suthtml += "  <td class=\"formValue\">" + data[0].Table[0].majorname + "</td>";
+                    suthtml += " <th class=\"\">专业方向</th>";
+                    suthtml += "  <td class=\"formValue\">" + data[0].Table[0].mdname + "</td>";
+                    suthtml += " <th class=\"\">班级</th>";
+                    suthtml += "  <td class=\"formValue\">" + data[0].Table[0].classname + "</td>";
+                    suthtml += " </tr>";
+
+
+                    if (data[0].Table[0].bedid != null) {
+                        suthtml += " <tr>";
+                        suthtml += " <th class=\"\">宿舍</th>";
+                        suthtml += "  <td class=\"formValue\" colspan=\"7\">"
+                            + data[0].Table[0].dormbuildingname + "_"
+                            + data[0].Table[0].dormunitno + "_"
+                            + data[0].Table[0].dormfloorsno + "_"
+                            + data[0].Table[0].dormname + "_"
+                            + data[0].Table[0].bedno
+                            + "</td>";
+                        suthtml += " </tr>";
+                    }
+                    else {
+                        suthtml += " <tr>";
+                        suthtml += " <th class=\"\">宿舍</th>";
+                        suthtml += "  <td class=\"formValue\" colspan=\"7\" ><span style='color:red'> 未选择宿舍</span></td>";
+                        suthtml += " </tr>";
+                    }
+
+
+                    suthtml += " <tr>";
+                    suthtml += " <th class=\"\">生源地</th>";
+                    suthtml += "  <td class=\"formValue\" colspan=\"7\">" + (top.clientareaItem[data[0].Table[0].stufromprovince] == null ? "" : top.clientareaItem[data[0].Table[0].stufromprovince].FullName)
+                        + (top.clientareaItem[data[0].Table[0].stufromcity] == null ? "" : top.clientareaItem[data[0].Table[0].stufromcity].FullName)
+                        + (top.clientareaItem[data[0].Table[0].stufromdestrict] == null ? "" : top.clientareaItem[data[0].Table[0].stufromdestrict].FullName)
+                        + "</td>";
+                    suthtml += " </tr>";
+
+                    /*以下是增加按键的HTML*/
+                    btnhtml += "<tr>";
+                    btnhtml += "<td> <a  class=\"btn btn-default\" onclick=\"pagereload()\"><i class=\"fa fa-fast-forward\"></i>下一个</a> </td>";
+                    if (data[0].Table[0].bedid != null)
+                    {
+                       
+                    }
+                    else {
+                        btnhtml += "<td><a  class=\"btn btn-warning\"  onclick=\"ChoiceBed('" + data[0].Table[0].stuinfoid + "')\" ><i class=\"fa fa-bed\"></i>选择宿舍</a></td>";
+                    }
+                    btnhtml += "</tr>";
+
+
+                }
+            }
+        });
+        $('#stuinfotb').find('tbody').html(suthtml);
+        $('#btns').html(btnhtml);
+    }
+    //根据ID号返回数据字典的名称
+    function GetName(itemdetailid) {
+        var getitemdata;
+        $.ajax({
+            url: "/ClientData/GetDataItemModel",
+            data: { ItemDetailId: itemdetailid },
+            type: "post",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                getitemdata = data;
+            }
+        });
+        if (getitemdata == null) {
+            return "";
+        }
+        return getitemdata.ItemName;
+    }
+    //格式化日期
+    function dataformat(strdate) {
+        if (strdate == "") {
+            return "格式错误";
+        }
+        var dt = new Date(strdate);
+        return dt.getFullYear() + "年" + dt.getMonth() + "月" + dt.getDay() + "日";
+    }
+
+    function pagereload() {
+        $('#NoticeNo').val("").focus();
+        $('#stuname').val("");
+        $('#identitycardno').val("");
+        $('#stuno').val("");
+        reload();
+    }
+
+    function ChoiceBed(stuinfoId) {
+        dialogOpen({
+            id: 'Form',
+            title: '选择床位',
+            url: '/CollegeMIS/BK_StuInfo/BedForm?keyValue=' + stuinfoId,
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        })
+    }
+</script>
+
+<div class="titlePanel">
+    @*<div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>*@
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+            @*<a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>详细</a>*@
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="price-box">
+    <div class="price-title">
+        新生选宿舍床位
+    </div>
+    <div class="price-info">
+        <table class="form">
+            <tr>
+                <th class="formTitle" style="width: 100px;">通知书号(可扫描)：</th>
+                <td class="formValue" style="padding-right: 20px;">
+                    <input type="text" id="NoticeNo" class="form-control " />
+                </td>
+                <th class="formTitle">学&nbsp;&nbsp;&nbsp;&nbsp;号：</th>
+                <td class="formValue">
+                    <input type="text" class="form-control " id="stuno" value="" readonly />
+                </td>
+
+               
+            </tr>
+            <tr>
+                <th class="formTitle">姓&nbsp;&nbsp;&nbsp;&nbsp;名：</th>
+                <td class="formValue">
+                    <input type="text" id="stuname" class="form-control " readonly />
+                </td>
+                <th class="formTitle" style="width: 100px;">身份证号：</th>
+                <td class="formValue" style="padding-right: 20px;">
+                    <input type="text" id="identitycardno" class="form-control " readonly />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="price-subtitle">
+        <p>学生信息</p>
+    </div>
+
+    <div class="price-table">
+        <table class="form table table-bordered" id="stuinfotb">
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="price-info">
+        <table class="form" id="btns">
+
+            <!--<tr>
+                <td >
+                    <button type="button" class="btn btn-warning">警告</button>
+                </td>
+                <td >
+                    <button type="button" class="btn btn-success">成功</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info">一般信息</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger">危险</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-default">默认样式</button>
+                </td>
+            </tr>-->
+        </table>
+
+    </div>
+
+</div>
+

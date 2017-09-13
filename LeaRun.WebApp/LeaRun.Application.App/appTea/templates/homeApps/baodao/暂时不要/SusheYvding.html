@@ -1,0 +1,68 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">宿舍预订</h1>
+        
+    </ion-header-bar>
+
+
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar lr-headimgitem" type="item-text-wrap">
+                <img ng-src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497546871114&di=761ce087d87bd195be1b17bc2618c757&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F16%2F40%2F08%2F79K58PICfch_1024.jpg" style="left:auto;right:30px;" width="200px" />
+                
+            </ion-item>
+            <div class="P13">
+                <ion-item type="item-text-wrap">
+                    <span>宿舍</span>
+                    <span class="item-note">{{detailsData.realname}}</span>
+                    
+
+
+                </ion-item>
+
+
+
+                <div>
+
+                    
+
+        </ion-list>
+
+
+
+        <div class="list mt5">
+            <div class="item item-divider">
+                入住选项
+            </div>
+            <ion-list>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('DromStandard.html','right',detailsData)">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    住宿标准
+                    <span class="badge badge-assertive">未选择</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('DormLeaveInfo.html','right',detailsData)">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    入住信息
+                    <span class="badge badge-assertive">5</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                </ion-list>
+            </div>
+
+        <div class="item item-divider">
+            办理入住
+        </div>
+        <div>
+            <button class="button button-block button-positive" ng-click="openDetailsModal('DormBed.html','right',detailsData)">
+                预定
+            </button>
+        </div>
+
+    </ion-content>
+
+
+</ion-modal-view>
+

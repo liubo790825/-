@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "查看新闻公告";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = '@ViewBag.keyValue';
+    $(function () {
+        $("#NewsContent").height($(window).height() - 95);
+        initControl();
+    })
+    //初始化控件
+    function initControl() {
+        $.SetForm({
+            url: "../../PublicInfoManage/News/GetFormJson",
+            param: { keyValue: keyValue },
+            success: function (data) {
+                $("#FullHead").html(data.FullHead).css("color", data.FullHeadColor);
+                //$("#Category").html(data.Category);
+                $("#ReleaseTime").html(data.ReleaseTime);
+                $("#AuthorName").html(data.AuthorName)
+                $("#SourceAddress").html(data.SourceAddress);
+                //$("#TagWord").html(data.TagWord);
+                //$("#Keyword").html(data.Keyword);
+                $("#NewsContent").html(data.NewsContent);
+
+            }
+        });
+    }
+</script>
+<div class="border-bottom" style="padding-top: 10px; background: #F5F5F5; padding-bottom: 8px; height: 35px;">
+    @*<div style="position: absolute; right: 38px; top: 38px;">
+        <img style="height: 50px; width: 50px;" src="~/Content/images/80_1.png" />
+    </div>*@
+    <div id="FullHead" style="padding-bottom: 8px; padding-left: 18px; font-weight: bold; font-size: 16px;display:none">关于2015.9.22服务故障的事故报告与赔偿声明</div>
+    <center>
+        <table class="form" style="color: #95A0AA;">
+            <tr>
+                <th class="formTitle" style="width: 75px; padding-bottom: 4px;">发 布 者：</th>
+                <td class="formValue" style="padding: 0px; padding-bottom: 4px;">
+                    <span id="AuthorName" style="color: #5fa207;"></span>
+                </td>
+
+                <th class="formTitle" style="width: 75px; padding-bottom: 4px;">发布时间：</th>
+                <td class="formValue" style="padding: 0px; padding-bottom: 4px;">
+                    <div id="ReleaseTime">2015年9月22日(星期二) 晚上7:50</div>
+                </td>
+
+                <th class="formTitle" style="width: 75px; padding-bottom: 4px;">信息来源：</th>
+                <td class="formValue" style="padding: 0px; padding-bottom: 4px;">
+                    <div id="SourceAddress"></div>
+                </td>
+            </tr>
+        </table>
+    </center>
+</div>
+<div id="NewsContent" style="margin: 5px; overflow: auto; padding: 10px; padding-bottom: 0px;">
+</div>
+<div class="form-button" id="wizard-actions">
+    <a class="btn btn-success" onclick="dialogClose()">关闭</a>
+</div>

@@ -1,0 +1,205 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">抵校信息</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="openEditModal('baodaoEdit.html','right',detailsData)"><i class="icon ion-ios-compose-outline"></i></button>
+            <!--<button class="button button-clear" style="margin-left:5px;" ng-click="doDelete(detailsData)"><i class="icon ion-ios-trash-outline"></i></button>-->
+        </div>
+    </ion-header-bar>
+
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+                white-space: normal; /*覆盖white-space: nowrap*/
+            }
+
+    </style>
+    <!--<ion-content>
+        
+        </ion-content>-->
+
+                                <ion-content>
+
+                                    <div class="list mt5" style="background-color:white">
+
+                                        <div class="item item-divider bgcolor_d">
+                                            重要说明
+                                        </div>
+                                        <item-content>
+
+                                            <div class="list list-inset lr-list-type2 " style="margin-top:0px;">
+                                                <div class="row">
+                                                    <div class="col-99 item-note">
+                                                        <p>
+                                                            学校推出“新生报到接待”服务，届时会在各火车站、汽车站、机场设置新生接待处，并有学校班车接送学生报到入学，请各位同学认真填写下列信息，招办老师会及时与您联系。
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </item-content>
+                                    </div>
+
+                                    <ion-list>
+
+                                        
+                                        <!--<ion-item class="item-remove-animate item-avatar item-icon-right mt5 lr-headimgitem" type="item-text-wrap">
+                                            <img ng-src="{{detailsData.headicon}}" style="left:auto;right:30px;" />
+                                            <span>头像</span>
+                                            <i class="icon ion-chevron-right icon-accessory"></i>
+                                        </ion-item>-->
+
+                                        <div class="item item-divider bgcolor_b">
+                                            报到预约信息
+                                        </div>
+                                        <div class="P13">
+                                            <ion-item type="item-text-wrap">
+                                                <span>考生号</span>
+                                                <span class="item-note">17152612</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>准考证号</span>
+                                                <span class="item-note">17152612</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>姓名</span>
+                                                <span class="item-note">{{detailsData.realname}}</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>性别</span>
+                                                <span class="item-note">{{detailsData.gender}}</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>身份证号</span>
+                                                <span class="item-note">510222199901110039</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>出生日期</span>
+                                                <span class="item-note">1998-03-09</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>民族</span>
+                                                <span class="item-note">汉</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>政治面貌</span>
+                                                <span class="item-note">团员</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>考生类别</span>
+                                                <span class="item-note">应届</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>生源地</span>
+                                                <span class="item-note">新疆维吾尔自治区</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>联系地址</span>
+                                                <span class="item-note">新疆维吾尔自治区</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>籍贯</span>
+                                                <span class="item-note">新疆</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>报道时间</span>
+                                                <span class="item-note">2017-09-01</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>联系电话</span>
+                                                <span class="item-note">13983201985</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>联系人</span>
+                                                <span class="item-note">王悦</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>录取院系</span>
+                                                <span class="item-note">软件工程系</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>录取专业</span>
+                                                <span class="item-note">软件编程</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>专业类别</span>
+                                                <span class="item-note"> </span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>录取方向</span>
+                                                <span class="item-note"> </span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>学习生涯</span>
+                                                <span class="item-note"> </span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>年级</span>
+                                                <span class="item-note">2017</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>班级</span>
+                                                <span class="item-note">软件编程01班</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>学号</span>
+                                                <span class="item-note">20170101</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>辅导员</span>
+                                                <span class="item-note">陈晗</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>辅导员电话</span>
+                                                <span class="item-note">15227718901</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>缴费状态</span>
+                                                <span class="item-note">已交清</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>缴费金额</span>
+                                                <span class="item-note">5210</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>住宿状态</span>
+                                                <span class="item-note">未住</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>到校方式</span>
+                                                <span class="item-note">火车</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>到校时间</span>
+                                                <span class="item-note">2017-9-1</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>到站名称</span>
+                                                <span class="item-note">北京西站</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>随同人数</span>
+                                                <span class="item-note">2</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>联系电话</span>
+                                                <span class="item-note">18986798888</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>备用电话</span>
+                                                <span class="item-note">13323266666</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>附言</span>
+                                                <span class="item-note">行李很多，请接站</span>
+                                            </ion-item>
+                                            <ion-item type="item-text-wrap">
+                                                <span>备注</span>
+                                                <span class="item-note"> </span>
+                                            </ion-item>
+                                            <div>
+                                    </ion-list>
+                                </ion-content>
+
+
+</ion-modal-view>
+

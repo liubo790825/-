@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>柱状图</title>
+    <!--框架必需start-->
+    <link href="../Content/Styles/qjkjui-framework.css" rel="stylesheet" />
+    <script src="../Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="../Content/Scripts/qjkjui-framework.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    <script src="../Content/Scripts/highcharts/highcharts.js"></script>
+    <!--第三方统计图end-->
+    <script>
+        $(function () {
+            $('#container').highcharts({
+                chart: {
+                    type: 'column',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'XX学院新生报到情况分析'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                        '框选放大' :
+                        '手势放大'
+                },
+                xAxis: {
+                    categories: [
+                        '2013',
+                        '2014',
+                        '2015'
+                    ]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '报到人数 (人)'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span>{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} 人</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '录取人数',
+                    data: [1830, 1830, 1800]
+
+                }, {
+                    name: '报到人数',
+                    data: [2500, 2300, 2300]
+
+                },
+                {
+                    name: '交费人数',
+                    data: [2450, 2300, 2400]
+
+                }]
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+</body>
+</html>

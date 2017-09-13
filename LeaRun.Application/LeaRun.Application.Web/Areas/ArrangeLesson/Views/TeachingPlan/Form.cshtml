@@ -1,0 +1,236 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_OrderForm.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        InitialPage();
+        GetOrderEntryGrid();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+{ label: 'ID', name: 'PlanCourseId', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '课程号', name: 'CourseCode', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '课程名称', name: 'CourseName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '课程属性', name: 'CourseProperty', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '课程类型', name: 'CourseType', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '授课系部', name: 'TeachingDept', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '总学分', name: 'TotalCredits', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '总学时', name: 'TotalHours', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '周学时', name: 'WeekHours', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '第几学期', name: 'Semester', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '课程简介', name: 'CourseIntro', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '教学指导', name: 'TeachingGuideline', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '注意', name: 'CourseWare', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '参考书', name: 'ReferenceBook', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '教学计划编号', name: 'TeachingPlanCode', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '理论学时', name: 'TheoryHours', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '实践学时', name: 'PracticeHours', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '年级', name: 'Grade', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '状态', name: 'Status', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '考核方式', name: 'TestType', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '简称', name: 'ShortName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '学分', name: 'Xuefen', width: 80, align: '', sortable: false, resizable: false  },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+PlanCourseId: '<input name="PlanCourseId" type="text" class="editable center" />',
+CourseCode: '<input name="CourseCode" type="text" class="editable center" />',
+CourseName: '<input name="CourseName" type="text" class="editable center" />',
+CourseProperty: '<input name="CourseProperty" type="text" class="editable center" />',
+CourseType: '<input name="CourseType" type="text" class="editable center" />',
+TeachingDept: '<input name="TeachingDept" type="text" class="editable center" />',
+TotalCredits: '<input name="TotalCredits" type="text" class="editable center" />',
+TotalHours: '<input name="TotalHours" type="text" class="editable center" />',
+WeekHours: '<input name="WeekHours" type="text" class="editable center" />',
+Semester: '<input name="Semester" type="text" class="editable center" />',
+CourseIntro: '<input name="CourseIntro" type="text" class="editable center" />',
+TeachingGuideline: '<input name="TeachingGuideline" type="text" class="editable center" />',
+CourseWare: '<input name="CourseWare" type="text" class="editable center" />',
+ReferenceBook: '<input name="ReferenceBook" type="text" class="editable center" />',
+TeachingPlanCode: '<input name="TeachingPlanCode" type="text" class="editable center" />',
+TheoryHours: '<input name="TheoryHours" type="text" class="editable center" />',
+PracticeHours: '<input name="PracticeHours" type="text" class="editable center" />',
+Grade: '<input name="Grade" type="text" class="editable center" />',
+Status: '<input name="Status" type="text" class="editable center" />',
+TestType: '<input name="TestType" type="text" class="editable center" />',
+ShortName: '<input name="ShortName" type="text" class="editable center" />',
+Xuefen: '<input name="Xuefen" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../ArrangeLesson/TeachingPlan/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data.entity);
+                    //明细
+                    var childEntity = data.childEntity;
+                    $('#gridTable').find('[role=row]').each(function (i) {
+                        var row = childEntity[i - 1];
+                        if (row != undefined) {
+$(this).find('input[name="PlanCourseId"]').val(row.PlanCourseId);
+$(this).find('input[name="CourseCode"]').val(row.CourseCode);
+$(this).find('input[name="CourseName"]').val(row.CourseName);
+$(this).find('input[name="CourseProperty"]').val(row.CourseProperty);
+$(this).find('input[name="CourseType"]').val(row.CourseType);
+$(this).find('input[name="TeachingDept"]').val(row.TeachingDept);
+$(this).find('input[name="TotalCredits"]').val(row.TotalCredits);
+$(this).find('input[name="TotalHours"]').val(row.TotalHours);
+$(this).find('input[name="WeekHours"]').val(row.WeekHours);
+$(this).find('input[name="Semester"]').val(row.Semester);
+$(this).find('input[name="CourseIntro"]').val(row.CourseIntro);
+$(this).find('input[name="TeachingGuideline"]').val(row.TeachingGuideline);
+$(this).find('input[name="CourseWare"]').val(row.CourseWare);
+$(this).find('input[name="ReferenceBook"]').val(row.ReferenceBook);
+$(this).find('input[name="TeachingPlanCode"]').val(row.TeachingPlanCode);
+$(this).find('input[name="TheoryHours"]').val(row.TheoryHours);
+$(this).find('input[name="PracticeHours"]').val(row.PracticeHours);
+$(this).find('input[name="Grade"]').val(row.Grade);
+$(this).find('input[name="Status"]').val(row.Status);
+$(this).find('input[name="TestType"]').val(row.TestType);
+$(this).find('input[name="ShortName"]').val(row.ShortName);
+$(this).find('input[name="Xuefen"]').val(row.Xuefen);
+                        }
+                    });
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+        $('#gridTable').find('[role=row]').each(function (i) {
+        if (!!$(this).find('input[name="CourseCode"]').val()) {
+            childEntryJson.push({
+PlanCourseId: $(this).find('input[name="PlanCourseId"]').val(),
+CourseCode: $(this).find('input[name="CourseCode"]').val(),
+CourseName: $(this).find('input[name="CourseName"]').val(),
+CourseProperty: $(this).find('input[name="CourseProperty"]').val(),
+CourseType: $(this).find('input[name="CourseType"]').val(),
+TeachingDept: $(this).find('input[name="TeachingDept"]').val(),
+TotalCredits: $(this).find('input[name="TotalCredits"]').val(),
+TotalHours: $(this).find('input[name="TotalHours"]').val(),
+WeekHours: $(this).find('input[name="WeekHours"]').val(),
+Semester: $(this).find('input[name="Semester"]').val(),
+CourseIntro: $(this).find('input[name="CourseIntro"]').val(),
+TeachingGuideline: $(this).find('input[name="TeachingGuideline"]').val(),
+CourseWare: $(this).find('input[name="CourseWare"]').val(),
+ReferenceBook: $(this).find('input[name="ReferenceBook"]').val(),
+TeachingPlanCode: $(this).find('input[name="TeachingPlanCode"]').val(),
+TheoryHours: $(this).find('input[name="TheoryHours"]').val(),
+PracticeHours: $(this).find('input[name="PracticeHours"]').val(),
+Grade: $(this).find('input[name="Grade"]').val(),
+Status: $(this).find('input[name="Status"]').val(),
+TestType: $(this).find('input[name="TestType"]').val(),
+ShortName: $(this).find('input[name="ShortName"]').val(),
+Xuefen: $(this).find('input[name="Xuefen"]').val(),
+                 });
+            }
+        });
+        $.SaveForm({
+            url: "../../ArrangeLesson/TeachingPlan/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="height:190px;overflow-y:auto;margin:10px 10px;">
+    <table class="form" style="width: 100%;">
+        <tr>
+<th class="formTitle" style="width: 60px;">ID<font face="宋体">*</font></th>
+<td class="formValue"><input id="TeachingPlanId" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+<th class="formTitle" style="width: 60px;">计划编号</th>
+<td class="formValue"><input id="TeachingPlanCode" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">计划名称</th>
+<td class="formValue"><input id="TeachingPlanName" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">简介</th>
+<td class="formValue"><input id="TeachingPlanIntro" type="text"  class="form-control" ></td>
+</tr>
+<tr>
+<th class="formTitle" style="width: 60px;">学院</th>
+<td class="formValue"><input id="College" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">专业</th>
+<td class="formValue"><input id="Major" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">第几学期</th>
+<td class="formValue"><input id="Semester" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">年级</th>
+<td class="formValue"><input id="Grade" type="text"  class="form-control" ></td>
+</tr>
+<tr>
+<th class="formTitle" style="width: 60px;">学年</th>
+<td class="formValue"><input id="Xuenian" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">学期</th>
+<td class="formValue"><input id="Xueqi" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">标志</th>
+<td class="formValue"><input id="TpMark" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">状态</th>
+<td class="formValue"><input id="Status" type="text"  class="form-control" ></td>
+     </tr>
+    </table>
+ </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

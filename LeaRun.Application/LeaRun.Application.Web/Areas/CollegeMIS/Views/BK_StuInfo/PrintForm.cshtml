@@ -1,0 +1,120 @@
+@{;
+    ViewBag.Title = "学生通知书页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+
+<script>
+    var stuids = request('stuids');//得到学生的ID号
+    $(function () {
+        //InitialPage();
+        //initControl();        
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!stuids) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_StuInfo/GetFormJson",
+                param: { stuids: stuids },
+                success: function (data) {
+                    $("#form1").SetWebControls(data.entity);
+                }
+            });
+        }
+    }
+
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form').Validform()) {
+            return false;
+        }
+        var postData = $("#form").GetWebControls();
+        var childEntryJson = [];
+
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_StuInfo/SaveForm?stuids=" + stuids,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="price-box">
+
+    <div>
+        <div class="price-title">录取通知书</div>
+        <div style="width:100%;margin-left:10px;font-family:KaiTi;font-size:16pt;font-weight:300;">
+            <span id="StuName"></span>同学(准考证号<span id="zkzh"></span>)
+        </div>
+        <div class="col-sm-12" style="font-family:KaiTi;font-size:16pt;margin:10px;">
+            &nbsp; &nbsp;通过全国普通高等学校入学考试，你已被新疆农业大学科学技术学院<span id="majorname"></span>专业录取，
+            请于2017年9月13日到2017年9月14日间，到该院办理入学手续。
+        </div>
+        <div style="width:100%;font-family:KaiTi;font-size:16pt;margin:10px;float:right" class="col-sm-12">新疆农业大学科学技术学院 </div>
+        <div style="width:100%;font-family:KaiTi;font-size:16pt" class="col-sm-12">2017年8月10日 </div>
+    </div>
+</div>
+<div class="price-box">
+    <div >
+        <div class="price-title">录取通知书</div>
+        <div style="width:100%;margin-left:10px;font-family:KaiTi;font-size:16pt;font-weight:300;">
+            <span id="StuName"></span>同学(准考证号<span id="zkzh"></span>)
+        </div>
+        <div class="col-sm-12" style="font-family:KaiTi;font-size:16pt;margin:10px;">
+            &nbsp; &nbsp;通过全国普通高等学校入学考试，你已被新疆农业大学科学技术学院<span id="majorname"></span>专业录取，
+            请于2017年9月13日到2017年9月14日间，到该院办理入学手续。
+        </div>
+        <div style="width:100%;font-family:KaiTi;font-size:16pt;margin:10px;float:right" class="col-sm-12">新疆农业大学科学技术学院 </div>
+        <div style="width:100%;font-family:KaiTi;font-size:16pt" class="col-sm-12">2017年8月10日 </div>
+    </div>
+</div>
+
+<div class="price-box">
+    <div>
+        <div class="price-title">录取通知书</div>
+        <div style="width:100%;margin-left:10px;font-family:KaiTi;font-size:16pt;font-weight:300;">
+            <span id="StuName"></span>同学(准考证号<span id="zkzh"></span>)
+        </div>
+        <div class="col-sm-12" style="font-family:KaiTi;font-size:16pt;margin:10px;">
+            &nbsp; &nbsp;通过全国普通高等学校入学考试，你已被新疆农业大学科学技术学院<span id="majorname"></span>专业录取，
+            请于2017年9月13日到2017年9月14日间，到该院办理入学手续。
+        </div>
+        <div style="width:100%;font-family:KaiTi;font-size:16pt;margin:10px;float:right" class="col-sm-12">新疆农业大学科学技术学院 </div>
+        <div style="width:100%;font-family:KaiTi;font-size:16pt" class="col-sm-12">2017年8月10日 </div>
+    </div>
+</div>
+
+<div class="price-box">
+    <div>
+        <div class="price-title">录取通知书</div>
+        <div style="width:100%;margin-left:10px;font-family:KaiTi;font-size:16pt;font-weight:300;">
+            <span id="StuName"></span>同学(准考证号<span id="zkzh"></span>)
+        </div>
+        <div class="col-sm-12" style="font-family:KaiTi;font-size:16pt;margin:10px;">
+            &nbsp; &nbsp;通过全国普通高等学校入学考试，你已被新疆农业大学科学技术学院<span id="majorname"></span>专业录取，
+            请于2017年9月13日到2017年9月14日间，到该院办理入学手续。
+        </div>
+        <div style="width:100%;font-family:KaiTi;font-size:16pt;margin:10px;float:right" class="col-sm-12">新疆农业大学科学技术学院 </div>
+        <div style="width:100%;font-family:KaiTi;font-size:16pt" class="col-sm-12">2017年8月10日 </div>
+    </div>
+</div>
+<style>
+    .price-box{width:860px;margin-left:auto;margin-right:auto;border: 1px solid #ddd;box-shadow: rgb(189, 189, 189) 0px 0px 10px;background: #fff;padding: 50px;padding-top:20px;margin-top: 25px;padding-bottom:0px;}
+.price-title{font-size: 28px;text-align: center;line-height:60px;font-weight: bold;color: #333;}
+
+</style>

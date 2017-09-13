@@ -1,0 +1,40 @@
+﻿<ion-modal-view>
+  <ion-header-bar class="bar-stable nav-title-slide-ios7">
+      <button class="button button-clear " ng-click="closeBaodaoFuncModal()()"><i class="icon ion-ios-arrow-left"></i></button>
+    <h1 class="title">绿色通道管理</h1>
+    <button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>
+  </ion-header-bar>
+  <div class="bar bar-subheader lr-subheader">
+      <div class="lr-left-tool">
+          <div class="lr-down-select"><span>全部</span><span class="num"><!--{{data.records}}-->条</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+      </div>
+      <div class="lr-right-tool">
+          <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+          <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+      </div>
+  </div>
+  <ion-content delegate-handle="businesslist-content">
+      <ion-refresher pulling-text="下拉刷新" on-refresh="JustRefresh()"></ion-refresher>
+      <div class="list  list-inset lr-list-type2" style="margin-top:40px;" >
+          <ion-list>
+              <ion-item ng-repeat="lvseData in lvse.result.rows" class="item-remove-animate mt10" ng-click="openCommDetailsModal('lvsetongdaoDetails.html','up',lvseData)">
+                  <!--"business in data.businesss"-->
+                  <div class="row">
+                      <div class="col-80"><span class="lr-title">{{lvseData.stuName}}</span></div>
+                      <div class="col-20"><span class="lr-title" style="text-align:right;">{{lvseData.lvseOther|date:"yy-MM-dd"}}</span></div>
+                  </div>
+                  <div class="row">
+                      <div class="col-33"><div class="lr-label {{business.bgStageColor}}">{{lvseData.hujiLeibie}}</div></div>
+                      <div class="col-33 lr-item-content"><p><span>家庭类型：{{lvseData.familyType}}</span></p><p><span>家庭总人口：{{lvseData.familyNumber}}人</span></p></div>
+                      <div class="col-33 lr-item-content"><p><span>家庭月收入：{{lvseData.familyMonthIncome}}</span></p><p><span>人均月收入：{{lvseData.oneMonthIncome}}</span></p></div>
+                  </div>
+                  <ion-option-button ng-click="doDelete(business)"><span class="lr-trash-circled"><i class="icon ion-ios-trash-outline"></i></span></ion-option-button>
+              </ion-item>
+          </ion-list>
+      </div>
+      <ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>
+  </ion-content>
+  <!--<div class="lr-plug-btn">
+      <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+  </div>-->
+</ion-modal-view>

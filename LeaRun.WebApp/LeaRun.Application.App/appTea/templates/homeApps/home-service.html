@@ -1,0 +1,137 @@
+﻿
+
+    <ion-view hide-nav-bar="true" view-title="校园服务大厅">
+        <ion-content>
+            <ion-header-bar class="bar-stable nav-title-slide-ios7">
+                <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+                <h1 class="title">校园服务大厅</h1>
+                <button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>
+            </ion-header-bar>
+            <style>
+                .color1{
+                    color:black !important;
+
+                }
+               
+            </style>
+            <div class="bar bar-subheader lr-subheader">
+                <div class="lr-left-tool">
+                    <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}个</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+                </div>
+                <div class="lr-right-tool">
+                    <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+                    <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+                </div>
+            </div>
+            <!--首页图片轮询-->
+            <div class="banner">
+                <img src="img/2.jpg" />
+            </div>
+
+
+            <div class="button-bar bar-balanced mt10" style="padding:0;">
+                <a class="button button-positive">全部</a>
+                <a class="button button-balanced">教职工</a>
+                <a class="button button-calm">学生</a>
+                <a class="button " style="background-color:grey">访客</a>
+            </div>
+
+            <div class="list mt5">
+                <div class="item item-divider">
+                    后勤
+                </div>
+                <ion-list>
+
+                    <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                        <i class="icon ion-ios-list-outline positive-bg"></i>
+                        <p class="color1" style="margin-top:-20px;">安全隐患反馈</p>
+                            <span class="badge badge-assertive">6</span>
+                            
+                        <p style="color:grey;margin-top:-2px;">安全隐患相关问题保修</p>
+                        <p style="color:grey;margin-top:-2px;">热度：57</p>
+                    </ion-item>
+
+                    <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                        <i class="icon ion-ios-list-outline positive-bg"></i>
+                        <p class="color1" style="margin-top:-20px;">后勤意见反馈</p>
+                        <span class="badge badge-assertive">10</span>
+
+                        <p style="color:grey;margin-top:-2px;">后勤相关问题保修</p>
+                        <p style="color:grey;margin-top:-2px;">热度：85</p>
+                    </ion-item>
+                    <div class="item item-divider">
+                        教务
+                    </div>
+                    <ion-list>
+
+                        <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                            <i class="icon ion-ios-list-outline positive-bg"></i>
+                            <p class="color1" style="margin-top:-20px;">安全隐患反馈</p>
+                            <span class="badge badge-assertive">6</span>
+
+                            <p style="color:grey;margin-top:-2px;">安全隐患相关问题保修</p>
+                            <p style="color:grey;margin-top:-2px;">热度：57</p>
+                        </ion-item>
+                        <div class="item item-divider">
+                            教职工
+                        </div>
+                        <ion-list>
+
+                            <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                                <i class="icon ion-ios-list-outline positive-bg"></i>
+                                <p class="color1" style="margin-top:-20px;">请假申请</p>
+                                <span class="badge badge-assertive">6</span>
+
+                                <p style="color:grey;margin-top:-2px;">请假申请</p>
+                                <p style="color:grey;margin-top:-2px;">热度：1234</p>
+                            </ion-item>
+                            <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                                <i class="icon ion-ios-list-outline positive-bg"></i>
+                                <p class="color1" style="margin-top:-20px;">成绩申诉</p>
+                                <span class="badge badge-assertive">99</span>
+
+                                <p style="color:grey;margin-top:-2px;">成绩申诉</p>
+                                <p style="color:grey;margin-top:-2px;">热度：1234</p>
+                            </ion-item>
+                            <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                                <i class="icon ion-ios-list-outline positive-bg"></i>
+                                <p class="color1" style="margin-top:-20px;">调课申请</p>
+                                <span class="badge badge-assertive">99</span>
+
+                                <p style="color:grey;margin-top:-2px;">调课申请</p>
+                                <p style="color:grey;margin-top:-2px;">热度：1234</p>
+                            </ion-item>
+                            <div class="item item-divider">
+                                教学
+                            </div>
+                            <ion-list>
+
+                                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                                    <p class="color1" style="margin-top:-20px;">布置作业</p>
+                                    <span class="badge badge-assertive">99</span>
+
+                                    <p style="color:grey;margin-top:-2px;">布置作业</p>
+                                    <p style="color:grey;margin-top:-2px;">热度：1234</p>
+                                </ion-item>
+                                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                                    <p class="color1" style="margin-top:-20px;">交作业</p>
+                                    <span class="badge badge-assertive">99</span>
+
+                                    <p style="color:grey;margin-top:-2px;">交作业</p>
+                                    <p style="color:grey;margin-top:-2px;">热度：1234</p>
+                                </ion-item>
+                                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('MyTeaLesson.html','up')">
+                                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                                    <p class="color1" style="margin-top:-20px;">课表</p>
+                                    <span class="badge badge-assertive">99</span>
+
+                                    <p style="color:grey;margin-top:-2px;">课表</p>
+                                    <p style="color:grey;margin-top:-2px;">热度：1234</p>
+                                </ion-item>
+                            </ion-list>
+</div>
+        </ion-content>
+    </ion-view>
+

@@ -1,0 +1,252 @@
+﻿@{
+    ViewBag.Title = "流转条件设置";
+    Layout = "~/Views/Shared/_FormNew.cshtml";
+}
+
+<style>
+    .ui-widget-content {
+        border-left: none;
+        border-bottom: none;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td {
+        padding: 0;
+    }
+
+    .ui-widget-content .ui-state-hover {
+        background: #fff;
+    }
+
+    .ui-widget-content .ui-state-highlight {
+        background: #fff;
+        color: #000;
+    }
+
+    .unwritten {
+        display: none;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td {
+        border-right: 1px solid #ccc;
+    }
+
+    option {
+        font-family: 微软雅黑,宋体,Arial,Helvetica,Verdana,sans-serif;
+        font-size: 9pt;
+    }
+
+    .ui-jqgrid .ui-jqgrid-view input, .ui-jqgrid .ui-jqgrid-view select {
+        height: 26px;
+    }
+</style>
+<form>
+    <div style="margin: 10px;">
+        <input id="LineName" type="text" class="form-control" placeholder="请输入箭头标签" style="width: 260px;display:inline-block;" />
+        <div style="float:right;">
+            <div class="btn-group">
+                <a id="btn_add" class="btn btn-default btn-sm" onclick="$.formJs.btn.add()"><i class="fa fa-plus"></i>&nbsp;添加栏位</a>
+                <a id="btn_delete" class="btn btn-default  btn-sm" onclick="$.formJs.btn.deleteBtn()"><i class="fa fa-minus"></i>&nbsp;删除栏位</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div style=" overflow auto; height 301px;">
+            <div id="seniorcondition" class="tabPanel">
+                <table id="gridTable"></table>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    (function ($) {
+        $.formJs = {
+            line: {},
+            rownum: 1,
+            formHaven: [],
+            formContentData:{},
+            loadData: function () {
+                var _flowObject = top.FlowSchemeDesigner.$.indexJs.step.workFlowInfo.object;
+                var _lineId = top.FlowSchemeDesigner.$.indexJs.step.workFlowInfo.lineId;
+                $.formJs.line = _flowObject.$lineData[_lineId];
+                $.formJs.line.id = _lineId;
+                $.formJs.formHaven = top.FlowSchemeDesigner.$.indexJs.focusForm;
+                $.formJs.formContentData = top.FlowSchemeDesigner.$.indexJs.formContentData;
+            },
+            initialGrid: function () {
+                //显示表里面字段
+                var FieldValue = ":";
+                for (var j in $.formJs.formHaven)
+                {
+                    var frmId = $.formJs.formHaven[j];
+                    if ($.formJs.formContentData[frmId] != undefined) {
+                        var __data = [];
+                        if ($.formJs.formContentData[frmId].data.type == 2) {
+                            __data = $.formJs.formContentData[frmId].data.data.fields;
+                        }
+                        else {
+                            $.each($.formJs.formContentData[frmId].data.data, function (i, item) {
+                                $.each(item.fields, function (j, jitem) {
+                                    __data.push(jitem);
+                                });
+                            });
+                        }
+                        $.each(__data, function (i, item) {
+                            if (item.type != 'image' && item.type != 'upload' && item.type != 'file') {
+                                FieldValue += ";" + frmId +'|'+ item.field + ":" + $.formJs.formContentData[frmId].name + "-" + item.label;
+                            }
+                        });
+                    }
+                    else {
+                        learun.getDataForm({
+                            type: 'get',
+                            url: "../../FormManage/FormModule/GetEntityJson",
+                            param: { keyValue: frmId },
+                            success: function (dd) {
+                                if (dd != null) {
+                                    var _dataJson = JSON.parse(dd.FrmContent);
+                                    top.FlowSchemeDesigner.$.indexJs.formContentData[frmId] = { name: dd.FrmName, data: _dataJson };
+
+                                    var __data = [];
+                                    if ($.formJs.formContentData[frmId].data.type == 2) {
+                                        __data = $.formJs.formContentData[frmId].data.data.fields;
+                                    }
+                                    else {
+                                        $.each($.formJs.formContentData[frmId].data.data, function (i, item) {
+                                            $.each(item.fields, function (j, jitem) {
+                                                __data.push(jitem);
+                                            });
+                                        });
+                                    }
+
+
+                                    $.each(__data, function (i, item) {
+                                        if (item.type != 'image' && item.type != 'upload' && item.type != 'file') {
+                                            FieldValue += ";" + frmId + '|' + item.field + ":" + $.formJs.formContentData[frmId].name + "-" + item.label;
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+
+
+                }
+                var lastsel = 0;
+                $("#gridTable").jqGrid({
+                    datatype: "local",
+                    height: 271,
+                    autowidth: true,
+                    colModel: [
+                        { label: '字段ID', name: 'FieldId', index: 'FieldId', hidden: true },
+                        {
+                            label: "字段名称", name: "FieldName", index: "FieldName", width: 240, sortable: false, editable: true, edittype: 'select', editoptions: {
+                                value: FieldValue
+                            }
+                        },
+                        { label: '比较Id', name: 'FilterId', index: 'FilterId', hidden: true },
+                        {
+                            label: "比较", name: "FilterName", index: "FilterName", align: 'center', width: 80, sortable: false, editable: true, edittype: 'select', editoptions: {
+                                value: ":;Equal:等于;NotEqual:不等于;Greater:大于;GreaterThan:大于等于;Less:小于;LessThan:小于等于;Null:为空;NotNull:不为空;Like:包含;NotLike:不包含"//;LeftLike:左包含;RightLike:右包含"
+                            }
+                        },
+                        { label: "比较值", name: "FilterValue", index: "FilterValue", width: 300, sortable: false, editable: true },
+                        {
+                            label: "逻辑", name: "Logic", index: "Logic", width: 60, sortable: false, editable: true, edittype: 'select', editoptions: {
+                                value: ":;AND:AND;OR:OR"
+                            }
+                        }
+                    ],
+                    pager: "false",
+                    rowNum: 300,
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    altRows: false,
+                    onSelectRow: function (id) {
+                        var RowData = {
+                            FieldId: $("[name='FieldName']").val(),
+                            FieldName: $("[name='FieldName']").find('option:selected').text(),
+                            FilterId: $("[name='FilterName']").val(),
+                            FilterName: $("[name='FilterName']").find('option:selected').text(),
+                            FilterValue: $("[name='FilterValue']").val(),
+                            Logic: $("[name='Logic']").val(),
+                        }
+                        $('#gridTable').jqGrid('restoreRow', lastsel);
+                        $('#gridTable').jqGrid('editRow', id, true);
+                        $('#gridTable').jqGrid('setRowData', lastsel, RowData, '');
+                        lastsel = id;
+                    }
+                });
+                $('#gridTable').jqGrid('restoreRow', 1);
+                $('#gridTable').jqGrid('addRowData', 1, {}, "last");
+                //表格自适应（高度、宽度）
+                $(window).resize(function () {
+                    $("#gridTable").jqGrid('setGridWidth', $(window).width() - 4);
+                });
+            },
+            initialData: function () {
+                $("#LineName").val($.formJs.line.name);
+                if ($.formJs.line.setInfo) {
+                    $("#gridTable")[0].addJSONData($.formJs.line.setInfo.conditionJson);
+                }
+            },
+            btn: {
+                add: function () {
+                    $('#gridTable').jqGrid('restoreRow', $.formJs.rownum + 1);
+                    $('#gridTable').jqGrid('addRowData', $.formJs.rownum + 1, {}, "last");
+                    $.formJs.rownum++;
+                },
+                deleteBtn: function () {
+                    $('#gridTable').jqGrid('restoreRow', $.formJs.rownum);
+                    $('#gridTable').jqGrid('delRowData', $.formJs.rownum);
+                    $.formJs.rownum--;
+                }
+            },
+            acceptClick: function (callBack) {
+                var index = $("#gridTable").jqGrid('getGridParam', 'selrow');
+                var RowData = {
+                    FieldId: $("[name='FieldName']").val(),
+                    FieldName: $("[name='FieldName']").find('option:selected').text(),
+                    FilterId: $("[name='FilterName']").val(),
+                    FilterName: $("[name='FilterName']").find('option:selected').text(),
+                    FilterValue: $("[name='FilterValue']").val(),
+                    Logic: $("[name='Logic']").val(),
+                }
+                $('#gridTable').jqGrid('setRowData', index, RowData, '');
+                var ConditionJson = $("#gridTable").jqGrid("getRowData");
+                var postData = {
+                    lineMyName: $("#LineName").val(),
+                    conditionJson: ConditionJson
+                }
+
+                callBack($.formJs.line.id, postData);
+                dialogClose();
+            }
+        }
+
+        $(function () {
+            $.formJs.loadData();
+            $.formJs.initialGrid();
+            $.formJs.initialData();
+        });
+    })(window.jQuery);
+
+
+    var frmtype, lineobject, fromnode, frmCotent, nodePramData;
+
+    function initLoadPageData() {
+        var _FlowDesignObject = top.FlowSchemeBuider.FlowDesignObject;
+        lineobject = _FlowDesignObject.$lineData[top.FlowSchemeBuider.LineId];
+        lineobject.id = top.FlowSchemeBuider.LineId;
+        fromnode = _FlowDesignObject.$nodeData[lineobject.from];
+
+        frmtype = top.FlowSchemeBuider.postData["FrmType"];
+        if (frmtype == 0) {
+            frmCotent = JSON.parse(top.FlowSchemeBuider.frmData["FrmContent"]);
+        }
+        else {
+            nodePramData = top.FlowSchemeBuider.sysFrmData;
+        }
+        $("#LineName").val(lineobject.name);
+    }
+</script>

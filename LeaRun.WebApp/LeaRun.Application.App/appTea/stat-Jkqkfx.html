@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>柱状图</title>
+    <!--框架必需start-->
+    <link href="../Content/Styles/Qjkjui-framework.css" rel="stylesheet" />
+    <script src="../Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="../Content/Scripts/Qjkjui-framework.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    <script src="../Content/Scripts/highcharts/highcharts.js"></script>
+    <!--第三方统计图end-->
+    <script>
+        $(function () {
+            $('#container').highcharts({
+                chart: {
+                    type: 'column',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'XX学院2013-2014学年第一学期监考情况'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                        '框选放大' :
+                        '手势放大'
+                },
+                xAxis: {
+                    categories: [
+                        '第一临床学院',
+                        '中医实训研究所',
+                        '社会科学院',
+                        '外国语学院',
+                        '信息工程学院',
+                        '针灸推拿学院',
+                        '图书馆',
+                        '护理学院（附属卫校）',
+                        '军事体育教研',
+                        '第二临床学院',
+                        '基础医学院',
+                        '经济管理学院',
+                        '教学实验中心'
+                    ]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '监考人数 (人)'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span>{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} 人</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '监考人数',
+                    data: [10, 12, 9, 30, 43, 34, 23, 53, 23, 35, 23, 54, 23]
+
+                }, {
+                    name: '主监考人次',
+                    data: [10, 54, 23, 23, 12, 64, 19, 37, 23, 35, 23, 22, 23]
+
+                }, {
+                    name: '辅监考人次',
+                    data: [64, 64, 12, 74, 23, 44, 12, 61, 13, 23, 74, 45, 32]
+
+                }, {
+                    name: '监考人次',
+                    data: [12, 61, 63, 30, 43, 34, 23, 53, 23, 35, 23, 54, 23]
+
+                }]
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div id="container" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+</body>
+</html>

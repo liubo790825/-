@@ -1,0 +1,127 @@
+﻿<ion-modal-view ng-controller="BaodaoCtrl" ng-init="NumberModal()">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">迎新管理</h1>
+        <!--<button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>-->
+    </ion-header-bar>
+    <!--<div class="bar bar-subheader lr-subheader">
+        <div class="lr-left-tool">
+            <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}条</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+        </div>
+        <div class="lr-right-tool">
+            <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+            <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+        </div>
+    </div>-->
+    <ion-content delegate-handle="Baodaolist-content">
+        <!--<ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>-->
+        <!--<ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>-->
+
+
+
+        <div class="list mt5">
+
+
+            <div class="item item-divider">
+                新生入学管理
+            </div>
+            <ion-list>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('Jiezhan.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    接站信息
+                    <span class="badge badge-assertive">{{Number.Jiezhan.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('Junxunfu.html','up')">
+                    <i class="icon ion-person bgcolor_e"></i>
+                    军训服信息
+                    <span class="badge bgcolor_f">{{Number.Junxunfu.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('lvsetongdao.html','up')">
+                    <i class="icon ion-ios-arrow-right bgcolor_f"></i>
+                    绿色通道
+                    <span class="badge badge-positive">{{Number.Lvsetongdao.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory  "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('TuichiBaodao.html','up')">
+                    <i class="icon ion-ios-clock-outline bgcolor_c"></i>
+                    推迟报到
+                    <span class="badge badge-positive">{{Number.Tuichibaodao.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('answerDetails.html','up')">
+                    <i class="icon ion-chatbubble-working bgcolor_g"></i>
+                    咨询回复
+                    <span class="badge badge-positive">{{Number.Zixunhuifu.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('../reports/baobiao1-a.html','up')">
+                    <i class="icon ion-ios-paperplane-outline bgcolor_c"></i>
+                    新生报到率
+                    <span class="badge badge-positive">80%</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+            <div class="item item-divider">
+                我管理的新生
+            </div>
+
+            <ion-list>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('MyStudents.html','up')">
+                    <i class="icon ion-ios-people-outline calm-bg"></i>
+                    新生花名册
+                    <span class="badge badge-assertive">{{Number.Jiezhan.Xinsheng.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('MyStuLeave.html','up')">
+                    <i class="icon ion-person-stalker bgcolor_c"></i>
+                    新生住宿信息
+                    <span class="badge badge-assertive">{{Number.Xinshengzhusu.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+
+            <div class="item item-divider">
+                入学指南
+            </div>
+
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('RuxueXuzhi.html','up')">
+                    <i class="icon ion-alert assertive-bg"></i>
+                    入学须知
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('TongzhiGonggaoList.html','up')">
+                    <i class="icon ion-ios-bell-outline bgcolor_b"></i>
+                    通知公告
+                    <span class="badge badge-assertive">6</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('Luxian.html','up')">
+                    <i class="icon ion-ios-location bgcolor_g"></i>
+                    到校路线
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+
+
+        </div>
+
+
+
+
+
+    </ion-content>
+    <!--<div class="lr-plug-btn">
+        <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+    </div>-->
+
+
+
+</ion-modal-view>

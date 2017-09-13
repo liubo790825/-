@@ -1,0 +1,120 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">报到预约信息</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="openEditModal('baodaoEdit.html','right',yydata)"><i class="icon ion-ios-compose-outline"></i></button>
+        </div>
+    </ion-header-bar>
+
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+
+    </style>
+
+    <ion-content delegate-handle="baodaoDetailHandle">
+        <div class="item item-divider bgcolor_d">
+            重要说明
+        </div>
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;margin-bottom:10px">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+
+                            <div class="col-99">
+                                <div class="col-99 item-note">
+                                    <p>
+                                        学校推出“新生报到接待”服务，届时会在各火车站、汽车站、机场设置新生接待处，并有学校班车接送学生报到入学，请各位同学认真填写下列信息，招办老师会及时与您联系。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+
+
+        <!--<div class="list mt5" style="background-color:white">-->
+        <ion-list>
+
+            <div class="item item-divider bgcolor_b">
+                报到预约信息
+            </div>
+
+
+
+
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    <span>姓名</span>
+                </div>
+                <span>{{stuinfo.stuName}}</span>
+            </ion-item>
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    到校方式
+                </div>
+                <span>{{item.arrivalMode}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    到校时间
+                </div>
+                <span>{{item.arrivalDate}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    到站名称
+                </div>
+                <span>{{item.arrivalPosition}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    随同人数
+                </div>
+                <span>{{item.number}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    紧急联系人
+                </div>
+                <span>{{item.parentsName}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    联系电话
+                </div>
+                <span>{{item.telephone}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    备用电话
+                </div>
+                <span>{{item.spareTelephone}}</span>
+            </ion-item>
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+                    附言
+                </div>
+                <span>{{item.massage}}</span>
+            </ion-item>
+
+
+
+        </ion-list>
+
+
+            <!--</div>-->
+
+    </ion-content>
+
+
+</ion-modal-view>
+

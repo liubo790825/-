@@ -1,0 +1,62 @@
+﻿
+
+<ion-modal-view  ng-init="xinshengInfo()">
+
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeBaodaoFuncModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">新生花名册</h1>
+
+    </ion-header-bar>
+
+    <style>
+        .item-avatar > img:first-child, .item-avatar .item-image, .item-avatar .item-content > img:first-child, .item-avatar .item-content .item-image, .item-avatar-left > img:first-child, .item-avatar-left .item-image, .item-avatar-left .item-content > img:first-child, .item-avatar-left .item-content .item-image {
+            max-height: 105px;
+            max-width: 90px;
+        }
+
+        .item-avatar {
+            padding-left: 122px;
+        }
+        /*.has-header {
+            top: 30px;
+        }*/
+
+    </style>
+
+    
+    <ion-content delegate-handle="freshStuInfolist-content">
+        <ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>
+
+            <ng-list>
+                <ng-item ng-repeat="x in xinshenginfo.result">
+
+                    <div class="item item-divider bgcolor_b">
+                        班号：{{x.classno}} 人数：{{data.records}}
+                    </div>
+                    
+                    <ng-item ng-repeat="freshStuInfo in x.childEntity"  ng-click="openDetailsModal(freshStuInfo.stuInfoId)" >
+
+
+                        <a class="item item-avatar" href="#">
+                            <img src="{{freshStuInfo.headImg}}" />
+                            <h2>{{freshStuInfo.stuName}}</h2>
+                            <p>性别：{{freshStuInfo.gender}}</p>
+                            <p>民族：{{freshStuInfo.nationalityNo}}</p>
+                            <p>电话：{{freshStuInfo.telephone}}</p>
+                            <p>来源地：{{freshStuInfo.regionNo}}</p>
+                        </a>
+
+                    </ng-item>
+
+                </ng-item>
+
+            </ng-list>
+
+
+
+        <!--<ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>-->
+
+    </ion-content>
+
+
+</ion-modal-view>

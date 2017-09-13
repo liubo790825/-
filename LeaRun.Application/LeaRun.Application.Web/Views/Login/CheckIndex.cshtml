@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CheckIndex</title>
+    <script src="~/Content/scripts/jquery/jquery-1.10.2.min.js"></script>
+    <script>
+        var contentPath = '@Url.Content("~")'.substr(0, '@Url.Content("~")'.length - 1);
+        $.ajax({
+            url: contentPath + "/Login/CheckLogin2",
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if (data.type == 1) {
+                    //var hf = '(LeaRun.Util.Config.GetValue("GzUrl"))/tologin.aspx?ace=' + data.resultdata.UserName + '&wap=IEHeKSwIWLeLKrKKKQJOIYY3213004563or4pperogkrKSweii3BJUeIWOSLMNMrBVCXZfDERreSWYUtWbInEIgt&ts=DateTime.Now.Ticks';
+                    //$.ajax({
+                    //    url: hf,
+                    //    complete: function (xhr, options) {
+                            window.location.href = contentPath + '/Home/Index';
+                    //    }
+                    //})
+                }
+            }
+        })
+
+    </script>
+
+</head>
+<body>
+    <div>
+        
+    </div>
+</body>
+</html>

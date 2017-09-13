@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{21566527-8F54-4A8D-AA68-7662C2C31FB9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LeaRun.Application.Busines</RootNamespace>
+    <AssemblyName>LeaRun.Application.Busines</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountBLL.cs" />
+    <Compile Include="AppManage\App_PageTemplatesBLL.cs" />
+    <Compile Include="AppManage\App_ProjectBLL.cs" />
+    <Compile Include="ArrangeLesson\InfoClassBLL.cs" />
+    <Compile Include="ArrangeLesson\InfoLessonBLL.cs" />
+    <Compile Include="ArrangeLesson\InfoMajorBLL.cs" />
+    <Compile Include="ArrangeLesson\InfoPlaceBLL.cs" />
+    <Compile Include="ArrangeLesson\InfoTeacherBLL.cs" />
+    <Compile Include="ArrangeLesson\OpenLessonPlanBLL.cs" />
+    <Compile Include="ArrangeLesson\TeachingPlanBLL.cs" />
+    <Compile Include="ArrangeLesson\TrainingPlanBLL.cs" />
+    <Compile Include="AuthorizeManage\AuthorizeBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleFormBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleFormInstanceBLL.cs" />
+    <Compile Include="CollegeMIS\Alumni_EventsBLL.cs" />
+    <Compile Include="CollegeMIS\BK_AdvisoryAnswerBLL.cs" />
+    <Compile Include="CollegeMIS\BK_AdvisoryBLL.cs" />
+    <Compile Include="CollegeMIS\BK_AppChangeBedBLL.cs" />
+    <Compile Include="CollegeMIS\BK_AuthorizeNewStuRegFlowBLL.cs" />
+    <Compile Include="CollegeMIS\BK_BaodaoYuyueBLL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CollegeMIS\BK_BehaviorRecodeBLL.cs" />
+    <Compile Include="CollegeMIS\BK_CancelAppBLL.cs" />
+    <Compile Include="CollegeMIS\BK_ClassInfoBLL.cs" />
+    <Compile Include="CollegeMIS\BK_DeptBLL.cs" />
+    <Compile Include="CollegeMIS\BK_DormBedBLL.cs" />
+    <Compile Include="CollegeMIS\BK_DormBLL.cs" />
+    <Compile Include="CollegeMIS\BK_DormBuildingBLL.cs" />
+    <Compile Include="CollegeMIS\BK_DormFloorsBLL.cs" />
+    <Compile Include="CollegeMIS\BK_DormItemBLL.cs" />
+    <Compile Include="CollegeMIS\BK_DormItemRepairBLL.cs" />
+    <Compile Include="CollegeMIS\BK_DormUnitBLL.cs" />
+    <Compile Include="CollegeMIS\BK_ExpressInfoBLL.cs" />
+    <Compile Include="CollegeMIS\BK_JunxunFuzhuangBLL.cs" />
+    <Compile Include="CollegeMIS\BK_LvseTongdaoBLL.cs" />
+    <Compile Include="CollegeMIS\BK_MajorBLL.cs" />
+    <Compile Include="CollegeMIS\BK_MajorDetailBLL.cs" />
+    <Compile Include="CollegeMIS\BK_NewStuRegFlowBLL.cs" />
+    <Compile Include="CollegeMIS\BK_OverallQualityBLL.cs" />
+    <Compile Include="CollegeMIS\BK_RateDormLevelBLL.cs" />
+    <Compile Include="CollegeMIS\BK_SchoolAreaBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuBedDwellBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuChangeClassRecBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuFilesBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuInfoBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuLeaveBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuPassFlowBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuQSBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuQualityScoreBLL.cs" />
+    <Compile Include="CollegeMIS\BK_StuSocRelaBLL.cs" />
+    <Compile Include="CollegeMIS\BK_TuiChiBaoDaoBLL.cs" />
+    <Compile Include="CollegeMIS\CommunityActivBLL.cs" />
+    <Compile Include="CollegeMIS\CommunityMembersBLL.cs" />
+    <Compile Include="CollegeMIS\Community_ActivitiesBLL.cs" />
+    <Compile Include="CollegeMIS\Community_infoBLL.cs" />
+    <Compile Include="CollegeMIS\Community_MembersBLL.cs" />
+    <Compile Include="CollegeMIS\CommunityMemberInfoBLL.cs" />
+    <Compile Include="CollegeMIS\Community_RolesBLL.cs" />
+    <Compile Include="CollegeMIS\EmpInfo2LoginUserBLL.cs" />
+    <Compile Include="CollegeMIS\StudentsBLL.cs" />
+    <Compile Include="CollegeMIS\TempGjTableBLL.cs" />
+    <Compile Include="CustomerManage\CashBalanceBLL.cs" />
+    <Compile Include="CustomerManage\ChanceBLL.cs" />
+    <Compile Include="CustomerManage\ExpensesBLL.cs" />
+    <Compile Include="CustomerManage\InvoiceBLL.cs" />
+    <Compile Include="CustomerManage\ReceivableBLL.cs" />
+    <Compile Include="CustomerManage\ReceivableReportBLL.cs" />
+    <Compile Include="CustomerManage\TrailRecordBLL.cs" />
+    <Compile Include="CustomerManage\CustomerBLL.cs" />
+    <Compile Include="CustomerManage\CustomerContactBLL.cs" />
+    <Compile Include="CustomerManage\OrderBLL.cs" />
+    <Compile Include="CustomerManage\OrderEntryBLL.cs" />
+    <Compile Include="FlowManage\WFDelegate.cs" />
+    <Compile Include="FlowManage\WFRuntimeBLL.cs" />
+    <Compile Include="FlowManage\WFSchemeInfoBLL.cs" />
+    <Compile Include="FlowManage\WFFrmMainBLL.cs" />
+    <Compile Include="FlowManage\WF_ProcessNodesBLL.cs" />
+    <Compile Include="FormManage\Form_ModuleBLL.cs" />
+    <Compile Include="FormManage\Form_ModuleContentBLL.cs" />
+    <Compile Include="FormManage\Form_ModuleInstanceBLL.cs" />
+    <Compile Include="FormManage\Form_ModuleRelationBLL.cs" />
+    <Compile Include="HVSMIS\EmpInfo2AccountBLL.cs" />
+    <Compile Include="HVSMIS\StuInfoGraduateBLL.cs" />
+    <Compile Include="HVSMIS\SupplierCheckBooksBLL.cs" />
+    <Compile Include="HVSMIS\TbBasicInfoBLL.cs" />
+    <Compile Include="PublicInfoManage\ScheduleBLL.cs" />
+    <Compile Include="ReportManage\RptTempBLL.cs" />
+    <Compile Include="SystemManage\ExcelExportBLL.cs" />
+    <Compile Include="SystemManage\ExcelImportBLL.cs" />
+    <Compile Include="SystemManage\LogBLL.cs" />
+    <Compile Include="SystemManage\CodeRuleBLL.cs" />
+    <Compile Include="PublicInfoManage\EmailCategoryBLL.cs" />
+    <Compile Include="PublicInfoManage\EmailContentBLL.cs" />
+    <Compile Include="MessageManage\IMContentBLL.cs" />
+    <Compile Include="MessageManage\IMGroupBLL.cs" />
+    <Compile Include="MessageManage\IMUserBLL.cs" />
+    <Compile Include="PublicInfoManage\FileFolderBLL.cs" />
+    <Compile Include="PublicInfoManage\FileInfoBLL.cs" />
+    <Compile Include="PublicInfoManage\NewsBLL.cs" />
+    <Compile Include="PublicInfoManage\NoticeBLL.cs" />
+    <Compile Include="SystemManage\DataBaseBackupBLL.cs" />
+    <Compile Include="AuthorizeManage\FilterIPBLL.cs" />
+    <Compile Include="AuthorizeManage\FilterTimeBLL.cs" />
+    <Compile Include="SystemManage\DataBaseTableBLL.cs" />
+    <Compile Include="SystemManage\DataBaseLinkBLL.cs" />
+    <Compile Include="SystemManage\AreaBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleButtonBLL.cs" />
+    <Compile Include="AuthorizeManage\ModuleColumnBLL.cs" />
+    <Compile Include="AuthorizeManage\PermissionBLL.cs" />
+    <Compile Include="BaseManage\DepartmentBLL.cs" />
+    <Compile Include="BaseManage\OrganizeBLL.cs" />
+    <Compile Include="BaseManage\UserBLL.cs" />
+    <Compile Include="BaseManage\PostBLL.cs" />
+    <Compile Include="BaseManage\JobBLL.cs" />
+    <Compile Include="BaseManage\UserGroupBLL.cs" />
+    <Compile Include="SystemManage\DataItemBLL.cs" />
+    <Compile Include="SystemManage\DataItemDetailBLL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BaseManage\RoleBLL.cs" />
+    <Compile Include="SystemManage\System_SetExcelExportBLL.cs" />
+    <Compile Include="SystemManage\System_SetExcelImportFiledBLL.cs" />
+    <Compile Include="SystemManage\System_SetExcelImprotBLL.cs" />
+    <Compile Include="WeChatManage\WeChatAppBLL.cs" />
+    <Compile Include="WeChatManage\WeChatOrganizeBLL.cs" />
+    <Compile Include="WeChatManage\WeChatUserBLL.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\LeaRun.Cache\LeaRun.Cache.Factory\LeaRun.Cache.Factory.csproj">
+      <Project>{a68cdd21-2e12-4b11-95db-d0a0fced48b1}</Project>
+      <Name>LeaRun.Cache.Factory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LeaRun.Cache\LeaRun.Cache\LeaRun.Cache.csproj">
+      <Project>{5af4997c-4395-48af-990c-932259111dff}</Project>
+      <Name>LeaRun.Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LeaRun.Data\LeaRun.Data.Repository\LeaRun.Data.Repository.csproj">
+      <Project>{1751a2dd-0f00-4c76-b180-97e8f72fe078}</Project>
+      <Name>LeaRun.Data.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LeaRun.Util.SignalR\LeaRun.Util.SignalR.csproj">
+      <Project>{6bc8c632-4985-4e7e-b5ca-375d400ea8a5}</Project>
+      <Name>LeaRun.Util.SignalR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LeaRun.Util\LeaRun.Util.Extension\LeaRun.Util.Extension.csproj">
+      <Project>{4b7dde80-dfa1-4938-93f8-3721e2c592b9}</Project>
+      <Name>LeaRun.Util.Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LeaRun.Util\LeaRun.Util.Offices\LeaRun.Util.Offices.csproj">
+      <Project>{4f8b359e-b664-48c0-88d0-31c140602654}</Project>
+      <Name>LeaRun.Util.Offices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LeaRun.Util\LeaRun.Util.WebControl\LeaRun.Util.WebControl.csproj">
+      <Project>{93f81df7-5a0b-4a13-a90e-8cf7c41955c3}</Project>
+      <Name>LeaRun.Util.WebControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LeaRun.Util\LeaRun.Util.WeChat\LeaRun.Util.WeChat.csproj">
+      <Project>{a610b831-7b6a-4e53-8c5d-9b3f0707e349}</Project>
+      <Name>LeaRun.Util.WeChat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LeaRun.Util\LeaRun.Util\LeaRun.Util.csproj">
+      <Project>{07aa2566-d0e5-47af-a17d-3b1c6aee598d}</Project>
+      <Name>LeaRun.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LeaRun.Application.Code\LeaRun.Application.Code.csproj">
+      <Project>{9b10db87-130c-41d3-8687-1fac877db74a}</Project>
+      <Name>LeaRun.Application.Code</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LeaRun.Application.Entity\LeaRun.Application.Entity.csproj">
+      <Project>{c10920fe-8c74-4993-a7f4-1da189da842c}</Project>
+      <Name>LeaRun.Application.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LeaRun.Application.IService\LeaRun.Application.IService.csproj">
+      <Project>{6ce11ff9-1cb7-494e-89c7-5f06bea94211}</Project>
+      <Name>LeaRun.Application.IService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LeaRun.Application.Service\LeaRun.Application.Service.csproj">
+      <Project>{d6b8abea-c923-4605-99a9-b7aca5de4d8a}</Project>
+      <Name>LeaRun.Application.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

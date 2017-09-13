@@ -1,0 +1,136 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">我的报到单</h1>
+        <div class="buttons">
+            
+        </div>
+    </ion-header-bar>
+
+
+
+
+    <ion-content delegate-handle="Baodaolist-content">
+        <!--<ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>-->
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;">
+            <ion-list>
+
+                <div class="item item-divider bgcolor_b">
+                    通知书号：{{stuinfo.noticeNo}}
+                </div>
+                <ion-item class="item-remove-animate item-icon-right mt5 lr-headimgitem" type="item-text-wrap">
+                    <!--通知书号条码-->
+                    <img ng-src="{{stuinfo.noticeNo}}" style="left:auto;right:30px;" width="300px" height="50px" />
+                </ion-item>
+
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+
+                        <div class="row">
+                            <div class="col-40"><span class="lr-title">{{stuinfo.stuName}}</span></div>
+                            <div class="col-60">
+                                <span class="lr-title" style="text-align:right;margin-right:15px">
+                                    <i class="icon ion-card positive"></i>
+                                    {{stuinfo.identityCardNo}}
+                                </span>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-35 lr-item-content">
+                                <img width="80px" height="100px" ng-src="{{stuinfo.headImg}}" name="StuPhoto" />
+
+                              
+                            </div>                           
+
+                            <div class="col-75 lr-item-content">
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;录取院系：<span>{{stuinfo.deptName}}</span></p>
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;录取专业：<span>{{stuinfo.majorName}}</span></p>
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;专业类别：<span>{{stuinfo.majorType}}</span></p><!--(1)哲学;(2)经济学;(3)法学;(4)教育学;(5)文学;(6)历史学;(7)理学;(8)工学;(9)农学;(10)医学;(11)军事学;(12)管理学-->
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;专业方向：<span>{{stuinfo.majorDetailName}}</span></p>
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;班级：<span>{{stuinfo.className}}</span></p>
+
+                                
+                            </div>                           
+
+                        </div>
+                        <hr/>
+                        
+
+                        <div class="row">
+                            <div class="col-50 lr-item-content">
+                                <p>性别：<span>{{stuinfo.gender}}</span></p>
+                                <p>民族：<span>{{stuinfo.nationaltyNo}}</span></p>
+                                <p>籍贯：<span>{{stuinfo.residenceNo}}-{{stuinfo.city}}</span></p>
+                                <p>生日：<span>{{stuinfo.birthday}}</span></p>
+                                <p>电话：<span>{{stuinfo.telephone}}</span></p>
+                                
+                                
+
+                            </div>
+                            <div class="col-50 lr-item-content">
+                                <!--<p>通知书号：<span>170511012131</span></p>-->
+                                
+                                <p>年级：<span>{{stuinfo.grade}}级</span></p>
+                                <p>学号：<span>{{stuinfo.stuNo}}</span></p>
+                                <p>宿舍：<span>{{stuinfo.stuOther1}}</span></p>
+                                <p>辅导员：<span>{{stuinfo.stuOther2}}</span></p>
+                                <p>辅导员电话：<span>{{stuinfo.stuOther3}}</span></p>
+
+                            </div>
+                            
+                        </div>
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-70 lr-item-content">
+
+                                <p>考生号：<span>{{stuinfo.ksh}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+                                <p>考生类别：<span>{{stuinfo.stuOther4}}</span></p>
+                                <p>生源地：<span>{{stuinfo.stuFromProvince}}-{{stuinfo.stuFromCity}}</span></p>
+                                <p>报到时间：<span>{{stuinfo.retisterStatus}}</span></p>
+                                <p>交费状态：<span>{{stuinfo.stuOther5}}</span></p>
+                                
+                                <!--1.体育艺术类：
+                                体育类（体兼理和体兼文，有一本，二本[其中有免费师范]，三本和高职专科）
+                                艺术类（文理兼招，有一本，二本，三本和高职专科）
+                                2.理工类（分军队院校提前本科，一本，二本，免费师范，三本和高职专科）
+                                3.文史类（分军队院校提前本科，一本，二本，免费师范，三本和高职专科）
+                                4.少数民族预科等。-->
+                            </div>
+                        
+                            <div class="col-30 lr-item-content">
+                                <p>
+                                    <img ng-src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498136288&di=03bf85fa4d2ed53dfc17abed0b1babd4&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.cache.netease.com%2Fcatchpic%2F8%2F8E%2F8E007DB82E53D1408BF40039D78B9F0C.jpg" style="margin-top:10px;left:auto;right:5px;" width="100px" />
+                                </p>
+                            </div>
+                        </div>
+
+</div>
+                    <!--<ion-option-button ng-click="doDelete(customer)">
+                        <span class="lr-trash-circled"><i class="icon ion-ios-trash-outline"></i></span>
+                    </ion-option-button>-->
+                </ion-item>
+                
+                
+
+            </ion-list>
+            
+        </div>
+        <div>
+
+            <!--新生网上报到单：考生号，准考证号，姓名，性别，照片(条码，二维码)
+            身份证号，出生日期，民族，考生类别，生源地，联系地址，籍贯，报到时间，联系电话，联系人，录取院系，录取专业，专业类别，专业方向,年级，班级，学号，辅导员，辅导员电话，缴费状态，缴费时间，住宿，备注-->
+
+
+
+            <button class="button button-block button-royal" ng-click="closeDetailsModal()">
+                关闭
+            </button>
+        </div>
+
+    </ion-content>
+
+
+</ion-modal-view>
+

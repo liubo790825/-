@@ -1,0 +1,224 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_OrderForm.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    var majorno = request('majorno'); // 专业号
+    var majorname = request("majorname");//专业名称
+    $(function () {
+        InitialPage();
+       // GetOrderEntryGrid();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+                { label: 'ClassId', name: 'ClassId', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+                { label: '行政班码', name: 'ClassNo', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '行政班名', name: 'ClassName', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '系所码', name: 'DeptNo', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '专业码', name: 'MajorNo', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '专业方向号（如0，1，2，3，4，5）      0代表无专业方向细分', name: 'MajorDetailNo', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '专业方向名', name: 'MajorDetailName', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '年级', name: 'Grade', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '学生人数', name: 'StuNum', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '年级内序号', name: 'SerialNum', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '班主任职工号', name: 'ClassDiredctorNo', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '辅导员职工号   ', name: 'ClassTutorNo', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '班级名称全称(根据年级、专业名称、序号自动生成）', name: 'ClassNameFull', width: 80, align: '', sortable: false, resizable: false  },
+                { label: '审核标志', name: 'CheckMark', width: 80, align: '', sortable: false, resizable: false  },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+                ClassId: '<input name="ClassId" type="text" class="editable center" />',
+                ClassNo: '<input name="ClassNo" type="text" class="editable center" />',
+                ClassName: '<input name="ClassName" type="text" class="editable center" />',
+                DeptNo: '<input name="DeptNo" type="text" class="editable center" />',
+                MajorNo: '<input name="MajorNo" type="text" class="editable center" />',
+                MajorDetailNo: '<input name="MajorDetailNo" type="text" class="editable center" />',
+                MajorDetailName: '<input name="MajorDetailName" type="text" class="editable center" />',
+                Grade: '<input name="Grade" type="text" class="editable center" />',
+                StuNum: '<input name="StuNum" type="text" class="editable center" />',
+                SerialNum: '<input name="SerialNum" type="text" class="editable center" />',
+                ClassDiredctorNo: '<input name="ClassDiredctorNo" type="text" class="editable center" />',
+                ClassTutorNo: '<input name="ClassTutorNo" type="text" class="editable center" />',
+                ClassNameFull: '<input name="ClassNameFull" type="text" class="editable center" />',
+                CheckMark: '<input name="CheckMark" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+        if (!!majorname) {
+            $('#MajorName').val(majorname);
+        }
+        if (!!majorno) {
+            $('#majortr').hide();
+            var schtd = $('#majortr').find(".formValue");
+            schtd.append("<input id=\"MajorNo\" type=\"text\" class=\"form-control\" value=\"" + majorno + "\">");
+            $('#MajorNo').val(majorno);
+        }
+        else {
+            //获取校区数据
+            var schtd = $('#majortr').find(".formValue");
+            schtd.append(" <div id=\"MajorNo\" type=\"select\" class=\"ui-select\" isvalid=\"yes\" checkexpession=\"NotNull\"></div>");
+            $("#MajorNo").ComboBox({
+                url: "/CollegeMIS/BK_Major/GetListJson",
+                description: "==请选择==",
+                id: "MajorNo",
+                text: "MajorName",
+                height: "230px",
+                allowSearch: true
+            }).bind("change", function () {
+                var value = $(this).attr('data-text');
+                $('#MajorName').val(value);
+            });
+        }
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_MajorDetail/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data.entity);
+                    //明细
+                    //var childEntity = data.childEntity;
+                    //$('#gridTable').find('[role=row]').each(function (i) {
+                    //    var row = childEntity[i - 1];
+                    //    if (row != undefined) {
+                    //        $(this).find('input[name="ClassId"]').val(row.ClassId);
+                    //        $(this).find('input[name="ClassNo"]').val(row.ClassNo);
+                    //        $(this).find('input[name="ClassName"]').val(row.ClassName);
+                    //        $(this).find('input[name="DeptNo"]').val(row.DeptNo);
+                    //        $(this).find('input[name="MajorNo"]').val(row.MajorNo);
+                    //        $(this).find('input[name="MajorDetailNo"]').val(row.MajorDetailNo);
+                    //        $(this).find('input[name="MajorDetailName"]').val(row.MajorDetailName);
+                    //        $(this).find('input[name="Grade"]').val(row.Grade);
+                    //        $(this).find('input[name="StuNum"]').val(row.StuNum);
+                    //        $(this).find('input[name="SerialNum"]').val(row.SerialNum);
+                    //        $(this).find('input[name="ClassDiredctorNo"]').val(row.ClassDiredctorNo);
+                    //        $(this).find('input[name="ClassTutorNo"]').val(row.ClassTutorNo);
+                    //        $(this).find('input[name="ClassNameFull"]').val(row.ClassNameFull);
+                    //        $(this).find('input[name="CheckMark"]').val(row.CheckMark);
+                    //    }
+                    //});
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+        //$('#gridTable').find('[role=row]').each(function (i) {
+        //if (!!$(this).find('input[name="ClassNo"]').val()) {
+        //    childEntryJson.push({
+        //        ClassId: $(this).find('input[name="ClassId"]').val(),
+        //        ClassNo: $(this).find('input[name="ClassNo"]').val(),
+        //        ClassName: $(this).find('input[name="ClassName"]').val(),
+        //        DeptNo: $(this).find('input[name="DeptNo"]').val(),
+        //        MajorNo: $(this).find('input[name="MajorNo"]').val(),
+        //        MajorDetailNo: $(this).find('input[name="MajorDetailNo"]').val(),
+        //        MajorDetailName: $(this).find('input[name="MajorDetailName"]').val(),
+        //        Grade: $(this).find('input[name="Grade"]').val(),
+        //        StuNum: $(this).find('input[name="StuNum"]').val(),
+        //        SerialNum: $(this).find('input[name="SerialNum"]').val(),
+        //        ClassDiredctorNo: $(this).find('input[name="ClassDiredctorNo"]').val(),
+        //        ClassTutorNo: $(this).find('input[name="ClassTutorNo"]').val(),
+        //        ClassNameFull: $(this).find('input[name="ClassNameFull"]').val(),
+        //        CheckMark: $(this).find('input[name="CheckMark"]').val(),
+        //    });
+        //    }
+        //});
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_MajorDetail/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="overflow-y:auto;margin:10px 10px;">
+     <table class="form" style="width: 100%;">
+         <tr id="majortr">
+             <th class="formTitle" style="width: 100px;">专业<font face="宋体">*</font></th>
+             <td class="formValue"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 100px;">专业名称<font face="宋体">*</font></th>
+             <td class="formValue"><input id="MajorName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" readonly></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 100px;">
+                 专业方向编号<font face="宋体">*</font>
+             </th>
+             <td class="formValue"><input id="MajorDetailNo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 100px;">专业方向名<font face="宋体">*</font></th>
+             <td class="formValue"><input id="MajorDetailName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 100px;">教委专业代码</th>
+             <td class="formValue"><input id="GovMajorNo" type="text" class="form-control"></td>
+         </tr>
+     </table>
+ </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

@@ -1,0 +1,283 @@
+@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+
+    var subgrid_table_id;
+    var secrow;
+
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../CollegeMIS/BK_SchoolArea/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: '校区ID', name: 'AreaId', index: 'AreaId', width: 80, align: '' ,hidden: true },
+                { label: '校区名称', name: 'AreaName', index: 'AreaName', width: 180, align: ''  },
+                { label: '校区地址', name: 'AreaAddress', index: 'AreaAddress', width: 280, align: '' },
+                {
+                    label: '有效', name: 'EnableMrak', index: 'EnableMrak', width: 80, align: '',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
+                { label: '审核', name: 'CheckMark', index: 'CheckMark', width: 80, align: ''  },
+                { label: '', name: '', index: '', width: 80, align: '' },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'AreaId',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            },
+            subGrid: true,
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var keyValue = $gridTable.jqGrid('getRowData', row_id)['AreaId'];
+                var AreaName = $gridTable.jqGrid('getRowData', row_id)['AreaName'];
+
+                subgrid_table_id = subgrid_id + "_t";
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "'></table>");
+                $("#" + subgrid_table_id).jqGrid({
+                    url: "../../CollegeMIS/BK_SchoolArea/GetDetailsJson",
+                    postData: { keyValue: keyValue },
+                    datatype: "json",
+                    height: "100%",
+                    colModel: [
+                        { label: 'ID', name: 'DeptId', index: 'DeptId', width: 80, align: '', hidden: true },
+                        { label: '编号', name: 'DeptNo', index: 'DeptNo', width: 120, align: '' },
+                        { label: '名称', name: 'DeptName', index: 'DeptName', width: 120, align: '' },
+                        { label: '简称', name: 'DeptShortName', index: 'DeptShortName', width: 120, align: '' },
+                        { label: '英文简称', name: 'DeptEnBrief', index: 'DeptEnBrief', width: 120, align: '' },
+                        { label: '所属科类', name: 'DeptSort', index: 'DeptSort', width: 80, align: '' },
+                        //{ label: '英文简称', name: 'DeptEnShort', index: 'DeptEnShort', width: 80, align: ''  },
+                        { label: '系主任', name: 'DeptDirector', index: 'DeptDirector', width: 80, align: '' },
+                        //{ label: '教学秘书', name: 'TeachSecretary', index: 'TeachSecretary', width: 80, align: '' },
+                        { label: '曾用名', name: 'DeptOldName', index: 'DeptOldName', width: 80, align: '' },
+                        {
+                            label: '有效', name: 'EnableRemark', index: 'EnableRemark', width: 80, align: '',
+                            formatter: function (cellvalue, options, rowObject) {
+                                return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                            }
+                        },
+                    ],
+                    onSelectRow: function (chrowid, status) {
+                        subgrid_table_id = "";
+                        secrow = null;
+                        subgrid_table_id = this.id;
+                        secrow = $gridTable.jqGrid('getRowData', row_id);
+                    },
+                    caption: AreaName+"院系明细",
+                    rowNum: "1000",
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    gridview: true,
+                    hidegrid: false
+                });
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加校区',
+            url: '/CollegeMIS/BK_SchoolArea/Form',
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('AreaId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑校区',
+                url: '/CollegeMIS/BK_SchoolArea/Form?keyValue=' + keyValue,
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue('AreaId');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../CollegeMIS/BK_SchoolArea/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的校区！', 0);
+        }
+    }
+    //详细
+    function btn_details() {
+        var keyValue = $('#gridTable').jqGridRowValue('AreaId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '详细校区',
+                url: '/CollegeMIS/BK_SchoolArea/Form?keyValue=' + keyValue+'&isDeltail=true',
+                width: '1000px',
+                height: '750px',
+                btn:null,
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+
+    //导入
+    function btn_import(btnid) {
+        dialogOpen({
+            id: "ExcelImportForm",
+            title: "快速导入",
+            url: "/Utility/ExcelImportForm?Id=@ViewBag.F_Id",//btnId=" + btnid,
+            width: "1100px",
+            height: "700px",
+            btn: null,
+            callBack: function () {
+
+            }
+        });
+    }
+
+
+    //增加院系
+    function btn_addyx() {
+        var keyValue = $('#gridTable').jqGridRowValue('AreaId');
+        var areaname = $('#gridTable').jqGridRowValue('AreaName');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '添加' + areaname + '校区的院系',
+                url: '/CollegeMIS/BK_Dept/Form?areaid='+keyValue,
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            });
+        }
+        else {
+            dialogMsg('请选择要增加院系的校区！', 0);
+        }
+    }
+    //编辑院系
+    function btn_edityx() {
+        var areaid = secrow['AreaId']; //校区ID号
+        var AreaName = secrow['AreaName'];//校区名
+        var keyValue = $("#" + subgrid_table_id).jqGridRowValue("DeptId");
+        var DeptName = $("#" + subgrid_table_id).jqGridRowValue("DeptName");
+        if (keyValue) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑' + DeptName + '信息',
+                url: '/CollegeMIS/BK_Dept/Form?keyValue=' + keyValue,
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除院系
+    function btn_deleteyx() {
+        var keyValue = $("#" + subgrid_table_id).jqGridRowValue("DeptId");//院系ID号;
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../CollegeMIS/BK_Dept/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的院系！', 0);
+        }
+    }
+</script>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+
+        <div class="btn-group">
+            <a id="lr-addyx" class="btn btn-default" onclick="btn_addyx()"><i class="fa fa-plus"></i>&nbsp;增加院系</a>
+            <a id="lr-edityx" class="btn btn-default" onclick="btn_edityx()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑院系</a>
+            <a id="lr-deleteyx" class="btn btn-default" onclick="btn_deleteyx()"><i class="fa fa-trash-o"></i>&nbsp;删除院系</a>
+            <a id="lr-deleteyx" class="btn btn-default" onclick="btn_detailsyx()"><i class="fa fa-list-alt"></i>&nbsp;院系详细</a>
+        </div>
+
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>&nbsp;详细</a>
+        </div>
+        <div class="btn-group">
+            <a id="lr-import" class="btn btn-default" onclick="btn_import('lr-import')" ><i class="fa fa-sign-in"></i>&nbsp;导入Excel</a>
+            <a id="lr-export" class="btn btn-default" ><i class="fa fa-export"></i>&nbsp;导出</a>
+        </div>
+
+        <script>
+            $('.toolbar').authorizeButton()
+        </script>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

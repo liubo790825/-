@@ -1,0 +1,81 @@
+﻿
+
+        <!--<ion-modal-view ng-controller="BusinesssCtrl">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">学生管理</h1>
+        <button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>
+    </ion-header-bar>
+    <div class="bar bar-subheader lr-subheader">
+        <div class="lr-left-tool">
+            <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}条</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+        </div>
+        <div class="lr-right-tool">
+            <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+            <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+        </div>
+    </div>-->
+
+    <ion-view hide-nav-bar="true" view-title="首页">
+        <ion-content>
+            <ion-header-bar class="bar-stable nav-title-slide-ios7">
+                <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+                <h1 class="title">校园服务大厅</h1>
+                <button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>
+            </ion-header-bar>
+            <div class="bar bar-subheader lr-subheader">
+                <div class="lr-left-tool">
+                    <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}个</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+                </div>
+                <div class="lr-right-tool">
+                    <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+                    <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+                </div>
+            </div>
+            <!--首页图片轮询-->
+            <div class="banner">
+                <img src="img/2.jpg" />
+            </div>
+
+
+            <div class="button-bar bar-balanced mt10" style="padding:0;">
+                <a class="button button-positive">全部</a>
+                <a class="button button-balanced">教职工</a>
+                <a class="button button-calm">学生</a>
+            </div>
+
+            <!--<div class="list" style="height:230px;">
+                <ion-item class=" item-icon-left applist" ng-repeat="homeApp in homeApps" type="item-text-wrap" ng-click="openPageModel(homeApp.viewid)">
+                    <i class="icon {{homeApp.icon}} {{homeApp.color}}"></i>
+                    <span>{{homeApp.name}}</span>
+                </ion-item>
+            </div>-->
+
+
+            <!--<div class="list" style="height:230px;">
+                <ion-item class="item-icon-left applist item" ng-repeat="homeApp in homeApps" type="item-text-wrap" ng-click="">
+                    <i class="icon ion-ios-paperplane-outline bgcolor_a"></i>
+                    <span class="ng-binding">移动门户</span>
+                </ion-item>
+            <ion-item class="item-icon-left applist item" ng-repeat="homeApp in homeApps" type="item-text-wrap" ng-click="openPageModel(homeApp.viewid)">
+                    <i class="icon ion-ios-people-outline bgcolor_b"></i>
+                    <span class="ng-binding">教务教学</span>
+                </ion-item>
+                
+                
+            </div>-->
+
+
+
+            <div class="list mt5">
+                <ion-item class="item-icon-right lr-iconitem" ng-repeat="case in cases" type="item-text-wrap" ng-click="openPageModel(case.viewid,case.id)">
+                    <i class="icon {{case.icon}} {{case.bgcolor}}"></i>
+                    <span>{{case.name}}</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </div>
+        </ion-content>
+    </ion-view>
+
+
+

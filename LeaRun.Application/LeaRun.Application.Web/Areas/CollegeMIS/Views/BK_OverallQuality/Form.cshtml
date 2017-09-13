@@ -1,0 +1,105 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<!--<script src="/Content/scripts/plugins/laydate-v1.1/laydate/laydate.js"></script>-->
+
+
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+
+        $('#AcademicTypeId').ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=Academic",
+            id: "ItemDetailId",
+            text: "ItemName",
+            height: "150px",
+            description: "==请选择==",
+            allowSearch: true
+        }).bind("change", function () {
+            var typename = $(this).attr('data-text');
+            $('#AcademicTypeName').val(typename);
+        });
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_OverallQuality/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_OverallQuality/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">学术类型<font face="宋体" color="red">*</font></td>
+            <td class="formValue">
+                <div id="AcademicTypeId" type="select" class="ui-select"></div>
+                <input id="AcademicTypeName" type="hidden" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">题目<font face="宋体" color="red">*</font></td>
+            <td class="formValue">
+                <input id="Title" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">主讲人</td>
+            <td class="formValue">
+                <input id="Speaker" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">开讲时间<font face="宋体" color="red">*</font></td>
+            <td class="formValue">
+                <input id="RunTime" type="text" class="form-control input-datepicker"  isvalid="yes" checkexpession="NotNull" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm', qsEnabled: false, isShowClear: false, isShowOK: false, isShowToday: false })" />
+                <!----<input id="RunTime" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" onfocus="laydate({ istime: true, format: 'YYYY-MM-DD hh:mm' })" />-->
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">举办单位</td>
+            <td class="formValue">
+                <input id="UnitName" type="text" class="form-control" value="新疆农业大学科学技术学院" isvalid="yes" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">讲座地点<font face="宋体" color="red">*</font></td>
+            <td class="formValue">
+                <input id="RunAddress" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2"><div style="width:100%;text-align:center">主要内容</div></td>
+        </tr>
+        <tr>
+            <td class="formValue" colspan="2">
+                <textarea id="Description" class="form-control" rows="8"></textarea>
+            </td>
+        </tr>
+       
+    </table>
+</div>

@@ -1,0 +1,50 @@
+﻿<ion-modal-view >
+  <ion-header-bar class="bar-stable nav-title-slide-ios7">
+      <button class="button button-clear " ng-click="closeBaodaoFuncModal()"><i class="icon ion-ios-arrow-left"></i></button>
+    <h1 class="title">学生军训服管理</h1>
+    <button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>
+  </ion-header-bar>
+  <div class="bar bar-subheader lr-subheader">
+      <div class="lr-left-tool">
+          <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}条</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+      </div>
+      <div class="lr-right-tool">
+          <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+          <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+      </div>
+  </div>
+    <ion-content >
+        <ion-refresher pulling-text="下拉刷新" on-refresh="JustRefresh()"></ion-refresher>
+        <div class="list  list-inset lr-list-type2" style="margin-top:40px;">
+            <ion-list>
+                <ion-item ng-repeat="fuzhuang in Junxunfu.result.rows" class="item-remove-animate mt10" ng-click="openCommDetailsModal('junxunfuDetails.html','up',fuzhuang)">
+                    <div class="row">
+                        <div class="col-80"><span class="lr-title">姓名：{{fuzhuang.stuName}}</span></div>
+                        <div class="col-20"><span class="lr-title" style="text-align:right;">日期</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-33"><div class="lr-label {{fuzhuang.bgStageColor}}">男</div></div>
+                        <div class="col-33 lr-item-content">
+                            <p><span>性别：{{fuzhuang.gender}}</span></p>
+                            <p><span>身高：{{fuzhuang.height}}CM</span></p>
+                        </div>
+                        <div class="col-33 lr-item-content">
+                            <p><span>体重：{{fuzhuang.bodyWeight}}KG</span></p>
+                            <p><span>腰围：{{fuzhuang.waistline}}CM</span></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-33"><div class="lr-label {{fuzhuang.bgStageColor}}">男</div></div>
+                        <div class="col-33 lr-item-content"><p><span>头围：{{fuzhuang.headWaistline}}CM</span></p><p><span>衣服尺寸：{{fuzhuang.clothSize}}</span></p></div>
+                        <div class="col-33 lr-item-content"><p><span>裤子尺寸：{{fuzhuang.pantsSize}}</span></p><p><span>鞋子尺寸：{{fuzhuang.shoesSize}}</span></p></div>
+                    </div>
+                    <ion-option-button ng-click="doDelete(data)"><span class="lr-trash-circled"><i class="icon ion-ios-trash-outline"></i></span></ion-option-button>
+                </ion-item>
+            </ion-list>
+        </div>
+        <ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>
+    </ion-content>
+  <!--<div class="lr-plug-btn">
+      <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+  </div>-->
+</ion-modal-view>

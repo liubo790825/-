@@ -1,0 +1,262 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_OrderForm.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        InitialPage();
+       // GetOrderEntryGrid();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+{ label: '序号', name: 'DormId', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '楼层序号', name: 'DormFloorsId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '单元序号', name: 'DormUnitId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '宿舍楼ID号', name: 'DormBuildingId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '宿舍名称', name: 'DormName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '宿舍编号', name: 'DormNo', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '标准', name: 'standard', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '价格', name: 'Price', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '床位总和', name: 'Beds', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '星级', name: 'StarLevel', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '是否带卫生间（普通间，带卫生间高档间）', name: 'AdvancedMark', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '宿舍电话', name: 'DormTel', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '宿舍IP地址', name: 'DormIp', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'DormOther', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'DormOther1', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'DormOther2', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'DormOther3', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '备用', name: 'DormOther4', width: 80, align: '', sortable: false, resizable: false  },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+DormId: '<input name="DormId" type="text" class="editable center" />',
+DormFloorsId: '<input name="DormFloorsId" type="text" class="editable center" />',
+DormUnitId: '<input name="DormUnitId" type="text" class="editable center" />',
+DormBuildingId: '<input name="DormBuildingId" type="text" class="editable center" />',
+DormName: '<input name="DormName" type="text" class="editable center" />',
+DormNo: '<input name="DormNo" type="text" class="editable center" />',
+standard: '<input name="standard" type="text" class="editable center" />',
+Price: '<input name="Price" type="text" class="editable center" />',
+Beds: '<input name="Beds" type="text" class="editable center" />',
+StarLevel: '<input name="StarLevel" type="text" class="editable center" />',
+AdvancedMark: '<input name="AdvancedMark" type="text" class="editable center" />',
+DormTel: '<input name="DormTel" type="text" class="editable center" />',
+DormIp: '<input name="DormIp" type="text" class="editable center" />',
+DormOther: '<input name="DormOther" type="text" class="editable center" />',
+DormOther1: '<input name="DormOther1" type="text" class="editable center" />',
+DormOther2: '<input name="DormOther2" type="text" class="editable center" />',
+DormOther3: '<input name="DormOther3" type="text" class="editable center" />',
+DormOther4: '<input name="DormOther4" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+
+        $('#DormBuildingId').ComboBox({
+            url: "/CollegeMIS/BK_DormBuilding/GetListJson",
+            description: "==请选择==",
+            id: "DormBuildingId",
+            text: "DormBuildingName",
+            height: "230px",
+            allowSearch: true
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            $('#DormUnitId').attr('data-value', '').attr('data-text', '');
+            $('#DormUnitId').find('.ui-select-text').empty()
+
+            $('#DormUnitId').ComboBox({
+                url: "/CollegeMIS/BK_DormBuilding/GetDetailsJson" ,
+                param: { keyValue: value},
+                description: "==请选择==",
+                id: "DormUnitId",
+                text: "DormUnitName",
+                height: "230px",
+                allowSearch: true
+            });
+        });
+
+        $('#DormFloorsType').ComboBox({
+            description: "==请选择==",
+            id: "genderid",
+            text: "gendertext",
+            height: "230px",
+            allowSearch: true,
+            data: [{ "genderid": "男生", "gendertext": "男生" }, { "genderid": "女生", "gendertext": "女生" }]
+        })
+
+
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_DormFloors/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#DormUnitId').ComboBox({
+                        url: "/CollegeMIS/BK_DormBuilding/GetDetailsJson" ,
+                        param: { keyValue: data.entity.DormBuildingId },
+                        description: "==请选择==",
+                        id: "DormUnitId",
+                        text: "DormUnitName",
+                        height: "230px",
+                        allowSearch: true
+                    });
+
+                    $("#form1").SetWebControls(data.entity);
+                    //明细
+                    var childEntity = data.childEntity;
+                    //$('#gridTable').find('[role=row]').each(function (i) {
+                    //    var row = childEntity[i - 1];
+                    //    if (row != undefined) {
+                    //        $(this).find('input[name="DormId"]').val(row.DormId);
+                    //        $(this).find('input[name="DormFloorsId"]').val(row.DormFloorsId);
+                    //        $(this).find('input[name="DormUnitId"]').val(row.DormUnitId);
+                    //        $(this).find('input[name="DormBuildingId"]').val(row.DormBuildingId);
+                    //        $(this).find('input[name="DormName"]').val(row.DormName);
+                    //        $(this).find('input[name="DormNo"]').val(row.DormNo);
+                    //        $(this).find('input[name="standard"]').val(row.standard);
+                    //        $(this).find('input[name="Price"]').val(row.Price);
+                    //        $(this).find('input[name="Beds"]').val(row.Beds);
+                    //        $(this).find('input[name="StarLevel"]').val(row.StarLevel);
+                    //        $(this).find('input[name="AdvancedMark"]').val(row.AdvancedMark);
+                    //        $(this).find('input[name="DormTel"]').val(row.DormTel);
+                    //        $(this).find('input[name="DormIp"]').val(row.DormIp);
+                    //        $(this).find('input[name="DormOther"]').val(row.DormOther);
+                    //        $(this).find('input[name="DormOther1"]').val(row.DormOther1);
+                    //        $(this).find('input[name="DormOther2"]').val(row.DormOther2);
+                    //        $(this).find('input[name="DormOther3"]').val(row.DormOther3);
+                    //        $(this).find('input[name="DormOther4"]').val(row.DormOther4);
+                    //    }
+                    //});
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+        //$('#gridTable').find('[role=row]').each(function (i) {
+        //    if (!!$(this).find('input[name="DormFloorsId"]').val()) {
+        //        childEntryJson.push({
+        //            DormId: $(this).find('input[name="DormId"]').val(),
+        //            DormFloorsId: $(this).find('input[name="DormFloorsId"]').val(),
+        //            DormUnitId: $(this).find('input[name="DormUnitId"]').val(),
+        //            DormBuildingId: $(this).find('input[name="DormBuildingId"]').val(),
+        //            DormName: $(this).find('input[name="DormName"]').val(),
+        //            DormNo: $(this).find('input[name="DormNo"]').val(),
+        //            standard: $(this).find('input[name="standard"]').val(),
+        //            Price: $(this).find('input[name="Price"]').val(),
+        //            Beds: $(this).find('input[name="Beds"]').val(),
+        //            StarLevel: $(this).find('input[name="StarLevel"]').val(),
+        //            AdvancedMark: $(this).find('input[name="AdvancedMark"]').val(),
+        //            DormTel: $(this).find('input[name="DormTel"]').val(),
+        //            DormIp: $(this).find('input[name="DormIp"]').val(),
+        //            DormOther: $(this).find('input[name="DormOther"]').val(),
+        //            DormOther1: $(this).find('input[name="DormOther1"]').val(),
+        //            DormOther2: $(this).find('input[name="DormOther2"]').val(),
+        //            DormOther3: $(this).find('input[name="DormOther3"]').val(),
+        //            DormOther4: $(this).find('input[name="DormOther4"]').val(),
+        //        });
+        //    }
+        //});
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_DormFloors/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="overflow-y:auto;margin:10px 10px;">
+     <table class="form" style="width: 100%;">
+         <tr>
+             <th class="formTitle" style="width: 90px;">宿舍楼<font face="宋体">*</font></th>
+             <td class="formValue">
+                 <div id="DormBuildingId" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>             
+             </td>
+
+             <th class="formTitle" style="width: 90px;">单元<font face="宋体">*</font></th>
+             <td class="formValue">
+                 <div id="DormUnitId" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>            
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">楼层<font face="宋体">*</font></th>
+             <td class="formValue"><input id="DormFloorsName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+
+             <th class="formTitle" style="width: 60px;">楼层编号</th>
+             <td class="formValue"><input id="DormFloorsNo" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">男生或女生</th>
+             <td class="formValue">
+                 <div id="DormFloorsType" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>          
+             </td>
+             <th class="formTitle" style="width: 60px;">管理员</th>
+             <td class="formValue"><input id="DormFloorsManager" type="text" class="form-control"></td>
+         </tr>
+        
+     </table>
+ </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

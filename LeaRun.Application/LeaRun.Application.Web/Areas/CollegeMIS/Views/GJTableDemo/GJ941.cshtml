@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "高基941报表";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        GetGrid();
+    })
+    function GetGrid() {
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            url: "../../CollegeMIS/GJTableDemo/GetGJTableJson?tablename=GJ941",
+            datatype: "json",
+            height: $(window).height() - 258.5,
+            autowidth: true,
+            colModel: [
+                { name: "area", label: "地区", width: 100, align: "left" },
+                //{ name: "bianhao", label: "编号", width: 200, align: "center" },
+                { name: "jhlqs", label: "计", width: 80, align: "right" },
+                { name: "nclqs", label: "农村", width: 80, align: "right" },
+                { name: "jhyks", label: "计", width: 80, align: "left" },
+                { name: "ncyks", label: "农村", width: 80, align: "left" },
+                { name: "pgyjjhs", label: "计", width: 80, align: "left" },
+                { name: "pgyjnc", label: "农村", width: 80, align: "left" },
+                { name: "pgwjjhs", label: "计", width: 80, align: "left" },
+                { name: "pgwjnc", label: "农村", width: 80, align: "left" },
+                { name: "zzyjjhs", label: "计", width: 80, align: "left" },
+                { name: "zzyjnc", label: "农村", width: 80, align: "left" },
+                { name: "zzwjjhs", label: "计", width: 80, align: "left" },
+                { name: "zzwjnc", label: "农村", width: 80, align: "left" },
+                { name: "otherjh", label: "计", width: 80, align: "left" },
+                { name: "othernc", label: "农村", width: 80, align: "left" },
+                { name: "", label: "", width: 80, align: "left" }
+            ],
+            viewrecords: true,
+            rowNum: 300,
+            rowList: [30, 50, 100],
+            //pager: "#gridPager",
+            sortname: 'CreateDate',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: true
+        });
+        //表头合并
+        $gridTable.jqGrid('setGroupHeaders', {
+            useColSpanStyle: true,
+            groupHeaders: [
+              { startColumnName: 'jhlqs', numberOfColumns: 2, titleText: '录取数' },
+              { startColumnName: 'jhyks', numberOfColumns: 2, titleText: '其中：普通预科生' },
+              { startColumnName: 'pgyjjhs', numberOfColumns: 2, titleText: '普通高中应届毕业生' },
+              { startColumnName: 'pgwjjhs', numberOfColumns: 2, titleText: '普通高中往届毕业生' },
+              { startColumnName: 'zzyjjhs', numberOfColumns: 2, titleText: '中职学校应届毕业生' },
+              { startColumnName: 'zzwjjhs', numberOfColumns: 2, titleText: '中职学校往届毕业生' },
+              { startColumnName: 'otherjh', numberOfColumns: 2, titleText: '其他学历' }
+            ]
+        });
+
+        //查询条件
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = {
+                condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                keyword: $("#txt_Keyword").val()
+            }
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    }
+    //打印
+    function btn_print() {
+        $("#gridPanel").printTable();
+    }
+    //导出
+    function btn_export() {
+        dialogOpen({
+            id: "ExcelIExportDialog",
+            title: '导出高基941报表',
+            url: '/Utility/ExcelExportForm?gridId=gridTable',
+            width: "500px",
+            height: "380px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }, btn: ['导出Excel', '关闭']
+        });
+    }
+</script>
+
+<div class="titlePanel">
+    <!--
+    <div class="title-search">
+
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+
+
+    </div> -->
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-print" class="btn btn-default" onclick="btn_print()"><i class="fa fa-print"></i>&nbsp;打印</a>
+            <a id="lr-export" class="btn btn-default" onclick="btn_export()"><i class="fa fa-sign-out"></i>&nbsp;导出</a>
+        </div>
+    </div>
+</div>
+
+<div class="gridPanel" id="gridPanel">
+    <div class="printArea">
+        <div class="grid-title" style="text-align:center;font-family:'黑体';font-size:x-large;">普通专科生录取来源情况</div>
+        <div class="grid-subtitle">高基941</div>
+        <table id="gridTable"></table>
+        <!--<div id="gridPager"></div>-->
+    </div>
+</div>

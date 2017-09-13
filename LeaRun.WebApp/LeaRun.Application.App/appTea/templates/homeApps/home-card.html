@@ -1,0 +1,101 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <!--<button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>-->
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">校园卡申请</h1>
+        <div class="buttons">
+            <!--<button class="button button-clear" ng-click="openEditModal('junxunfuEdit.html','right',detailsData)"><i class="icon ion-ios-compose-outline"></i></button>-->
+            <!--<button class="button button-clear" ng-click="openEditModal(detailsData)"><i class="icon ion-ios-compose-outline"></i></button>-->
+            <!--<button class="button button-clear" style="margin-left:5px;" ng-click="doDelete(detailsData)"><i class="icon ion-ios-trash-outline"></i></button>-->
+        </div>
+    </ion-header-bar>
+
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+
+        /*.item-stacked-label {
+            display: normal;
+        }
+
+        .item-note {
+            margin: -5px;
+        }*/
+    </style>
+
+    <ion-content>
+
+        <!--<div class="item item-divider bgcolor_d">
+            重要说明
+        </div>
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;margin-bottom:10px">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+
+                            <div class="col-99">
+                                <div class="col-99 item-note">
+                                    <p>
+                                        选择军训服尺码之后学校会安排人员之间将军训服放置于学生床位上，免去排队领取等手续。如放置于床位的军训服或军训鞋码大小不合适，学生可以到物质中心进行调换。（注意：体型偏胖选大一码）
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>-->
+
+        
+        <div class="banner">
+            <img src="img/2.jpg" />
+        </div>
+        <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    我要咨询
+                    <span class="badge badge-assertive">6</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('#.html','up')">
+                    <i class="icon ion-person bgcolor_e"></i>
+                    意见反馈
+                    <span class="badge bgcolor_f">28</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+
+                <div class="item item-divider bgcolor_b">
+                    业务介绍
+                </div>
+
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        
+                    </div><span style="margin-left:-50px;">101 返聘、访学、挂职、高层次人员校园卡申请与延期</span>
+                </ion-item>
+
+            <div class="item item-divider bgcolor_b">
+                授权人群
+            </div>
+
+            <ion-item class="lr-details-item">
+                <div class="lr-item-htitle">
+
+                </div><span style="margin-left:-50px;">超级管理员 教职工 本专科生 研究生</span>
+            </ion-item>
+                
+
+            </ion-list>
+        <div>
+            <button class="button button-block button-positive">
+                开始办理
+            </button>
+        </div>
+    </ion-content>
+
+
+</ion-modal-view>
+

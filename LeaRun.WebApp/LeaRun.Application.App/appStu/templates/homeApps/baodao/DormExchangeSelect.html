@@ -1,0 +1,85 @@
+﻿
+<style>
+
+    .item {
+        padding: 5px;
+        border-width: 1px;
+    }
+    .list {
+        border-width: 0px;
+    }
+</style>
+
+<ion-modal-view >
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">选择要交换的床位</h1>
+
+    </ion-header-bar>
+
+    <ion-content delegate-handle="dormInfo-content" ng-init="ExchangeDormInfodoRefresh()">
+
+        <ion-item class="lr-item-htitle">
+            <span>姓名：</span>
+            <span class="positive ng-binding">{{stuinfo.stuName}}</span><span style="font-size:16px;color:red">（{{stuinfo.gender}}）</span>
+        </ion-item>
+
+
+        <div class="list mt5">
+
+            <!--这是一个宿舍start-->
+            <ion-refresher pulling-text="下拉刷新" on-refresh="ExchangeDormInfodoRefresh()"></ion-refresher>
+            <ion-list style="border-width: 0px">
+                <ion-item ng-repeat="data in dormexchange.result">
+
+                    <div class="item item-divider bgcolor_b">
+                        宿舍：{{data.entity.dormName}}
+                    </div>
+
+                    <!--<ion-item ng-repeat="x in cwdata.dormBed  track by data.dormName">-->
+
+                    <ion-item ng-repeat="x in data.childEntity ">
+                        <div class="row item" ng-if="x.stuInfoId!=null" ng-click="openDormExchangeDetailsModal('DormExchangeDetails.html','up',x,data.entity.dormName)">
+                            <div style=" margin:6px"><div class="lr-label bgcolor_d">{{x.bedName}}</div></div>
+                            <div class="col-40 lr-item-content" style="margin-left:20px">
+                                <p><i class="icon ion-ios-person positive"></i><span><b>{{x.stuName}}</b></span></p>
+                                <p><i class="icon ion-ios-camera positive"></i><span>{{x.majorDetailName}}{{x.className}}班</span></p>
+                            </div>
+                            <div class="col-40 lr-item-content">
+                                <p><i class="icon ion-ios-person positive"></i><span>{{x.nationalityNo}}</span></p>
+                                <p><i class="icon ion-ios-flame-outline energized"></i><span>{{x.provinceNo}}</span></p>
+                            </div>
+                        </div>
+                        <div ng-if="x.stuInfoId==null" ng-click="openDormExchangeDetailsModal('DormExchangeDetails.html','up',x,data.entity.dormName)">
+                            <ion-radio class="item" ng-model="choicebed" ng-value="'{{x.bedId}}'" ng-click="">
+                                <div style="margin-left: -9px">
+                                    <div class="lr-label bgcolor_c" style="width:50px">{{x.bedName}}</div>
+                                </div>
+                                <div style="margin-left:70px;margin-top:-25px;"><font color="green">空床位</font></div>
+                            </ion-radio>
+                        </div>
+                    </ion-item>
+
+                </ion-item>
+            </ion-list>
+            <!--<ion-infinite-scroll ng-if="data.moredata" on-infinite="DormInfodoLoadMore()" distance="1%"></ion-infinite-scroll>-->
+            <!--你也可以试试：<input type="radio" ng-name="f.title" ng-value="f.title" ng-model="formData[d.title]" />
+            返回结果类似：formData:{"你最喜欢玩什么游戏?":"魔兽世界","你最喜欢吃什么水果?":"橙子"}
+
+            也可以试试：<input type="radio" ng-name="f.title" ng-value="f.id" ng-model="formData[$parent.$index]" />
+            返回结果类似：formData:{"0":2,"1":3}-->
+            <!--这是一个宿舍end-->
+            <!--<li ng-repeat="item in flower">
+                                    <input type="radio" class="radiocheck" name="quan1" value="{{item.circle_name}" id="{{item.circle_id}}" title="{{item.circle_name}}" ng-model="$parent.circle_name"  ng-checked="$parent.circle_name" />
+            </li>-->
+
+
+
+
+        </div>
+
+    </ion-content>
+
+
+</ion-modal-view>
+

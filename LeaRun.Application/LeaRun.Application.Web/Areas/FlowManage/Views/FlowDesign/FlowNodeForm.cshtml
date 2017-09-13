@@ -1,0 +1,467 @@
+﻿@{
+    ViewBag.Title = "工作流节点设置";
+    Layout = "~/Views/Shared/_NewFlowForm.cshtml";//_FlowForm.cshtml
+}
+
+<style>
+    .standtab-pane {
+        width: 224px;
+        border-right: 1px solid #ccc;
+        float: left;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#BaseInfo" data-toggle="tab">基本配置</a></li>
+    <li><a href="#MakerInfo" data-toggle="tab">审核者</a></li>
+    <li><a href="#PermissionInfo" data-toggle="tab">权限分配</a></li>
+    <li><a href="#SQLInfo" data-toggle="tab">节点通过后执行SQL</a></li>
+</ul>
+<div class="tab-content">
+    <div id="BaseInfo" class="tab-pane active" style="padding-top:15px;padding-right:30px;">
+        <table class="form">
+            <tr>
+                <td class="formTitle">节点标识</td>
+                <td class="formValue">
+                    <input id="nodeCode" type="text" class="form-control" disabled isvalid="yes" checkexpession="NotNull" />
+                </td>
+                <td class="formTitle">节点名称<font face="宋体">*</font></td>
+                <td class="formValue">
+                    <input id="nodeMyName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">驳回类型<font face="宋体">*</font></td>
+                <td class="formValue">
+                    <div id="nodeRejectType" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+                </td>
+                <td class="formTitle">驳回步骤</td>
+                <td class="formValue">
+                    <div id="nodeRejectStep" type="select" class="ui-select"></div>
+                </td>
+            </tr>
+            <tr id="confluencenode">
+                <td class="formTitle">会签策略<font face="宋体">*</font></td>
+                <td class="formValue">
+                    <div id="nodeConfluenceType" type="select" class="ui-select"></div>
+                </td>
+                <td class="formTitle">会签比例</td>
+                <td class="formValue">
+                    <input id="nodeConfluenceRate" type="text" class="form-control" value="100" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">表单选择</td>
+                <td class="formValue" colspan="3">
+                    <div id="nodeForm" type="selectTree" class="ui-select"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">执行对象</td>
+                <td class="formValue" colspan="3">
+                    <input id="nodeSysFn" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">
+                    备注
+                </th>
+                <td class="formValue" colspan="3">
+                    <textarea id="nodeDes" class="form-control" style="height: 80px;"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="MakerInfo" class="tab-pane">
+        <div class="bottomline">
+            <div class="rdio rdio-color_a"><input name="nodeDesignateTypename" id="nodeDesignateType1" value="1" type="radio" checked /><label for="nodeDesignateType1">所有成员</label></div>
+            <div class="rdio rdio-color_a"><input name="nodeDesignateTypename" id="nodeDesignateType2" value="2" type="radio" /><label for="nodeDesignateType2">指定成员</label></div>
+            <div class="rdio rdio-color_a"><input name="nodeDesignateTypename" id="nodeDesignateType3" value="3" type="radio" /><label for="nodeDesignateType3">发起者领导</label></div>
+            <div class="rdio rdio-color_a"><input name="nodeDesignateTypename" id="nodeDesignateType4" value="4" type="radio" /><label for="nodeDesignateType4">前一步骤领导</label></div>
+            <div class="rdio rdio-color_a"><input name="nodeDesignateTypename" id="nodeDesignateType5" value="5" type="radio" /><label for="nodeDesignateType5">发起者部门领导</label></div>
+            <div class="rdio rdio-color_a"><input name="nodeDesignateTypename" id="nodeDesignateType6" value="6" type="radio" /><label for="nodeDesignateType6">发起者公司领导</label></div>
+        </div>
+        <div id="DesignateMember">
+            <div class="standtabborder" style="height: 262px;">
+                <div class="standtab  standtabactived" onclick="learun.changeStandTab({ obj: this, id: 'Role' })">
+                    角色
+                </div>
+                <div class="standtab " onclick="learun.changeStandTab({ obj: this, id: 'Post' })">
+                    岗位
+                </div>
+                <div class="standtab " onclick="learun.changeStandTab({ obj: this, id: 'UserGroup' })">
+                    用户组
+                </div>
+                <div class="standtab " onclick="learun.changeStandTab({ obj: this, id: 'User' })">
+                    用户
+                </div>
+            </div>
+            <div id="Role" class="standtab-pane"></div>
+            <div id="Post" style="display: none;" class="standtab-pane"></div>
+            <div id="UserGroup" style="display: none;" class="standtab-pane"></div>
+            <div id="User" style="display: none;" class="standtab-pane"></div>
+            <div style="margin: 0px; border-right: none; border-left: none; border-bottom: none; background-color: #fff; overflow: auto; padding-bottom: 10px;height:262px;">
+                <div id="RoleDiv" class="flow-portal-panel">
+                    <div class="flow-portal-panel-title"><i class="fa fa-paw"></i>&nbsp;&nbsp;角色</div>
+                </div>
+                <div id="PostDiv" class="flow-portal-panel">
+                    <div class="flow-portal-panel-title"><i class="fa fa-graduation-cap"></i>&nbsp;&nbsp;岗位</div>
+                </div>
+                <div id="UserGroupDiv" class="flow-portal-panel">
+                    <div class="flow-portal-panel-title"><i class="fa fa-group"></i>&nbsp;&nbsp;用户组</div>
+                </div>
+                <div id="UserDiv" class="flow-portal-panel">
+                    <div class="flow-portal-panel-title"><i class="fa fa-user"></i>&nbsp;&nbsp;用户</div>
+                </div>
+            </div>
+            <div id="Treebackground" style="position: fixed; top: 87px; left: 0px; z-index: 2; width: 750px; height: 262px; background: #000; filter: alpha(opacity=10); opacity: 0.1;"></div>
+        </div>
+    </div>
+    <div id="PermissionInfo" class="tab-pane" style="overflow-y:auto;">
+        <div style="line-height:45px;padding-left:10px;color: #666; font-weight: 300;font-size: 16px;">
+            <i class="fa fa-tags"></i>&nbsp;&nbsp;表单权限配置(默认都是勾选的)
+        </div>
+        <div style="overflow-y:auto;height:261px;">
+            <table class="table flow-table-Permission"></table>
+        </div>
+    </div>
+    <div id="SQLInfo" class="tab-pane">
+        <div style="padding:10px;">
+            <div id="nodeDbId" style="margin-bottom:10px;" type="selectTree" class="ui-select"></div>
+            <textarea id="nodeSQL" class="form-control" placeholder="请在此处填写需要执行的SQL语句,用{0}表示流程实例的主键Id!" style="height: 240px;"></textarea>
+        </div>
+    </div>
+</div>
+<script>
+    (function ($) {
+        "use strict";
+
+        $.formJs = {
+            node: null,
+            nodelist: [],
+            formHaven:[],
+            formContentData: {},//表单字段数据
+            loadData: function () {
+                var _flowObject = top.FlowSchemeDesigner.$.indexJs.step.workFlowInfo.object;
+                $.formJs.formHaven = top.FlowSchemeDesigner.$.indexJs.focusForm;
+                $.formJs.formContentData = top.FlowSchemeDesigner.$.indexJs.formContentData;
+                for (var i in _flowObject.$nodeData) {
+                    _flowObject.$nodeData[i].id = i;
+                    $.formJs.nodelist.push(_flowObject.$nodeData[i]);
+                }
+                $.formJs.node = _flowObject.$nodeData[_flowObject.$focus];
+            },
+            initialControl: function () {
+                if ($.formJs.node.type != "confluencenode")
+                {
+                    $('#confluencenode').hide();//是否会签节点
+                }
+                $('#nodeCode').val($.formJs.node.id);
+                $('#nodeMyName').val($.formJs.node.name);
+
+                $("#nodeRejectType").comboBox({
+                    data: [{ "key": "0", "value": "前一步" }, { "key": "1", "value": "第一步" }, { "key": "2", "value": "某一步" },  { "key": "3", "value": "不处理" }],
+                    id: "key",
+                    text: "value"
+                }).bind("change", function () {
+                    var _value = $(this).attr('data-value');
+                    var _comdata = [];
+                    if (_value == "2") {
+                        _comdata = $.formJs.nodelist;
+                    }
+                    //驳回到某一步
+                    $("#nodeRejectStep").comboBox({
+                        data: _comdata,
+                        id: "id",
+                        text: "name"
+                    });
+                }).comboBoxSetValue(0);
+                //驳回到某一步
+                $("#nodeRejectStep").comboBox({
+                    allowSearch: true,
+                    maxHeight: "110px",
+                });
+                //会签策略
+                $("#nodeConfluenceType").comboBox({
+                    data: [{ "key": 0, "value": "所有步骤通过" }, { "key": 1, "value": "一个步骤通过即可" }, { "key": 2, "value": "按百分比计算" }],
+                    id: "key",
+                    text: "value"
+                });
+                //表单选择
+                $("#nodeForm").comboBoxTree({
+                    maxHeight: "110px",
+                    data: top.FlowSchemeDesigner.$.indexJs.formDataList,
+                    allowSearch: true,
+                    dataItemName: "FormSort",
+                    click: function (item) {
+                        if (item.Sort == "form") {
+                            if ($.formJs.formContentData[item.value] != undefined) {
+                                $.formJs.setFrmCotent(item.value);
+                            }
+                            else {
+                                learun.getDataForm({
+                                    type: 'get',
+                                    url: "../../FormManage/FormModule/GetEntityJson",
+                                    param: { keyValue: item.value },
+                                    async: true,
+                                    success: function (data) {
+                                        var dataJson = JSON.parse(data.FrmContent);
+                                        top.FlowSchemeDesigner.$.indexJs.formContentData[item.value] = { name: item.text, data: dataJson };
+                                        $.formJs.setFrmCotent(item.value);
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            learun.dialogTop({ msg: "请选择表单而不是表单分类", type: "error" });
+                        }
+                    }
+                });
+                //SQL语句执行
+                $("#nodeDbId").comboBoxTree({
+                    description: "==请选择执行SQL语句的数据库==",
+                    height: "230px",
+                    url: "../../SystemManage/DataBaseLink/GetTreeJson",
+                    allowSearch: true
+                });
+            },
+            setData: function () {
+                var _node = $.formJs.node;
+                var formId = "";
+                if (_node.setInfo != undefined)
+                {
+                    formId = _node.setInfo.nodeForm;
+                }
+                $.formJs.setFrmCotent(formId);
+                if (_node.setInfo != undefined) {
+                    $("#BaseInfo").setWebControls(_node.setInfo);
+                    $("#SQLInfo").setWebControls(_node.setInfo);
+                    $('#nodeDesignateType' + _node.setInfo.nodeDesignate).trigger("click");
+                    if (_node.setInfo.nodeDesignate == "2")
+                    {
+                        $("#Role").setCheckedNodes(_node.setInfo.nodeDesignateData.role);
+                        $("#Post").setCheckedNodes(_node.setInfo.nodeDesignateData.post);
+                        $("#UserGroup").setCheckedNodes(_node.setInfo.nodeDesignateData.usergroup);
+                        $("#User").setCheckedNodes(_node.setInfo.nodeDesignateData.user);
+                    }
+                    $.each(_node.setInfo.nodeAuthorizeInfo, function (i, item) {
+                        if (item.look) {
+                            $('#PermissionInfo').find('#frmlook_' + item.fieldid).attr("checked", "checked");
+                        }
+                        else {
+                            $('#PermissionInfo').find('#frmlook_' + item.fieldid).removeAttr("checked");
+                        }
+                        if (item.down != undefined) {
+                            if (item.down) {
+                                $('#PermissionInfo').find('#frmdown_' + item.fieldid).attr("checked", "checked");
+                            }
+                            else {
+                                $('#PermissionInfo').find('#frmdown_' + item.fieldid).removeAttr("checked");
+                            }
+                        }
+                        if (item.edit != undefined) {
+                            if (item.edit) {
+                                $('#PermissionInfo').find('#frmedit_' + item.fieldid).attr("checked", "checked");
+                            }
+                            else {
+                                $('#PermissionInfo').find('#frmedit_' + item.fieldid).removeAttr("checked");
+                            }
+                        }
+
+
+                    });
+                }
+
+            },
+            designateMember: {
+                initial: function () {
+                    $.formJs.designateMember.initialTree('Role');
+                    $.formJs.designateMember.initialTree('Post');
+                    $.formJs.designateMember.initialTree('UserGroup');
+                    $.formJs.designateMember.initialTree('User');
+                    $("input[name='nodeDesignateTypename']").click(function () {
+                        var value = $(this).val();
+                        if (value == '2') {
+                            $("#Treebackground").hide();
+                        } else {
+                            $("#Treebackground").show();
+                        }
+                    });
+
+                },
+                initialTree: function (type) {
+                    var item = {
+                        height: 262,
+                        showcheck: true,
+                        data: $.arrayClone(top.FlowSchemeDesigner.$.indexJs.step.authorizeInfo.allDataJson[type]),
+                        oncheckboxclick: function (item, et, s) {
+                            var $item = $("#" + item.mytype + "Div");
+                            if (et == 1) {
+                                var mytype = "";
+                                var _html = "";
+                                var _title = '';
+                                switch (item.mytype) {
+                                    case "Role":
+                                        mytype = 'label-success';
+                                        break;
+                                    case "Post":
+                                        mytype = 'label-info';
+                                        break;
+                                    case "UserGroup":
+                                        mytype = 'label-warning';
+                                        break;
+                                    case "User":
+                                        mytype = 'label-danger';
+                                        break;
+                                }
+                                _html += '<span  id="' + item.id + '" data-value="' + item.mytype + '" class="flow-card-box label ' + mytype + ' ">' + item.text + '<i class="fa fa-close"></i></span>';
+                                $item.append(_html);
+                                $item.show();
+
+                                $(".flow-card-box").click(function () {
+                                    $(this).remove();
+                                    $('#' + $(this).attr('data-value')).setNoCheckedNodes($(this).attr('id'));
+                                    if ($item.find('.flow-card-box').length == 0) {
+                                        $item.hide();
+                                    }
+                                })
+                            }
+                            else if (et == 0) {
+                                $item.find('#' + item.id).remove();
+                                if ($item.find('.flow-card-box').length == 0) {
+                                    $item.hide();
+                                }
+                            }
+                        }
+                    };
+                    $("#" + type).treeview(item);
+                }
+            },
+            initFrmCotent: function (formId, opt) {
+                var data = [];
+                if (opt.data.type == 2) {
+                    data = opt.data.data.fields;
+                }
+                else {
+                    $.each(opt.data.data, function (i, item) {
+                        $.each(item.fields, function (j, jitem) {
+                            data.push(jitem);
+                        });
+                    });
+                }
+                $.each(data, function (i, item) {
+                    var rowdata = '<tr data-value="' + formId + '" ><td><i class="fa fa-star"></i></td><td>' + opt.name + "-" + item.label + '</td><td>';
+                    rowdata += '<div class="ckbox ckbox-color_a"><input id="frmedit_' + item.field + '" value="' + item.field + '" type="checkbox" checked><label for="frmedit_' + item.field + '">编辑</label></div>';
+                    rowdata += '<div class="ckbox ckbox-color_a"><input id="frmlook_' + item.field + '" value="' + item.field + '" type="checkbox" checked><label for="frmlook_' + item.field + '">查看</label></div>';
+                    rowdata += '</td></tr>';
+
+                    $('#PermissionInfo').find('table').append(rowdata);
+                });
+            },
+            setFrmCotent: function (frmId) {
+                var dataJson;
+                $('#PermissionInfo').find('table').html("");
+                if ($.formJs.formHaven.indexOf(frmId) == -1 && frmId　!= "") {
+                    if ($.formJs.formContentData[frmId] != undefined) {
+                        dataJson = $.formJs.formContentData[frmId];
+                        $.formJs.initFrmCotent(frmId, dataJson);
+                    }
+                    else {
+                        learun.getDataForm({
+                            type: 'get',
+                            url: "../../FormManage/FormModule/GetEntityJson",
+                            param: { keyValue: frmId },
+                            success: function (dd) {
+                                if (dd != null)
+                                {
+                                    var _dataJson = JSON.parse(dd.FrmContent);
+                                    top.FlowSchemeDesigner.$.indexJs.formContentData[frmId] = { name: dd.FrmName, data: _dataJson };
+                                    $.formJs.initFrmCotent(frmId, { name: dd.FrmName, data: _dataJson});
+                                }
+
+                            }
+                        });
+                    }
+                }
+                for (var j in $.formJs.formHaven) {
+                    var _item = $.formJs.formHaven[j];
+                    if (frmId != _item) {
+                        $('#nodeForm-option').find('[data-value="' + _item + '"]').parent().parent().parent().remove();
+                    }
+                    if ($.formJs.formContentData[_item] != undefined) {
+                        var dataJson = $.formJs.formContentData[_item];
+                        $.formJs.initFrmCotent(_item, dataJson);
+                    }
+                    else {
+                        learun.getDataForm({
+                            type: 'get',
+                            url: "../../FormManage/FormModule/GetEntityJson",
+                            param: { keyValue: _item },
+                            success: function (dd) {
+                                if (dd != null)
+                                {
+                                    var _dataJson = JSON.parse(dd.FrmContent);
+                                    top.FlowSchemeDesigner.$.indexJs.formContentData[_item] = { name: dd.FrmName, data: _dataJson };
+                                    $.formJs.initFrmCotent(_item,{ name: dd.FrmName, data: _dataJson });
+                                }
+                            }
+                        });
+                    }
+                }
+            },
+            acceptClick: function (callBack) {
+                if (!$('#BaseInfo').Validform()) {
+                    return false;
+                }
+                var baseinfo = $("#BaseInfo").GetWebControls();
+                var sqlinfo = $("#SQLInfo").GetWebControls();
+                var _Designate = {};
+                if ($('.bottomline').find('input:checked').val() == '2') {
+                    _Designate["role"] = $("#Role").getCheckedAllNodes();
+                    _Designate["post"] = $("#Post").getCheckedAllNodes();
+                    _Designate["usergroup"] = $("#UserGroup").getCheckedAllNodes();
+                    _Designate["user"] = $("#User").getCheckedAllNodes();
+                }
+                var _nodeAuthorizeInfo = [];
+                $.each($('#PermissionInfo').find('tr'), function (i, item) {
+                    var formId = $(this).attr('data-value');
+                    var _point = { formId: formId };
+                    $.each($(item).find('input'), function (j, d) {
+                        var _id = $(d).attr("id");
+                        _point["fieldid"] = $(d).val();
+                        if (_id.indexOf("frmlook_") != -1) {
+                            _point["look"] = $(d)[0].checked;
+                        }
+                        else {
+                            _point["edit"] = $(d)[0].checked;
+                        }
+                    });
+                    _nodeAuthorizeInfo.push(_point);
+                });
+                var nodeSetData = {
+                    nodeCode: baseinfo.nodeCode,
+                    nodeMyName: baseinfo.nodeMyName,
+                    nodeRejectType: baseinfo.nodeRejectType,
+                    nodeRejectStep: baseinfo.nodeRejectStep,
+                    nodeForm: baseinfo.nodeForm,
+                    nodeSysFn: baseinfo.nodeSysFn,
+                    nodeDes: baseinfo.nodeDes,
+                    nodeConfluenceType: baseinfo.nodeConfluenceType,
+                    nodeConfluenceRate: baseinfo.nodeConfluenceRate,
+                    nodeDbId: sqlinfo.nodeDbId,
+                    nodeSQL: sqlinfo.nodeSQL,
+                    nodeDesignate: $('.bottomline').find('input:checked').val(),
+                    nodeDesignateData: _Designate,
+                    nodeAuthorizeInfo: _nodeAuthorizeInfo
+                };
+                callBack($.formJs.node.id, nodeSetData);
+                dialogClose();
+            }
+        };
+        $(function () {
+            $.formJs.loadData();
+            $.formJs.initialControl();
+            $.formJs.designateMember.initial();
+            $.formJs.setData();
+        });
+    })(window.jQuery);
+</script>

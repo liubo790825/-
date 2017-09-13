@@ -1,0 +1,415 @@
+@{
+    ViewBag.Title = "新生报到";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<link href="~/Content/styles/learun-bill.css" rel="stylesheet" />
+<style>
+    .price-box {
+    width:960px;
+    }
+     .disabled { 
+        cursor:not-allowed;
+    }
+</style>
+<script src="~/Content/scripts/plugins/Lodop/LodopFuncs.js"></script>
+<script>
+    $(function () {
+        GetGrid();       
+    })
+    var LODOP; //声明为全局变量
+    var locapath = window.location.host;
+
+    //根据ID号返回数据字典的名称
+    function GetName(itemdetailid) {
+        var getitemdata;
+        $.ajax({
+            url: "/ClientData/GetDataItemModel",
+            data: { ItemDetailId: itemdetailid },
+            type: "post",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                getitemdata = data;
+            }
+        });
+        if (getitemdata == null) {
+            return "";
+        }
+        return getitemdata.ItemName;
+    }
+    //格式化日期
+    function dataformat(strdate)
+    {
+        if (strdate == "") {
+            return "格式错误";
+        }
+        var dt = new Date(strdate);
+        return dt.getFullYear() + "年" + (dt.getMonth()+1) + "月" + dt.getDate() + "日";
+    }
+
+    function pagereload() {
+        $('#NoticeNo').val("").focus();
+        $('#stuname').val("");
+        $('#identitycardno').val("");
+        $('#stuno').val("");
+        reload();
+    }
+
+
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 106.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        $('#NoticeNo').focus();
+        $('#NoticeNo').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                if ($('#NoticeNo').val() == "") {
+                    return;
+                }
+                regstu("NoticeNo", $('#NoticeNo').val());
+            }
+        });
+
+        $('#stuno').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                if ($('#stuno').val() == "") {
+                    return;
+                }
+                regstu("StuNo", $('#stuno').val());
+            }
+        });
+        $('#stuname').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                if ($('#stuname').val() == "") {
+                    return;
+                }
+                regstu("StuName", $('#stuname').val());
+            }
+        });
+        $('#identitycardno').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                if ($('#identitycardno').val() == "") {
+                    return;
+                }
+                regstu("IdentityCardNo", $('#identitycardno').val());
+            }
+        });
+    }
+
+    //根据输入的通知书号去查询学生的信息
+    function regstu(stutype, keyword) {
+        var queryJson = {
+            condition: stutype,
+            keyword: keyword
+        }
+        $('#stuinfotb').find('tbody').empty();
+        $('#btns').empty();
+        var suthtml = "";
+        var btnhtml = "";
+        $.SetForm({
+            url: "../../CollegeMIS/BK_StuInfo/GetEntityList",
+            param: { queryJson: JSON.stringify(queryJson) },
+            success: function (data) {
+                if (data.length > 0 && data[0].Table.length > 0) {
+                    var row = data[0].Table[0];
+                    
+                    $("#price-box").SetWebControls(row);
+                    $('#NoticeNo').val(row.noticeno);
+                    $('#stuname').val(row.stuname);
+                    $('#identitycardno').val(row.identitycardno);
+                    $('#stuno').val(row.stuno);
+
+                    suthtml += " <tr>";
+                    suthtml += " <th class=\"\">考生号</th>";
+                    suthtml += "  <td class=\"formValue\">" + row.ksh + "</td>";
+                    suthtml += " <th class=\"\">民族</th>";
+                    suthtml += "  <td class=\"formValue\">" + row.nationalityno + "</td>";
+                    suthtml += " <th class=\"\">籍贯</th>";
+                    suthtml += "  <td class=\"formValue\">" + row.regionno + "</td>";
+                    suthtml += " <th class=\"\">生日</th>";
+                    suthtml += "  <td class=\"formValue\">" + formatDate(row.birthday, 'yyyy-MM-dd') + "</td>"; //dataformat(row.birthday)
+                    suthtml += "  <td class=\"formTitle\" rowspan='4' colspan='2'><img src=\"" + row.headimg + "\" alt=\"头像\" style=\"width:100%;\" /></td>";
+                    suthtml += " </tr>";
+
+                    suthtml += " <tr>";
+                    suthtml += " <th class=\"\">院系</th>";
+                    suthtml += "  <td class=\"formValue\">" + row.deptname + "</td>";
+                    suthtml += " <th class=\"\">专业</th>";
+                    suthtml += "  <td class=\"formValue\">" + row.majorname + "</td>";
+                   
+                    suthtml += " <th class=\"\">班级</th>";
+                    suthtml += "  <td class=\"formValue\">" + row.classname + "</td>";
+                    suthtml += " <th class=\"\"></th>";
+                    suthtml += "  <td class=\"formValue\"></td>";
+                    /*
+                    suthtml += " <th class=\"\">专业方向</th>";
+                    suthtml += "  <td class=\"formValue\">" + row.mdname + "</td>";
+                    */
+                    suthtml += " </tr>";
+
+                    if (row.bedid!=null) {
+                        suthtml += " <tr>";
+                        suthtml += " <th class=\"\">宿舍</th>";
+                        suthtml += "  <td class=\"formValue\" colspan=\"7\">"
+                            + row.dormbuildingname + "_"
+                            + row.dormunitno + "_"
+                            + row.dormfloorsno + "_"
+                            + row.dormname + "_"
+                            + row.bedno
+                            + "</td>";
+                        suthtml += " </tr>";
+                    }
+                    else {
+                        suthtml += " <tr>";
+                        suthtml += " <th class=\"\">宿舍</th>";
+                        suthtml += "  <td class=\"formValue\" colspan=\"7\"><span style='color:red'> 未选择宿舍</span>" +
+                            "<a  class=\"btn btn-warning\"  onclick=\"ChoiceBed('" + row.stuinfoid + "')\" ><i class=\"fa fa-bed\"></i>选择宿舍</a></td>";
+                        suthtml += " </tr>";
+                    }
+
+                    suthtml += " <tr>";
+                    suthtml += " <th class=\"\">生源地</th>";
+                    suthtml += "  <td class=\"formValue\" colspan=\"7\">" + (top.clientareaItem[row.stufromprovince] == null ? "" : top.clientareaItem[row.stufromprovince].FullName)
+                        + (top.clientareaItem[row.stufromcity] == null ? "" : top.clientareaItem[row.stufromcity].FullName)                     
+                        + (top.clientareaItem[row.stufromdestrict] == null ? "" : top.clientareaItem[row.stufromdestrict].FullName)                       
+                        + "</td>";
+                    suthtml += " </tr>";
+
+                    /*以下是增加按键的HTML*/
+                    btnhtml += "<tr>";
+                    btnhtml += GetRegFlowBtn("'" + row.stuinfoid + "'");
+                    btnhtml += "<td><a  class=\"btn btn-info\" onclick=\"printbaodan('" + keyword + "','"
+                        + row.classname + "', '"
+                        + row.stuname + "', '"
+                        + row.stuno + "')\" ><i class=\"fa fa-print\"></i>打印报到单</a></td>";
+                    if (row.newstureport == 0) {                       
+                        btnhtml += "<td> <a  class=\"btn btn-success\" onclick=\"newstubaodao('" + row.stuinfoid + "')\" ><i class=\"fa fa-briefcase\"></i>报到</a> </td>"                     
+                    }
+                    else {
+                        btnhtml += "<td> <a  class=\"btn btn-success disabled\" onclick=\"newstubaodao('" + row.stuinfoid + "')\" disabled=\"disabled\"><i class=\"fa fa-briefcase\"></i>报到</a> </td>"                       
+                    }
+                   
+                    btnhtml += "<td> <a  class=\"btn btn-default\" onclick=\"pagereload()\"><i class=\"fa fa-fast-forward\"></i>下一个</a> </td>";
+                    btnhtml += "</tr>";
+                }
+            }
+        });
+        $('#stuinfotb').find('tbody').html(suthtml);
+        $('#btns').html(btnhtml);
+    }
+
+    function newstubaodao(keyValue)
+    {
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_StuInfo/NewStuBaodao?keyValue=" + keyValue,
+            loading: "正在保存数据...",
+            success: function () {
+                if (confirm("是否打印新生报到单")) {
+
+                }
+                else {
+                    pagereload();
+                }
+            }
+        })
+    }
+
+    function printbaodan(noticeno, clsname, stuname, stuno)
+    {
+        LODOP = getLodop();
+        LODOP.PRINT_INITA(0, 0, "210mm", "297mm", "打印新生报到单");
+        CreatePages(noticeno, clsname, stuname, stuno);
+        LODOP.PREVIEW();
+    }
+
+    //打开打印设置界面
+    function prn_Design(noticeno, clsname, stuname, stuno) {
+        LODOP.PRINT_INITA(0, 0, "210mm", "297mm", "打印新生报到单");
+        CreatePages(noticeno, clsname, stuname, stuno);
+        LODOP.PRINT_DESIGN();
+    };
+    //打印建立
+    function CreatePages(noticeno, clsname, stuname, stuno)
+    {
+       // LODOP.SET_PRINT_PAGESIZE(0, 0, 0, "A4");
+        LODOP.ADD_PRINT_BARCODE("7.14mm", "10.85mm", "81.23mm", "12.44mm", "128A", noticeno);//如果通知书号
+        LODOP.ADD_PRINT_IMAGE(94,139,565,79, "<img border='0'  src='http://" + locapath + "/Content/images/banner.PNG' />");//公章
+        LODOP.SET_PRINT_STYLE("FontSize", 24);
+        LODOP.SET_PRINT_STYLE("FontName", "黑体");
+        LODOP.ADD_PRINT_TEXT("51.57mm", "34.93mm", "164.31mm", "14.02mm", "新疆农业大学科学技术学院新生报到单");//增加纯文本项
+        LODOP.SET_PRINT_STYLE("FontSize", 12);
+        LODOP.SET_PRINT_STYLE("FontName", "宋体");
+        LODOP.ADD_PRINT_TEXT("77.26mm", "10.95mm", "68.26mm", "8.47mm", "班级：" + clsname);//增加纯文本项
+        LODOP.ADD_PRINT_TEXT("77.52mm", "87.05mm", "47.36mm", "7.94mm", "姓名：" + stuname);//增加纯文本项
+        LODOP.ADD_PRINT_TEXT("77.26mm", "142.45mm", "58.21mm", "8.2mm", "学号：" + stuno);//增加纯文本项
+    }
+
+    function ChoiceBed(stuinfoId)
+    {
+        dialogOpen({
+            id: 'Form',
+            title: '选择床位',
+            url: '/CollegeMIS/BK_StuInfo/BedForm?keyValue=' + stuinfoId,
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        })
+    }
+
+    //根据权限得到可以操作的所有的流程
+    function GetRegFlowBtn(stuid)
+    {
+        var btns = "";
+        var myFlows = [];
+        $.SetForm({
+            url: "../../CollegeMIS/BK_NewStuRegFlow/GetListJson",//得到当前操作者可以操作的所有的流程
+            success: function (data)
+            {
+                myFlows = data;
+            }
+        });
+
+        if (myFlows.length == 0) {//只有在当前用户的可以操作的流程大于0的情况下才能返回数据
+            return btns;
+        }
+
+
+        $.SetForm({
+            url: "../../CollegeMIS/BK_StuPassFlow/GetListJson",//得到这个学生下面已经做过的所有的流程
+            param: { queryJson: {"stuInfoId":stuid} },
+            success: function (result)
+            {
+                if (result.length > 0) {//这个有可能是空，所以要大于0的情况下才能取值
+                    for (var i = 0; i < myFlows.length; i++) {//有多少个流程
+                        var flag = true;
+                        for (var j = 0; j < result.length; j++) {//这个学生已经完成了多少个流程
+                            if (result[j].FlowId==myFlows[i].ID) {//查询这个学生是否已经完成了这个项目
+                                flag = false;
+                                break;
+                            }
+                        }
+
+                        if (flag) {
+                            btns += "<td> <a  class=\"btn btn-warning\" onclick=\"SaveStuFlow('" + myFlows[i].ID + "'," + stuid + ")\">" + myFlows[i].Flowname + "</a> </td>";
+                        }
+                        else {
+                            btns += "<td> <a  class=\"btn btn-default disabled\" disabled=\"disabled\">" + myFlows[i].Flowname + "</a> </td>";//表示该学生已经完成了这个项目
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < myFlows.length ; i++) {
+                        var flowid = myFlows[i].ID;
+                        btns += "<td> <a  class=\"btn btn-warning\" onclick=\"SaveStuFlow('" + flowid + "'," + stuid + ")\">" + myFlows[i].Flowname + "</a> </td>";
+                    }
+                }
+            }
+        });
+
+        return btns;
+    }
+
+    ///
+    function SaveStuFlow(flowid, stuid)
+    {
+        dialogOpen({
+            id: 'Form',
+            title: '报到流程备注',
+            url: '/CollegeMIS/BK_StuPassFlow/Form?flowid=' + flowid+"&stuid="+stuid,
+            width: '700px',
+            height: '550px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        })
+    }
+
+</script>
+<div class="titlePanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="pagereload()"><i class="fa fa-refresh"></i>刷新</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+
+<div class="price-box">
+    <div class="price-title">
+        新生报到
+    </div>
+    <div class="price-info">
+        <table class="form">
+            <tr>
+                <th class="formTitle" style="width: 100px;">通知书号(可扫描)：</th>
+                <td class="formValue" style="padding-right: 20px;">
+                    <input type="text" id="NoticeNo" class="form-control " />
+                </td>
+                <th class="formTitle">学&nbsp;&nbsp;&nbsp;&nbsp;号：</th>
+                <td class="formValue">
+                    <input type="text" class="form-control " id="stuno" value=""  />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">姓&nbsp;&nbsp;&nbsp;&nbsp;名：</th>
+                <td class="formValue">
+                    <input type="text" id="stuname" class="form-control "  />
+                </td>
+                <th class="formTitle" style="width: 100px;">身份证号：</th>
+                <td class="formValue" style="padding-right: 20px;">
+                    <input type="text" id="identitycardno" class="form-control " />
+                </td>
+               
+            </tr>
+        </table>
+    </div>
+    <div class="price-subtitle">
+        <p>学生信息</p>
+       
+    </div>
+
+    <div class="price-table">
+        <table class="form table table-bordered" id="stuinfotb">            
+            <tbody>
+               
+            </tbody>
+        </table>
+    </div>
+
+    <div class="price-info">
+        <table class="form" id="btns">
+            
+            <!--<tr>
+                <td >
+                    <button type="button" class="btn btn-warning">警告</button>
+                </td>
+                <td >
+                    <button type="button" class="btn btn-success">成功</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info">一般信息</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger">危险</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-default">默认样式</button>
+                </td>
+            </tr>-->
+
+
+        </table>
+
+    </div>
+</div>

@@ -1,0 +1,229 @@
+@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../CollegeMIS/BK_ClassInfo/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'ClassId', name: 'ClassId', index: 'ClassId', width: 80, align: '' ,hidden: true },
+                { label: '班级号', name: 'ClassNo', index: 'ClassNo', width: 150, align: ''  },
+                { label: '班级名', name: 'ClassName', index: 'ClassName', width: 150, align: '' },
+                { label: '全称', name: 'ClassNameFull', index: 'ClassNameFull', width: 150, align: '' },
+                {
+                    label: '院系', name: 'DeptNo', index: 'DeptNo', width: 120, align: '', formatter: function (cellvalue, options, rowObject) {
+                        return top.bk_deptlist[cellvalue] == null ? "" : top.bk_deptlist[cellvalue].FullName;
+                    }
+                },
+                {
+                    label: '专业', name: 'MajorNo', index: 'MajorNo', width: 120, align: '', formatter: function (cellvalue, options, rowObject) {
+                        return top.bk_majorlist[cellvalue] == null ? "" : top.bk_majorlist[cellvalue].FullName;
+                    }
+                },
+                //{ label: '专业方向号', name: 'MajorDetailNo', index: 'MajorDetailNo', width: 80, align: ''  },
+                //{ label: '专业方向', name: 'MajorDetailName', index: 'MajorDetailName', width: 120, align: '' },
+                { label: '年级', name: 'Grade', index: 'Grade', width: 80, align: ''  },
+                { label: '班级容量', name: 'StuNum', index: 'StuNum', width: 80, align: ''  },
+                //{ label: '年级内序号', name: 'SerialNum', index: 'SerialNum', width: 80, align: ''  },
+                {
+                    label: '班主任', name: 'ClassDiredctorNo', index: 'ClassDiredctorNo', width: 80, align: '', formatter: function (v, o, r) {
+                        return top.clientuserData[v] != null ? top.clientuserData[v].RealName : "";
+                    }
+                },
+                {
+                    label: '辅导员', name: 'ClassTutorNo', index: 'ClassTutorNo', width: 80, align: '', formatter: function (v, o, r) {
+                        return top.clientuserData[v] != null ? top.clientuserData[v].RealName : "";
+                    }
+                },
+                //{ label: '审核标志', name: 'CheckMark', index: 'CheckMark', width: 80, align: '', sortable: true },
+                {
+                    label: '有效', name: 'EnableRemark', index: 'EnableRemark', width: 80, align: '',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
+                { label: '', name: '', index: '', width: 80, align: '' },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'ClassId',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            },
+            subGrid: true,
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var keyValue = $gridTable.jqGrid('getRowData', row_id)['ClassId'];
+                var subgrid_table_id = subgrid_id + "_t";
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "'></table>");
+                $("#" + subgrid_table_id).jqGrid({
+                    url: "../../CollegeMIS/BK_ClassInfo/GetDetailsJson",
+                    postData: { keyValue: keyValue },
+                    datatype: "json",
+                    height: "100%",
+                    colModel: [
+                { label: '序号', name: 'StuClassId', index: 'StuClassId', width: 80, align: '',sortable: true ,hidden: true },
+                //{ label: '班级序号', name: 'ClassId', index: 'ClassId', width: 80, align: ''  },
+                //{ label: '学生序号', name: 'stuInfoId', index: 'stuInfoId', width: 80, align: ''  },
+                {
+                    label: '照片', name: 'HeadImg', index: 'HeadImg', width: 50, align: 'center',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null && cellvalue != "") {
+                            return '<img src="' + cellvalue + '" alt="头像" style="width:40px;height:40px;" />';
+                        }
+                        return "";
+                    }
+                },
+                { label: '姓名', name: 'StuName', index: 'StuName', width: 80, align: '' },
+                { label: '身份证号', name: 'IdentityCardNo', index: 'IdentityCardNo', width: 180, align: '' },
+                 { label: '性别', name: 'Gender', index: 'Gender', width: 30, align: '' },
+                  {
+                      label: '出生日期', name: 'Birthday', index: 'Birthday', width: 90, align: '',
+                      formatter: function (cellvalue, options, rowObject) {
+                          return formatDate(cellvalue, 'yyyy-MM-dd');
+                      }
+                  },
+                  { label: '学号', name: 'StuNo', index: 'StuNo', width: 150, align: '', sortable: true },
+
+                 {
+                     label: '院系', name: 'DeptNo', index: 'DeptNo', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                         return top.bk_deptlist[cellvalue] == null ? "" : top.bk_deptlist[cellvalue].FullName;
+                     }
+                 },
+                {
+                    label: '专业', name: 'MajorNo', index: 'MajorNo', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                        return top.bk_majorlist[cellvalue] == null ? "" : top.bk_majorlist[cellvalue].FullName;
+                    }
+                },
+                 { label: '', name: '', index: '', width: 30, align: '' },
+                    ],
+                    caption: "学生明细",
+                    rowNum: "1000",
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    gridview: true,
+                    hidegrid: false
+                });
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加行政班',
+            url: '/CollegeMIS/BK_ClassInfo/Form',
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('ClassId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑行政班',
+                url: '/CollegeMIS/BK_ClassInfo/Form?keyValue=' + keyValue,
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'ClassId');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../CollegeMIS/BK_ClassInfo/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的行政班！', 0);
+        }
+    }
+    //详细
+    function btn_details() {
+        var keyValue = $('#gridTable').jqGridRowValue('ClassId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '详细行政班',
+                url: '/CollegeMIS/BK_ClassInfo/Form?keyValue=' + keyValue+'&isDeltail=true',
+                width: '1000px',
+                height: '750px',
+                btn:null,
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+</script>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>详细</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

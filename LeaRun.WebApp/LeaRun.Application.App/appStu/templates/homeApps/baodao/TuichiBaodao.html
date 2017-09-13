@@ -1,0 +1,54 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">推迟报到</h1>
+        <div class="buttons">
+
+        </div>
+    </ion-header-bar>
+
+    <ion-content delegate-handle="TuiChiBaodaolist-content">
+
+        <ion-list class="lr-list-form">
+
+
+
+            <div class="item item-divider bgcolor_c">
+                申请信息
+            </div>
+            <ion-item class="lr-item-htitle">
+                <span>学生姓名：</span>
+                <span class="positive ng-binding">{{stuinfo.stuName}}</span>
+            </ion-item>
+
+
+
+
+            <div class="item item-divider">
+                推迟原因<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <!--<div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加推迟原因</div>-->
+                <input type="text" ng-model="editData.reason" ng-class="{'active' : isInputActive('reason')}" />
+            </ion-item>
+
+            <div class="item item-divider">
+                预计报到时间<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <!--<div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加预计报到时间</div>-->
+                <input type="text" ng-model="editData.tuiChiTime" ng-class="{'active' : isInputActive('tuiChiTime')}" />
+            </ion-item>
+
+
+            <div>
+                <button class="button button-block button-royal" ng-click="submitTuiChi()">
+                    提交
+                </button>
+            </div>
+
+    </ion-content>
+
+
+</ion-modal-view>
+

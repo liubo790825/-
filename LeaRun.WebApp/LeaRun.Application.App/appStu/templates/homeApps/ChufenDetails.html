@@ -1,0 +1,104 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">处分信息</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="openEditModal('baodaoEdit.html','right',detailsData)"><i class="icon ion-ios-compose-outline"></i></button>
+        </div>
+    </ion-header-bar>
+
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+
+    </style>
+
+    <ion-content delegate-handle="baodaoDetailHandle">
+       
+
+        <!--<div class="list mt5" style="background-color:white">-->
+            <ion-list>
+
+                <div class="item item-divider bgcolor_b">
+                    处分信息详细查看
+                </div>
+
+
+                
+
+
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        <span>学年</span>
+                    </div>
+                    <span>2017-2018</span>
+                </ion-item>
+                
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        学期
+                    </div>
+                    <span>第一学期</span>
+                </ion-item>
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        处分名称码
+                    </div>
+                    <span>12312</span>
+                </ion-item>
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        处分名称
+                    </div>
+                    <span>考试作弊</span>
+                </ion-item>
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        处分文号
+                    </div>
+                    <span>12421</span>
+                </ion-item>
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        处分日期
+                    </div>
+                    <span>2017-09-20</span>
+                </ion-item>
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        处分原因
+                    </div>
+                    <span>无</span>
+                </ion-item>
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        教师号
+                    </div>
+                    <span>Tea2017</span>
+                </ion-item>
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        教师姓名
+                    </div>
+                    <span>陈田</span>
+                </ion-item>
+                <ion-item class="lr-details-item">
+                    <div class="lr-item-htitle">
+                        备注
+                    </div>
+                    <span> </span>
+                </ion-item>
+
+                
+
+            </ion-list>
+
+
+            <!--</div>-->
+
+    </ion-content>
+
+
+</ion-modal-view>
+

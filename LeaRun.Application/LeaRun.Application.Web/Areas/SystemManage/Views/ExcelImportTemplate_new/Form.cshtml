@@ -1,0 +1,270 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_OrderForm.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        InitialPage();
+        GetOrderEntryGrid();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+{ label: 'ID号', name: 'F_FiledsInfoId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: 'ID号', name: 'F_ExcelImportTemplateId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '字段名', name: 'F_FiledName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '数据类型', name: 'F_FiledType', width: 80, align: '', sortable: false, resizable: false  },
+{ label: 'Excel列名', name: 'F_ColName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '唯一性', name: 'F_OnlyOne', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '关联类型', name: 'F_RelationType', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '数据字典编码', name: 'F_DataItemEncode', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '固定数值', name: 'F_Value', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '数据库ID号', name: 'F_DbId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '表名', name: 'F_DbTable', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '字段名', name: 'F_FliedLabel', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '保存数据字段', name: 'F_DbSaveFlied', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '对应字段', name: 'F_DbRelationFiled', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '描述', name: 'F_Description', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '排序', name: 'F_SortCode', width: 80, align: '', sortable: false, resizable: false  },
+{ label: 'ID号', name: 'F_FiledsInfoId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: 'ID号', name: 'F_ExcelImportTemplateId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '字段名', name: 'F_FiledName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '数据类型', name: 'F_FiledType', width: 80, align: '', sortable: false, resizable: false  },
+{ label: 'Excel列名', name: 'F_ColName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '唯一性', name: 'F_OnlyOne', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '关联类型', name: 'F_RelationType', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '数据字典编码', name: 'F_DataItemEncode', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '固定数值', name: 'F_Value', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '数据库ID号', name: 'F_DbId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '表名', name: 'F_DbTable', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '字段名', name: 'F_FliedLabel', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '保存数据字段', name: 'F_DbSaveFlied', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '对应字段', name: 'F_DbRelationFiled', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '描述', name: 'F_Description', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '排序', name: 'F_SortCode', width: 80, align: '', sortable: false, resizable: false  },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+F_FiledsInfoId: '<input name="F_FiledsInfoId" type="text" class="editable center" />',
+F_ExcelImportTemplateId: '<input name="F_ExcelImportTemplateId" type="text" class="editable center" />',
+F_FiledName: '<input name="F_FiledName" type="text" class="editable center" />',
+F_FiledType: '<input name="F_FiledType" type="text" class="editable center" />',
+F_ColName: '<input name="F_ColName" type="text" class="editable center" />',
+F_OnlyOne: '<input name="F_OnlyOne" type="text" class="editable center" />',
+F_RelationType: '<input name="F_RelationType" type="text" class="editable center" />',
+F_DataItemEncode: '<input name="F_DataItemEncode" type="text" class="editable center" />',
+F_Value: '<input name="F_Value" type="text" class="editable center" />',
+F_DbId: '<input name="F_DbId" type="text" class="editable center" />',
+F_DbTable: '<input name="F_DbTable" type="text" class="editable center" />',
+F_FliedLabel: '<input name="F_FliedLabel" type="text" class="editable center" />',
+F_DbSaveFlied: '<input name="F_DbSaveFlied" type="text" class="editable center" />',
+F_DbRelationFiled: '<input name="F_DbRelationFiled" type="text" class="editable center" />',
+F_Description: '<input name="F_Description" type="text" class="editable center" />',
+F_SortCode: '<input name="F_SortCode" type="text" class="editable center" />',
+F_FiledsInfoId: '<input name="F_FiledsInfoId" type="text" class="editable center" />',
+F_ExcelImportTemplateId: '<input name="F_ExcelImportTemplateId" type="text" class="editable center" />',
+F_FiledName: '<input name="F_FiledName" type="text" class="editable center" />',
+F_FiledType: '<input name="F_FiledType" type="text" class="editable center" />',
+F_ColName: '<input name="F_ColName" type="text" class="editable center" />',
+F_OnlyOne: '<input name="F_OnlyOne" type="text" class="editable center" />',
+F_RelationType: '<input name="F_RelationType" type="text" class="editable center" />',
+F_DataItemEncode: '<input name="F_DataItemEncode" type="text" class="editable center" />',
+F_Value: '<input name="F_Value" type="text" class="editable center" />',
+F_DbId: '<input name="F_DbId" type="text" class="editable center" />',
+F_DbTable: '<input name="F_DbTable" type="text" class="editable center" />',
+F_FliedLabel: '<input name="F_FliedLabel" type="text" class="editable center" />',
+F_DbSaveFlied: '<input name="F_DbSaveFlied" type="text" class="editable center" />',
+F_DbRelationFiled: '<input name="F_DbRelationFiled" type="text" class="editable center" />',
+F_Description: '<input name="F_Description" type="text" class="editable center" />',
+F_SortCode: '<input name="F_SortCode" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../SystemManage/ExcelImportTemplate/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data.entity);
+                    //明细
+                    var childEntity = data.childEntity;
+                    $('#gridTable').find('[role=row]').each(function (i) {
+                        var row = childEntity[i - 1];
+                        if (row != undefined) {
+$(this).find('input[name="F_FiledsInfoId"]').val(row.F_FiledsInfoId);
+$(this).find('input[name="F_ExcelImportTemplateId"]').val(row.F_ExcelImportTemplateId);
+$(this).find('input[name="F_FiledName"]').val(row.F_FiledName);
+$(this).find('input[name="F_FiledType"]').val(row.F_FiledType);
+$(this).find('input[name="F_ColName"]').val(row.F_ColName);
+$(this).find('input[name="F_OnlyOne"]').val(row.F_OnlyOne);
+$(this).find('input[name="F_RelationType"]').val(row.F_RelationType);
+$(this).find('input[name="F_DataItemEncode"]').val(row.F_DataItemEncode);
+$(this).find('input[name="F_Value"]').val(row.F_Value);
+$(this).find('input[name="F_DbId"]').val(row.F_DbId);
+$(this).find('input[name="F_DbTable"]').val(row.F_DbTable);
+$(this).find('input[name="F_FliedLabel"]').val(row.F_FliedLabel);
+$(this).find('input[name="F_DbSaveFlied"]').val(row.F_DbSaveFlied);
+$(this).find('input[name="F_DbRelationFiled"]').val(row.F_DbRelationFiled);
+$(this).find('input[name="F_Description"]').val(row.F_Description);
+$(this).find('input[name="F_SortCode"]').val(row.F_SortCode);
+$(this).find('input[name="F_FiledsInfoId"]').val(row.F_FiledsInfoId);
+$(this).find('input[name="F_ExcelImportTemplateId"]').val(row.F_ExcelImportTemplateId);
+$(this).find('input[name="F_FiledName"]').val(row.F_FiledName);
+$(this).find('input[name="F_FiledType"]').val(row.F_FiledType);
+$(this).find('input[name="F_ColName"]').val(row.F_ColName);
+$(this).find('input[name="F_OnlyOne"]').val(row.F_OnlyOne);
+$(this).find('input[name="F_RelationType"]').val(row.F_RelationType);
+$(this).find('input[name="F_DataItemEncode"]').val(row.F_DataItemEncode);
+$(this).find('input[name="F_Value"]').val(row.F_Value);
+$(this).find('input[name="F_DbId"]').val(row.F_DbId);
+$(this).find('input[name="F_DbTable"]').val(row.F_DbTable);
+$(this).find('input[name="F_FliedLabel"]').val(row.F_FliedLabel);
+$(this).find('input[name="F_DbSaveFlied"]').val(row.F_DbSaveFlied);
+$(this).find('input[name="F_DbRelationFiled"]').val(row.F_DbRelationFiled);
+$(this).find('input[name="F_Description"]').val(row.F_Description);
+$(this).find('input[name="F_SortCode"]').val(row.F_SortCode);
+                        }
+                    });
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+        $('#gridTable').find('[role=row]').each(function (i) {
+        if (!!$(this).find('input[name="F_FiledsInfoId"]').val()) {
+            childEntryJson.push({
+F_FiledsInfoId: $(this).find('input[name="F_FiledsInfoId"]').val(),
+F_ExcelImportTemplateId: $(this).find('input[name="F_ExcelImportTemplateId"]').val(),
+F_FiledName: $(this).find('input[name="F_FiledName"]').val(),
+F_FiledType: $(this).find('input[name="F_FiledType"]').val(),
+F_ColName: $(this).find('input[name="F_ColName"]').val(),
+F_OnlyOne: $(this).find('input[name="F_OnlyOne"]').val(),
+F_RelationType: $(this).find('input[name="F_RelationType"]').val(),
+F_DataItemEncode: $(this).find('input[name="F_DataItemEncode"]').val(),
+F_Value: $(this).find('input[name="F_Value"]').val(),
+F_DbId: $(this).find('input[name="F_DbId"]').val(),
+F_DbTable: $(this).find('input[name="F_DbTable"]').val(),
+F_FliedLabel: $(this).find('input[name="F_FliedLabel"]').val(),
+F_DbSaveFlied: $(this).find('input[name="F_DbSaveFlied"]').val(),
+F_DbRelationFiled: $(this).find('input[name="F_DbRelationFiled"]').val(),
+F_Description: $(this).find('input[name="F_Description"]').val(),
+F_SortCode: $(this).find('input[name="F_SortCode"]').val(),
+F_FiledsInfoId: $(this).find('input[name="F_FiledsInfoId"]').val(),
+F_ExcelImportTemplateId: $(this).find('input[name="F_ExcelImportTemplateId"]').val(),
+F_FiledName: $(this).find('input[name="F_FiledName"]').val(),
+F_FiledType: $(this).find('input[name="F_FiledType"]').val(),
+F_ColName: $(this).find('input[name="F_ColName"]').val(),
+F_OnlyOne: $(this).find('input[name="F_OnlyOne"]').val(),
+F_RelationType: $(this).find('input[name="F_RelationType"]').val(),
+F_DataItemEncode: $(this).find('input[name="F_DataItemEncode"]').val(),
+F_Value: $(this).find('input[name="F_Value"]').val(),
+F_DbId: $(this).find('input[name="F_DbId"]').val(),
+F_DbTable: $(this).find('input[name="F_DbTable"]').val(),
+F_FliedLabel: $(this).find('input[name="F_FliedLabel"]').val(),
+F_DbSaveFlied: $(this).find('input[name="F_DbSaveFlied"]').val(),
+F_DbRelationFiled: $(this).find('input[name="F_DbRelationFiled"]').val(),
+F_Description: $(this).find('input[name="F_Description"]').val(),
+F_SortCode: $(this).find('input[name="F_SortCode"]').val(),
+                 });
+            }
+        });
+        $.SaveForm({
+            url: "../../SystemManage/ExcelImportTemplate/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="height:190px;overflow-y:auto;margin:10px 10px;">
+    <table class="form" style="width: 100%;">
+        <tr>
+<th class="formTitle" style="width: 60px;">ID号<font face="宋体">*</font></th>
+<td class="formValue"><input id="F_ExcelImportTemplateId" type="text"  class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+<th class="formTitle" style="width: 60px;">名称</th>
+<td class="formValue"><input id="F_Name" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">功能页面ID</th>
+<td class="formValue"><input id="F_ModuleId" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">功能页面的按钮ID号</th>
+<td class="formValue"><input id="F_ModuleBtnId" type="text"  class="form-control" ></td>
+</tr>
+<tr>
+<th class="formTitle" style="width: 60px;">数据库ID号</th>
+<td class="formValue"><input id="F_DbId" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">表名称</th>
+<td class="formValue"><input id="F_DbTable" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">导入错误时的类型，跳过或终止</th>
+<td class="formValue"><input id="F_ErrorType" type="text"  class="form-control" ></td>
+<th class="formTitle" style="width: 60px;">是否启用</th>
+<td class="formValue"><input id="F_EnabledMark" type="text"  class="form-control" ></td>
+</tr>
+<tr>
+<th class="formTitle" style="width: 60px;">关联类型</th>
+<td class="formValue"><input id="F_Description" type="text"  class="form-control" ></td>
+     </tr>
+    </table>
+ </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

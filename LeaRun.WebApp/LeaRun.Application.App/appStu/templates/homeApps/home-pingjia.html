@@ -1,0 +1,78 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">网上评教</h1>
+
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content>
+
+
+        <div class="item item-divider bgcolor_d">
+            说明
+        </div>
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;margin-bottom:10px">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+
+                            <div class="col-99">
+                                <div class="col-99 item-note">
+                                    <p>
+                                        本次需先评教后选课，因为今年启用新系统选课和评教，为了保护网络，我们采用了防刷机制，但我们发现有部分同学在评教过程中，狂点按钮，或不小心多按了提交按钮，导致该同学账户锁定，无法选课；本次是随机选课，大家也不要急，在操作时耐心一些。若有过这样操作的同学不能选课，必须重新评教，以前评教作废！
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+
+
+        
+            <div class="item item-divider bgcolor_c">
+                16-17学年上学期——网上评教
+            </div>
+            <ion-list>
+                <p>1、该教师上课是否认真负责？</p>
+                <ion-radio ng-model="choice">是</ion-radio>
+                <ion-radio>否</ion-radio>
+            </ion-list>
+        <ion-list>
+            <p>2、该教师上课是否拖堂？</p>
+            <ion-radio>是</ion-radio>
+            <ion-radio>否</ion-radio>
+        </ion-list>
+
+            <div ng-switch="choice" style="margin:10px">
+                <div ng-switch-when="kecheng1">
+                    <!--<p>已选音乐赏析</p>-->
+                    <p>确定选课：<span style="font-size:24px;color:red">音乐赏析</span></p>
+                </div>
+                <div ng-switch-when="kecheng2">
+                    <!--<p>已选美术鉴赏</p>-->
+                    <p>确定选课：<span style="font-size:24px;color:red">美术鉴赏</span></p>
+                </div>
+            </div>
+
+
+            <div>
+                <button class="button button-block button-positive" ng-click="openDetailsModal('MyKecheng.html','right',detailsData)">
+                    确定
+                </button>
+            </div>
+
+
+    </ion-content>
+
+
+</ion-modal-view>
+

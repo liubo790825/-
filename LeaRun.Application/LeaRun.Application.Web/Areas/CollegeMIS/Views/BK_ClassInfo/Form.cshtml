@@ -1,0 +1,299 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_OrderForm.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        InitialPage();
+        //GetOrderEntryGrid();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+{ label: '序号', name: 'StuClassId', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '班级序号', name: 'ClassId', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '学生序号', name: 'stuInfoId', width: 80, align: '', sortable: false, resizable: false  },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+StuClassId: '<input name="StuClassId" type="text" class="editable center" />',
+ClassId: '<input name="ClassId" type="text" class="editable center" />',
+stuInfoId: '<input name="stuInfoId" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+
+        //院系专业的选择
+        $("#DeptNo").ComboBox({
+            url: "/CollegeMIS/BK_Dept/GetListJson",
+            description: "==请选择==",
+            id: "DeptNo",
+            text: "DeptName",
+            height: "230px",
+            allowSearch: true
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            if (value != "" && value!="==请选择==") {
+                $("#MajorNo").removeAttr("disabled");
+            }
+            else {
+                $("#MajorNo").attr("disabled", "disabled");
+            }
+            $("#MajorNo").ComboBox({
+                url: "/CollegeMIS/BK_Major/GetListJson",
+                param: { queryJson: "{\"DeptNo\":\"" + value + "\"}" },
+                description: "==请选择==",
+                id: "MajorNo",
+                text: "MajorName",
+                disabled: false,
+                height: "230px",
+                allowSearch: true
+            }).bind("change", function () {
+                //var majno = $(this).attr('data-value');
+                //if (majno != "" && majno != "==请选择==") {
+                //    $("#MajorDetailNo").removeAttr("disabled");
+                //}
+                //else {
+                //    $("#MajorDetailNo").attr("disabled", "disabled");
+                //}
+                //$("#MajorDetailNo").ComboBox({
+                //    url: "/CollegeMIS/BK_MajorDetail/GetListJson",
+                //    param: { queryJson: "{\"MajorNo\":\"" + majno + "\"}" },
+                //    description: "==请选择==",
+                //    id: "MajorDetailNo",
+                //    text: "MajorDetailName",
+                //    disabled: false,
+                //    height: "230px",
+                //    allowSearch: true
+                //}).bind("change", function () {
+                //    $('#MajorDetailName').val("");
+                //    var mdname = $(this).attr('data-text');
+                //    if (mdname != "" && mdname != "==请选择==")
+                //        $('#MajorDetailName').val(mdname);
+                //})
+            });
+        });
+
+        //班主任
+        $("#ClassDiredctorNo").ComboBox({
+            url: "../../BaseManage/User/GetListJson",
+            id: "UserId",
+            text: "RealName",
+            title: "Account",
+            description: "==请选择==",
+            allowSearch: true
+        })
+
+        //辅导员
+        $("#ClassTutorNo").ComboBox({
+            url: "../../BaseManage/User/GetListJson" ,
+            id: "UserId",
+            text: "RealName",
+            title: "Account",
+            description: "==请选择==",
+            allowSearch: true
+        })
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_ClassInfo/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    //$("#MajorDetailNo").removeAttr("disabled");
+                    //$("#MajorDetailNo").ComboBox({
+                    //    url: "/CollegeMIS/BK_MajorDetail/GetListJson",
+                    //    param: { queryJson: "{\"MajorNo\":\"" + data.entity.MajorNo + "\"}" },
+                    //    description: "==请选择==",
+                    //    id: "MajorDetailNo",
+                    //    text: "MajorDetailName",
+                    //    disabled: false,
+                    //    height: "230px",
+                    //    allowSearch: true
+                    //}).bind("change", function () {
+                    //    $('#MajorDetailName').val("");
+                    //    var mdname = $(this).attr('data-text');
+                    //    if (mdname != "" && mdname != "==请选择==")
+                    //        $('#MajorDetailName').val(mdname);
+                    //})
+
+                    $("#MajorNo").removeAttr("disabled");
+                    $("#MajorNo").ComboBox({
+                        url: "/CollegeMIS/BK_Major/GetListJson",
+                        param: { queryJson: "{\"DeptNo\":\"" + data.entity.DeptNo + "\"}" },
+                        description: "==请选择==",
+                        id: "MajorNo",
+                        text: "MajorName",
+                        disabled: false,
+                        height: "230px",
+                        allowSearch: true
+                    })
+                    
+                    $("#form1").SetWebControls(data.entity);
+                    //明细
+                    //var childEntity = data.childEntity;
+                    //$('#gridTable').find('[role=row]').each(function (i) {
+                    //    var row = childEntity[i - 1];
+                    //    if (row != undefined) {
+                    //        $(this).find('input[name="StuClassId"]').val(row.StuClassId);
+                    //        $(this).find('input[name="ClassId"]').val(row.ClassId);
+                    //        $(this).find('input[name="stuInfoId"]').val(row.stuInfoId);
+                    //    }
+                    //});
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+        //$('#gridTable').find('[role=row]').each(function (i) {
+        //if (!!$(this).find('input[name="ClassId"]').val()) {
+        //    childEntryJson.push({
+        //        StuClassId: $(this).find('input[name="StuClassId"]').val(),
+        //        ClassId: $(this).find('input[name="ClassId"]').val(),
+        //        stuInfoId: $(this).find('input[name="stuInfoId"]').val(),
+        //    });
+        //    }
+        //});
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_ClassInfo/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="overflow-y:auto;margin:10px 10px;">
+     <table class="form" style="width: 100%;">
+         <tr>
+             <th class="formTitle" style="width: 60px;">院系<font face="宋体">*</font></th>
+             <td class="formValue">
+                 <div id="DeptNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">专业<font face="宋体">*</font></th>
+             <td class="formValue">
+                 <div id="MajorNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull" disabled="disabled"></div>
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 90px;">班级号<font face="宋体">*</font></th>
+             <td class="formValue"><input id="ClassNo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+        
+             <th class="formTitle" style="width: 90px;">班级名称</th>
+             <td class="formValue"><input id="ClassName" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">全称</th>
+             <td class="formValue"><input id="ClassNameFull" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">年级<font face="宋体">*</font></th>
+             <td class="formValue"><input id="Grade" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+                    
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">
+                 辅导员<font face="宋体">*</font>
+             </th>
+             <td class="formValue">
+                 <div id="ClassTutorNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">班主任<font face="宋体">*</font></th>
+             <td class="formValue">
+                 <div id="ClassDiredctorNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+         </tr>
+
+
+         <tr>
+             <th class="formTitle" style="width: 60px;">班级容量<font face="宋体">*</font></th>
+             <td class="formValue"><input id="StuNum" type="text" class="form-control"  isvalid="yes" checkexpession="NotNull"></td>
+             <th class="formTitle" style="width: 60px;">
+             </th>
+             <td class="formValue"></td>
+         </tr>
+         
+         <!--
+             
+             <tr>
+             <th class="formTitle" style="width: 60px;">
+                 专业方向
+             </th>
+             <td class="formValue">
+                 <div id="MajorDetailNo" type="select" class="ui-select"  disabled="disabled"></div>
+                 <input id="MajorDetailName" type="hidden" >
+             </td>
+
+             <th class="formTitle" style="width: 60px;">年级内序号</th>
+             <td class="formValue">
+                 <input id="SerialNum" type="text" class="form-control" isvalid="yes" checkexpession="NotNull">
+             </td>
+
+
+
+            
+         </tr>-->
+         
+         
+     </table>
+ </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

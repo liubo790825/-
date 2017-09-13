@@ -1,0 +1,275 @@
+@{;
+    ViewBag.Title = "预分床位页面";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script>
+    var dormids = request('dormids');
+    var bedIds = [];
+
+
+    $(function () {
+        InitialPage();
+        //GetBeds();
+        GetTree();
+       
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            west__size: 160,
+            spacing_open: 0,
+            onresize: function () {
+                $(window).resize()
+            }
+        });
+        $(".center-Panel").height($(window).height() - 40)
+    }
+
+    //初始化控件
+    function initControl() {
+        $("#MajorId").ComboBox({
+            url: "/CollegeMIS/BK_Major/GetListJson",
+            description: "==请选择==",
+            id: "MajorNo",
+            text: "MajorName",
+            height: "230px",
+            allowSearch: true
+        }).bind("change", function () {
+            var majno = $(this).attr('data-value');
+            $('#showmajorbeds').empty();
+            if (majno != "") {
+                $("#MajorDetailId").removeAttr("disabled");
+                $("#MajorDetailId").ComboBox({
+                    url: "/CollegeMIS/BK_MajorDetail/GetListJson",
+                    param: { queryJson: "{\"MajorNo\":\"" + majno + "\"}" },
+                    description: "==请选择==",
+                    id: "MajorDetailNo",
+                    text: "MajorDetailName",
+                    disabled: false,
+                    height: "230px",
+                    allowSearch: true
+                }).bind("change", function () {
+                    $('#showmajordetailbeds').empty();
+                    var majdetailid = $(this).attr('data-value');
+                    if (majdetailid != "") {
+                        $.ajax({
+                            url: "/CollegeMIS/BK_DormBed/GetListJson",
+                            data: { 'queryJson': '{"MajorDetailId":"' + majdetailid + '"}' },
+                            type: "get",
+                            dataType: 'json',
+                            async: false,
+                            success: function (data) {
+                                $('#showmajordetailbeds').text("已经预分了" + data.length + "个床位！");
+                            }
+                        });
+                    }
+                })
+
+
+
+                $.ajax({
+                    url: "/CollegeMIS/BK_DormBed/GetListJson",
+                    data: { 'queryJson': '{"MajorId":"' + majno + '"}' },
+                    type: "get",
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        $('#showmajorbeds').text("已经预分了" + data.length + "个床位！");
+                    }
+                });
+            }
+            else {
+                $('#showmajordetailbeds').empty();
+                $("#MajorDetailId").attr("disabled", "disabled");
+            }
+
+        })
+
+    }
+
+    //加载树
+    var departmentid = "card-box";
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 1,
+            url: "../../CollegeMIS/BK_Dorm/GetDormTreeJson?dormids=" + dormids,
+            onnodeclick: function (item) {
+                Loading(true);
+                window.setTimeout(function () {
+                    if (item.parentnodes == "0") {
+                        $(".card-box").show();
+                        departmentid = "card-box";
+                    } else {
+                        $(".card-box").hide();
+                        $('.' + item.id).show();
+                        departmentid = item.id;
+                    }
+                    Loading(false);
+                }, 200);
+
+                GetBeds(item.id);
+
+            }
+        };
+        //初始化
+        $("#itemTree").treeview(item);
+    }
+    
+    //加载床位
+    function GetBeds(dormid) {
+        $.ajax({
+            url: "../../CollegeMIS/BK_Dorm/GetDetailsJson?keyValue=" + dormid,
+            type: "get",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                var _html = "";
+                $.each(data, function (i) {
+                    var row = data[i];
+                    var active = "";
+                    bedIds.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                        if (value == row.BedId ) {
+                            active = "active";
+                        }
+                    });
+                    if (row.MajorId != null && row.MajorId != '') {
+                        active = "active";
+                    }
+                    _html += '<div class="card-box ' + row.DormId + ' ' + active + '">';
+                    _html += '    <div class="card-box-img">';
+                    _html += '        <img src="/Content/images/Bed.png" />';
+                    _html += '    </div>';
+                    _html += '    <div id="' + row.BedId + '" class="card-box-content">';
+                    _html += '        <p>床位：' + row.BedName + '</p>';
+                    if (row.MajorId!=null && row.MajorId!='') {
+                        _html += '        <p>已预分：' + row.MajorId + '</p>';
+                    }
+                   
+                    _html += '    </div><i></i>';
+                    _html += '</div>';
+                });
+                $(".gridPanel").html(_html);
+                $(".card-box").click(function () {
+                    if (!$(this).hasClass("active")) {
+                        $(this).addClass("active");
+                        addbedid($(this).find('.card-box-content').attr('id'))//添加id号
+                    } else {
+                        $(this).removeClass("active");
+                        delbedid(bedIds, $(this).find('.card-box-content').attr('id'));//删除ID号
+                    }
+                })
+                Loading(false);
+            }, beforeSend: function () {
+                Loading(true);
+            }
+        });
+    }
+
+    //增加床位的ID号
+    function addbedid(bedid)
+    {
+        if (bedIds.length == 0)
+        {
+            bedIds.push(bedid);
+        }
+        else {
+            var flag = true;
+
+            bedIds.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                if (value==bedid) {
+                    flag = false;                   
+                }
+            });
+
+            if (flag) {
+                bedIds.push(bedid);
+            }
+        }
+    }
+
+    //删除床位的ID号
+    function delbedid(arr, val) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] == val) {
+                arr.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#layout').Validform()) {
+            return false;
+        }
+        if (bedIds.length == 0) {
+            dialogMsg('请选择需要预分的床位！', 0);
+            return false;
+        }
+
+        var postData = $("#layout").GetWebControls();
+        postData["bedIds"] = String(bedIds)
+        postData["dormids"] = dormids;//得到所有的宿舍ID号
+
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_Dorm/SaveYFBedForm",
+            param: { "strEntity": JSON.stringify(postData)},
+            loading: "正在预分宿舍和床位，请稍等...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        });
+
+
+    }
+</script>
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel" style="margin: 0px; border-top: none; border-left: none; border-bottom: none;">
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="treesearch">
+            @*<input id="txt_TreeKeyword" type="text" class="form-control" style="border-top: none;" placeholder="请输入要查询关键字" />
+            <span id="btn_TreeSearch" class="input-query" title="Search"><i class="fa fa-search"></i></span>*@
+
+            <div style="overflow-y:auto;margin:10px 10px;">
+                <table class="form" style="width: 100%;">
+                    <tr>
+                        <th class="formTitle" style="width: 90px;">预分到专业<font face="宋体">*</font></th>
+                        <td class="formValue">
+                            <div id="MajorId" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+                        </td>
+                        <th class="formTitle" style="width: 90px;">预分到专业方向</th>
+                        <td class="formValue">
+                            <div id="MajorDetailId" type="select" class="ui-select" disabled="disabled"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formValue" colspan="2">
+                            <div id="showmajorbeds"></div>
+                        </td>
+                        <td class="formValue" colspan="2">
+                            <div id="showmajordetailbeds"></div>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="center-Panel" style="margin: 0px; border-right: none; border-left: none; border-bottom: none; background-color: #fff; overflow: auto; padding-bottom: 10px;">
+            <div class="gridPanel">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

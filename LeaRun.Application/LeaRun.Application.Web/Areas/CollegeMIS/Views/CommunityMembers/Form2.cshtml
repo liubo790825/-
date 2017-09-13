@@ -1,0 +1,141 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    var cid = request('cid');
+    var cname = request('cname');
+
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //社团角色
+        $("#CR_Id").ComboBox({
+            url: "../../CollegeMIS/Community_Roles/GetListJson",
+            param: { EnCode: "CompanyNature" },
+            id: "CR_Id",
+            text: "CR_Name",
+            description: "==请选择==",
+            height: "200px"
+        });
+        //社团信息(名称和ID号)
+        if (!!cid) {
+            $('#C_Id').val(cid);
+            $.SetForm({
+                url: "../../CollegeMIS/Community_info/GetFormJson",
+                param: { keyValue: cid },
+                success: function (data) {
+                    $("#C_Name").val(data.C_Name);
+                }
+            })
+        }
+
+
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/CommunityMembers/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../CollegeMIS/Community_Members/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+
+    function getStuInfoByStuNo()
+    {
+        var stuno = $('#CMI_StuNo').val();
+        if ($.trim(stuno) != "") {
+            var queryJson = "{\"CMI_StuNo\":\"" + stuno + "\"}";
+
+            $.SetForm({
+                url: "../../CollegeMIS/CommunityMemberInfo/GetModel",
+                param: { queryJson: queryJson },
+                success: function (data) {
+                    if (data!="") {
+                        $('#CMI_StuName').val(data.CMI_StuName);
+                        $('#CMI_Id').val(data.CMI_Id);
+                    }
+                    else {
+                        dialogMsg('没有找到该名学生！', 0);
+                    }
+                }
+            })
+        }
+        else {
+            dialogMsg('请输入学号再查询！', 0);
+        }
+
+    }
+
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">社团名称</td>
+            <td class="formValue">
+                <input type="text" id="C_Name" class="form-control" readonly isvalid="yes" checkexpession="NotNull" />
+                <input id="C_Id" type="hidden" isvalid="yes" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">社团角色</td>
+            <td class="formValue">
+                <div id="CR_Id" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>                
+            </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle">学号</td>
+            <td class="formValue">
+                <span>
+                    <input id="CMI_StuNo" type="text" class="form-control" style="width:80%" isvalid="yes" checkexpession="NotNull" />
+
+                    <a id="btn_Searchstuno" onclick="getStuInfoByStuNo()" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle">学生姓名</td>
+            <td class="formValue">
+                <input id="CMI_StuName" type="text" class="form-control" readonly isvalid="yes" checkexpession="NotNull"/>
+                <input id="CMI_Id" type="hidden" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+
+        <!--<tr>
+            <td class="formTitle">加入日期</td>
+            <td class="formValue">
+                <input id="CM_JoinDate" type="text" class="form-control"  />
+            </td>
+        </tr>-->
+        <tr>
+            <td class="formTitle">备注</td>
+            <td class="formValue">
+                <input id="CM_Remark" type="text" class="form-control"  />
+            </td>
+        </tr>
+       
+    </table>
+</div>

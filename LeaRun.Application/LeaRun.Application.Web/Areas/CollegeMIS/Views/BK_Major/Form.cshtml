@@ -1,0 +1,218 @@
+@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_OrderForm.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    var deptno = request('deptno'); // 院系号
+
+    $(function () {
+        InitialPage();
+        //GetOrderEntryGrid();
+        initControl();
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+{ label: '标识列', name: 'ID', width: 80, align: '', sortable: false, resizable: false ,hidden: true },
+{ label: '专业代码      现用（3位）', name: 'MajorNo', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '专业名称', name: 'MajorName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '专业方向号（如0，1，2，3，4，5）   0代表无专业方向细分', name: 'MajorDetailNo', width: 80, align: '', sortable: false, resizable: false  },
+{ label: '专业方向名', name: 'MajorDetailName', width: 80, align: '', sortable: false, resizable: false  },
+{ label: 'GovMajorNo', name: 'GovMajorNo', width: 80, align: '', sortable: false, resizable: false  },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+                ID: '<input name="ID" type="text" class="editable center" />',
+                MajorNo: '<input name="MajorNo" type="text" class="editable center" />',
+                MajorName: '<input name="MajorName" type="text" class="editable center" />',
+                MajorDetailNo: '<input name="MajorDetailNo" type="text" class="editable center" />',
+                MajorDetailName: '<input name="MajorDetailName" type="text" class="editable center" />',
+                GovMajorNo: '<input name="GovMajorNo" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+        if (!!deptno) {
+            $('#depttr').hide();
+            var schtd = $('#depttr').find(".formValue");
+            schtd.append("<input id=\"DeptNo\" type=\"text\" class=\"form-control\" value=\"" + deptno + "\">");
+            $('#DeptNo').val(deptno);
+        }
+        else {
+            //获取校区数据
+            var schtd = $('#depttr').find(".formValue");
+            schtd.append(" <div id=\"DeptNo\" type=\"select\" class=\"ui-select\" isvalid=\"yes\" checkexpession=\"NotNull\"></div>");
+            $("#DeptNo").ComboBox({
+                url: "/CollegeMIS/BK_Dept/GetListJson",
+                description: "==请选择==",
+                id: "DeptNo",
+                text: "DeptName",
+                height: "230px",
+                allowSearch: true
+            });
+        }
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_Major/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data.entity);
+                    //明细
+                    //var childEntity = data.childEntity;
+                    //$('#gridTable').find('[role=row]').each(function (i) {
+                    //    var row = childEntity[i - 1];
+                    //    if (row != undefined) {
+                    //        $(this).find('input[name="ID"]').val(row.ID);
+                    //        $(this).find('input[name="MajorNo"]').val(row.MajorNo);
+                    //        $(this).find('input[name="MajorName"]').val(row.MajorName);
+                    //        $(this).find('input[name="MajorDetailNo"]').val(row.MajorDetailNo);
+                    //        $(this).find('input[name="MajorDetailName"]').val(row.MajorDetailName);
+                    //        $(this).find('input[name="GovMajorNo"]').val(row.GovMajorNo);
+                    //    }
+                    //});
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+//        $('#gridTable').find('[role=row]').each(function (i) {
+//        if (!!$(this).find('input[name="MajorNo"]').val()) {
+//            childEntryJson.push({
+//ID: $(this).find('input[name="ID"]').val(),
+//MajorNo: $(this).find('input[name="MajorNo"]').val(),
+//MajorName: $(this).find('input[name="MajorName"]').val(),
+//MajorDetailNo: $(this).find('input[name="MajorDetailNo"]').val(),
+//MajorDetailName: $(this).find('input[name="MajorDetailName"]').val(),
+//GovMajorNo: $(this).find('input[name="GovMajorNo"]').val(),
+//                 });
+//            }
+//        });
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_Major/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="overflow-y:auto;margin:10px 10px;">
+     <table class="form" style="width: 100%;">
+         <tr id="depttr">
+             <th class="formTitle" style="width: 90px;">院系</th>
+             <td class="formValue"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 90px;">专业号<font face="宋体">*</font>
+             </th>
+             <td class="formValue"><input id="MajorNo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+             </tr>
+         <tr>
+             <th class="formTitle" style="width: 90px;">专业名称<font face="宋体">*</font></th>
+             <td class="formValue"><input id="MajorName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">英文名称</th>
+             <td class="formValue"><input id="MajorNameEn" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">简称</th>
+             <td class="formValue"><input id="MajorNameBrief" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">教委专业代码<font face="宋体">*</font></th>
+             <td class="formValue"><input id="GovMajorNo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">教委专业名称</th>
+             <td class="formValue"><input id="GovMajorName" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">学制<font face="宋体">*</font></th>
+             <td class="formValue"><input id="LengthOfSchooling" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+         </tr>
+         <!--<tr>
+             <th class="formTitle" style="width: 60px;">学科门类编号<font face="宋体">*</font></th>
+             <td class="formValue"><input id="SubjectSpeciesNo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">学科门类</th>
+             <td class="formValue"><input id="SubjectSpeciesNo1" type="text" class="form-control"></td>
+         </tr>-->
+         <tr>
+             <th class="formTitle" style="width: 60px;">本专科编号</th>
+             <td class="formValue"><input id="GraduateNo" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">专业主任</th>
+             <td class="formValue"><input id="MajorDirector" type="text" class="form-control"></td>
+         </tr>
+         @*<tr>
+             <th class="formTitle" style="width: 60px;">新生用专业标志</th>
+             <td class="formValue"><input id="FreshStuMark" type="text" class="form-control"></td>
+         </tr>*@
+
+     </table>
+ </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

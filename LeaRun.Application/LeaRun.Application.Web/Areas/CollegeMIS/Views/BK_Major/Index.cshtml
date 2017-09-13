@@ -1,0 +1,270 @@
+@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    var subgrid_table_id;
+    var secrow;
+
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../CollegeMIS/BK_Major/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: '标识列', name: 'MajorId', index: 'MajorId', width: 80, align: '', hidden: true },
+                {
+                    label: '所属院系', name: 'DeptNo', index: 'DeptNo', width: 150, align: '', formatter: function (cellvalue, options, rowObject) {
+                        return top.bk_deptlist[cellvalue] == null ? "" : top.bk_deptlist[cellvalue].FullName;
+                    }
+                },
+                { label: '专业号', name: 'MajorNo', index: 'MajorNo', width: 120 },
+                { label: '专业名称', name: 'MajorName', index: 'MajorName', width: 150, align: '' },
+                { label: '专业英文名称', name: 'MajorNameEn', index: 'MajorNameEn', width: 120, align: '' },
+                { label: '专业名称简称', name: 'MajorNameBrief', index: 'MajorNameBrief', width: 120, align: '' },
+                { label: '教委专业代码', name: 'GovMajorNo', index: 'GovMajorNo', width: 120, align: '' },
+                { label: '教委专业名称', name: 'GovMajorName', index: 'GovMajorName', width: 120, align: ''  },
+                { label: '学制', name: 'LengthOfSchooling', index: 'LengthOfSchooling', width: 80, align: ''  },
+                //{ label: '学科门类代码', name: 'SubjectSpeciesNo', index: 'SubjectSpeciesNo', width: 120, align: ''  },
+                //{ label: '学科门类', name: 'SubjectSpeciesNo1', index: 'SubjectSpeciesNo1', width: 120, align: ''  },
+                { label: '本专科代码', name: 'GraduateNo', index: 'GraduateNo', width: 120, align: ''  },
+                { label: '专业主任', name: 'MajorDirector', index: 'MajorDirector', width: 80, align: ''  },
+                {
+                    label: '新生用专业标志', name: 'FreshStuMark', index: 'FreshStuMark', width: 150, align: '',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"><span>&nbsp;&nbsp;启用</span></i>" : "<i class=\"fa fa-toggle-off\"><span>&nbsp;&nbsp;停用</span></i>";
+                    }
+                },
+                //{ label: '审查标志', name: 'CheckMark', index: 'CheckMark', width: 80, align: '', sortable: true },
+                {
+                    label: '有效', name: 'EnableRemark', index: 'EnableRemark', width: 80, align: '',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                }
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'MajorId',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            },
+            subGrid: true,
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var keyValue = $gridTable.jqGrid('getRowData', row_id)['MajorNo'];
+                var mname = $gridTable.jqGrid('getRowData', row_id)['MajorName'];
+                subgrid_table_id = subgrid_id + "_t";
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "'></table>");
+                $("#" + subgrid_table_id).jqGrid({
+                    url: "../../CollegeMIS/BK_Major/GetDetailsJson",
+                    postData: { keyValue: keyValue },
+                    datatype: "json",
+                    height: "100%",
+                    colModel: [
+                { label: '标识列', name: 'ID', index: 'ID', width: 80, align: '' ,hidden: true },
+                { label: '专业代码', name: 'MajorNo', index: 'MajorNo', width: 80, align: '', hidden: true },
+                { label: '专业名称', name: 'MajorName', index: 'MajorName', width: 80, align: '', hidden: true },
+                { label: '专业方向号', name: 'MajorDetailNo', index: 'MajorDetailNo', width: 80, align: '' },
+                { label: '专业方向名', name: 'MajorDetailName', index: 'MajorDetailName', width: 80, align: '' },
+                { label: '教委专业代码', name: 'GovMajorNo', index: 'GovMajorNo', width: 150, align: '' },
+                {
+                    label: '有效', name: 'EnableRemark', index: 'EnableRemark', width: 80, align: '',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
+                { label: '', name: '', index: '', width: 80, align: '' }
+                    ],
+                    onSelectRow: function (chrowid, status) {
+                        subgrid_table_id = "";
+                        secrow = null;
+                        subgrid_table_id = this.id;
+                        secrow = $gridTable.jqGrid('getRowData', row_id);
+                    },
+                    caption: mname+"详细方向",
+                    rowNum: "1000",
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    gridview: true,
+                    hidegrid: false
+                });
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加专业',
+            url: '/CollegeMIS/BK_Major/Form',
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('MajorId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑专业',
+                url: '/CollegeMIS/BK_Major/Form?keyValue=' + keyValue,
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'MajorId');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../CollegeMIS/BK_Major/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的专业！', 0);
+        }
+    }
+    //详细
+    function btn_details() {
+        var keyValue = $('#gridTable').jqGridRowValue('MajorId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '详细专业',
+                url: '/CollegeMIS/BK_Major/Form?keyValue=' + keyValue+'&isDeltail=true',
+                width: '1000px',
+                height: '750px',
+                btn:null,
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+
+
+    //新增专业方向
+    function btn_addmjd() {
+        var keyValue = $('#gridTable').jqGridRowValue('MajorNo');//专业号
+        var MajorName = $('#gridTable').jqGridRowValue('MajorName');//专业名称
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '添加' + MajorName + '的专业方向',
+                url: '/CollegeMIS/BK_MajorDetail/Form?majorno=' + keyValue+"&majorname="+ escape( MajorName),
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            });
+        }
+        else {
+            dialogMsg('请选择要增加专业方向的专业！', 0);
+        }
+    }
+    //编辑专业方向
+    function btn_editmjd() {
+        var deptno = secrow['MajorNo']; //专业编号
+        var AreaName = secrow['MajorName'];//专业名
+        var keyValue = $("#" + subgrid_table_id).jqGridRowValue("ID");
+        var MajorName = $("#" + subgrid_table_id).jqGridRowValue("MajorDetailName");
+        if (keyValue) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑' + MajorName + '专业方向信息',
+                url: '/CollegeMIS/BK_MajorDetail/Form?keyValue=' + keyValue + '&majorno=' + deptno + "&majorname=" + escape(AreaName),
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除专业
+    function btn_deletemjd() {
+        var keyValue = $("#" + subgrid_table_id).jqGridRowValue("MajorId"); //专业ID号;
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../CollegeMIS/BK_MajorDetail/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的专业！', 0);
+        }
+    }
+
+
+
+</script>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>详细</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

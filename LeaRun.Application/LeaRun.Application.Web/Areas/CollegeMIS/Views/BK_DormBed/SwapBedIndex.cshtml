@@ -1,0 +1,514 @@
+@{;
+    ViewBag.Title = "床位互换页面";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script>
+    var bedIds = [];
+    var bedIds2 = [];
+
+    $(function () {
+        InitialPage();
+        GetTree();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        $("#gridTable").delegate(".card-box", "click", function () {
+            if (changeArr(bedIds, $(this).find('.card-box-content').attr('id'), bedIds2)) {
+                if (!$(this).hasClass("active")) {
+                    $(this).addClass("active");
+                    //changeArr(bedIds, $(this).find('.card-box-content').attr('id'))//添加id号
+                } else {
+                    $(this).removeClass("active");
+                    //changeArr(bedIds, $(this).find('.card-box-content').attr('id'));//删除ID号
+                }
+            }
+        });
+
+        $("#gridTable2").delegate(".card-box", "click", function () {
+            if (changeArr(bedIds2, $(this).find('.card-box-content').attr('id'), bedIds)) {
+                if (!$(this).hasClass("active")) {
+                    $(this).addClass("active");
+                    //changeArr(bedids2, $(this).find('.card-box-content').attr('id'))//添加id号
+                } else {
+                    $(this).removeClass("active");
+                    //changeArr(bedIds2, $(this).find('.card-box-content').attr('id'));//删除ID号
+                }
+            }
+            
+        });
+
+
+        $('#layout_1').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                $(window).resize()
+            }
+        })
+        $('#layout_2').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                $(window).resize()
+            }
+        })
+       // $('#layout').height($(window).height() - 65);
+        $('#gridTable').height($(window).height() - 100);
+        $('#gridTable2').height($(window).height() - 100);
+
+
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').height($(window).height() - 100);
+                $('#gridTable2').height($(window).height() - 100);
+                //$('#layout').height($(window).height() - 59);
+                //$('#layout_1').height($(window).height() - 120);
+                //$('#layout_2').height($(window).height() - 120);
+                //$("#itemTree").setTreeHeight($(window).height() - 120);
+                //$('#itemTree2').setTreeHeight($(window).height() - 120);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载树
+    var _parentId = "";
+    var chkwho = "";
+
+    var _parentId2 = "";
+    var chkwho2 = "";
+
+
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 100,
+            url: "../../CollegeMIS/BK_Dorm/GetTreeJson?usedrom=true",
+            onnodeclick: function (item) {
+                _parentId = item.id;
+                chkwho = item.show;
+                GetGrid(_parentId, chkwho, "gridTable");
+            }
+        };
+        var item2 = {
+            height: $(window).height() - 100,
+            url: "../../CollegeMIS/BK_Dorm/GetTreeJson?usedrom=true",
+            onnodeclick: function (item) {
+                _parentId2 = item.id;
+                chkwho2 = item.show;
+                GetGrid(_parentId2, chkwho2, "gridTable2");
+            }
+        };
+
+        //初始化
+        $("#itemTree").treeview(item);
+        $("#itemTree2").treeview(item2);
+    }
+
+    //
+    function GetGrid(pid, chkwhos,divid) {
+        if (pid == "" && chkwhos == "") {
+            return;
+        }
+        if (chkwhos == "floor") {//加载这个楼层下面的所有的宿舍和床位
+            getDormsAndBeds(pid,divid);
+            return;
+        }
+        if (chkwhos == "dorm") {
+            getBeds(pid,divid);
+            return;
+        }
+    }
+
+    //根据楼层得到所有的宿舍和床位
+    function getDormsAndBeds(floorid,divid)
+    {
+        var gridTablehtml = "";
+        gridTablehtml += " <table class=\"table table-bordered\" style='background-color:#fff'>";//
+
+        gridTablehtml += " <tr> <th>宿舍</th><th>床位</th> </tr> ";
+        var postData = {"DormFloorsId":floorid};
+        $.SetForm({
+            url: "../../CollegeMIS/BK_Dorm/GetListAndChildList",
+            param: { queryJson: JSON.stringify(postData) },
+            success: function (data) {
+                if (data==null) {
+                    return;
+                }
+                for (var i = 0; i < data.length; i++) {
+                    var childEntity = data[i].childEntity;
+                    var row = data[i].entity;
+
+                    gridTablehtml += "<tr>";
+                    gridTablehtml += " <th style=\"width:10%\">" + row.DormNo + "(共" + row.Beds + "床,空" + row.NotUseBeds + "床)" + "</th>";
+                    gridTablehtml += " <td style=\"padding-bottom:10px;\">";
+                    //循环所有的床位
+                    for (var j = 0; j < childEntity.length; j++) {
+                        var bedinfo = childEntity[j];
+                        var active = "";
+                        if (divid == "gridTable") {
+                            bedIds.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                                if (value == bedinfo.BedId) {
+                                    active = "active";
+                                }
+                            });
+                        }
+                        else if (divid == "gridTable2") {
+                            bedIds2.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                                if (value == bedinfo.BedId) {
+                                    active = "active";
+                                }
+                            });
+                        }
+                        gridTablehtml += '<div class="card-box ' + row.DormId + ' ' + active + '">'; //" <div class=\"card-box \" style=\"display: block;\">";
+                        gridTablehtml += "  <div class=\"card-box-img\">";
+                        gridTablehtml += "        <img src=\"/Content/images/Bed.png\">";
+                        gridTablehtml += "               </div>";
+                        gridTablehtml += "  <div id=\"" + bedinfo.BedId + "\" class=\"card-box-content\">";
+                        gridTablehtml += "               <p>床号：" + bedinfo.BedName + "</p>";
+                        if (bedinfo.IsUsed == "1") {
+                            gridTablehtml += "               <p>使用者：" + bedinfo.StuName + "</p>";
+                            gridTablehtml += "               <p>电话：" + bedinfo.BedOther4 + "</p>";
+                        }
+                        else {
+                            gridTablehtml += "               <p>使用者：空床位</p>";
+                        }
+                        gridTablehtml += "  </div>";
+                        gridTablehtml += "  <i></i>";
+                        gridTablehtml += "  </div>";
+                    }
+                    gridTablehtml += "</td>";
+                    gridTablehtml += "</tr>";
+                }
+            }
+        });
+        gridTablehtml += " </table>";
+        $('#'+divid).html(gridTablehtml);
+    }
+
+    //根据宿舍得到所有的床位
+    function getBeds(dormid,divid)
+    {
+        var gridTablehtml = "";
+        $.SetForm({
+            url: "../../CollegeMIS/BK_Dorm/GetFormJson",
+            param: { keyValue: dormid },
+            success: function (data) {
+                if (data == null) {
+                    return;
+                }
+
+                $.each(data.childEntity, function (i) {
+                    var row = data.childEntity[i];
+                    var active = "";
+                    if (divid == "gridTable") {
+                        bedIds.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                            if (value == row.BedId) {
+                                active = "active";
+                            }
+                        });
+                    }
+                   else  if (divid == "gridTable2") {
+                        bedIds2.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                            if (value == row.BedId) {
+                                active = "active";
+                            }
+                        });
+                    }
+                    gridTablehtml += '<div class="card-box ' + row.DormId + ' ' + active + '">';
+                    gridTablehtml += "  <div class=\"card-box-img\">";
+                    gridTablehtml += "        <img src=\"/Content/images/Bed.png\">";
+                    gridTablehtml += "               </div>";
+                    gridTablehtml += "  <div id=\"" + row.BedId + "\" class=\"card-box-content\">";
+                    gridTablehtml += "               <p>床号：" + row.BedName + "</p>";
+                    if (row.IsUsed=="1") {
+                        gridTablehtml += "               <p>使用者：" + row.StuName + "</p>";
+                        gridTablehtml += "               <p>电话：" + row.BedOther4 + "</p>";
+                    }
+                    else {
+                        gridTablehtml += "               <p>使用者：空床位</p>";
+                    }
+                    gridTablehtml += "  </div>";
+                    gridTablehtml += "  <i></i>";
+                    gridTablehtml += "  </div>";
+                });
+               
+            }
+        })
+        $('#'+divid).html(gridTablehtml);
+    }
+
+
+   //增加或删除床位号，如果
+    function changeArr(bedarr, bedid, Barr)
+    {
+        if (bedid=="") {
+            return false;
+        }
+        //首先检测Barr里面是否已经存在该值了，如果已经存在就不能保存到bedarr里面了，但是要给出提示
+        var hasvalue = false;//表示没有值
+        if (Barr.length>0) {
+            Barr.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                if (value == bedid) {
+                    hasvalue = true;//说明已经存在该值了
+                }
+            });
+        }
+        if (!hasvalue) {
+            if (bedarr.length == 0) {
+                bedarr.push(bedid);
+            }
+            else {
+                //如果这个值在数据列里面已经有了就删除，如果没有就添加
+                var flag = true;
+                for (var i = 0; i < bedarr.length; i++) {
+                    if (bedarr[i] == bedid) {
+                        bedarr.splice(i, 1);//删除这个值
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    bedarr.push(bedid);//添加这个值
+                }
+            }
+            return true;
+        }
+        else {
+            dialogMsg('该床位不能同时出现在调整床位和目标床位！', 0);
+            return false;
+        }
+    }
+    //增加床位的ID号
+    function addbedid(bedarr, bedid)
+    {
+        if (bedarr.length == 0) {
+            bedarr.push(bedid);
+        }
+        else {
+            var flag = true;
+            bedarr.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                if (value == bedid) {
+                    flag = false;
+                }
+            });
+
+            if (flag) {
+                bedarr.push(bedid);
+            }
+        }
+    }
+
+
+    function addbedid_old(bedid, divid) {
+        if (divid == "gridTable") {
+            if (bedIds.length == 0) {
+                bedIds.push(bedid);
+            }
+            else {
+                var flag = true;
+                bedIds.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                    if (value == bedid) {
+                        flag = false;
+                    }
+                });
+
+                if (flag) {
+                    bedIds.push(bedid);
+                }
+            }
+            return;
+        }
+        if (divid == "gridTable2") {
+            if (bedIds2.length == 0) {
+                bedIds2.push(bedid);
+            }
+            else {
+                var flag = true;
+                bedIds2.forEach(function (value) { //只使用了第一个参数（函数），调用的函数也只使用了第一个参数数组元素
+                    if (value == bedid) {
+                        flag = false;
+                    }
+                });
+
+                if (flag) {
+                    bedIds2.push(bedid);
+                }
+            }
+            return;
+        }
+    }
+
+    //删除床位的ID号
+    function delbedid(arr, val) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] == val) {
+                arr.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+
+    //交换宿舍
+    function btn_add() {        
+        if (bedIds.length == 0) {
+            dialogMsg('请选择需要调换宿舍的学生！', 0);
+            return
+        }
+        if (bedIds2.length == 0) {
+            dialogMsg('请选择需要调换到的哪个宿舍和床位！', 0);
+            return
+        }
+        if (bedIds.length>bedIds2.length) {
+            dialogMsg('要调换的学生有'+bedIds.length+'个，而目标床位只有'+bedIds2.length+'个，目标宿舍和床位不足！', 0);
+            return
+        }
+        if (bedIds.length < bedIds2.length) {
+            dialogMsg('要调换的学生有' + bedIds.length + '个，而目标床位有' + bedIds2.length + '个，要调换的学生不足！', 0);
+            return
+        }
+
+
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_DormBed/ChangeBeds",
+            param: { "fromBeds": bedIds.toString(), "targetBeds": bedIds2.toString() },
+            loading: "正在调换宿舍床位...",
+            success: function () {
+                //去掉当前页面所有的已经选择的床位CSS
+                //清空bedids和bedids2;
+                //直接刷新当前页面
+                reload();
+            }
+        })
+    };
+
+    //预分床位
+    function btn_edit() {
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);
+            if (row.NotDistributeBeds > 0) {//未预分床位要大于零才能
+                rowIds.push(row.DormId);
+            }
+        }
+        if (rowIds.length == 0) {
+            dialogMsg('请选择需要预分床位的宿舍！', 0);
+            return;
+        }
+        dialogOpen({
+            id: "Form",
+            title: '预分床位',
+            url: '/CollegeMIS/BK_Dorm/YFBedForm?dormids=' + rowIds,
+            width: "700px",
+            height: "530px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+
+    }
+    //重置预分
+    function btn_delete() {
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);
+            if (row.DistributeBeds>0) {//已预分床位要大于零才能
+                rowIds.push(row.DormId);
+            }
+        }
+        if (rowIds.length == 0) {
+            dialogMsg('请选择需要重置预分的宿舍或要要预分的宿舍床位为空！', 0);
+            return false;
+        }
+
+        if (confirm("你确定要重置这些宿舍和床位吗？")) {
+            $.SaveForm({
+                url: "../../CollegeMIS/BK_Dorm/ClearYFDorm",
+                param: { "strEntity": rowIds.toString() },
+                loading: "正在清空预分宿舍和床位，请稍等...",
+                success: function () {
+                    $('#gridTable').jqGrid("reloadGrid");
+                }
+            });
+
+        }
+
+
+
+    }
+</script>
+
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" style="display:none" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-warning" onclick="btn_add()"><i class="fa fa-refresh"></i>&nbsp;交换床位</a>
+            <!--<a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;床位预分</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;重置预分</a>-->
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+
+<div class="ui-layout" id="layout" style="width: 100%; height:100%">
+    <div class="ui-layout" id="layout_1"  style="height: 100%; width: 50%;float:left">
+        <div class="ui-layout-west">
+            <div class="west-Panel">
+                <div class="panel-Title">宿舍楼信息</div>
+                <div id="itemTree"></div>
+            </div>
+        </div>
+        <div class="ui-layout-center" style="background-color: #fff;height: 100%;">
+            <div class="center-Panel" >
+                <div class="panel-Title">房间或床位信息</div>
+              
+                <div class="gridPanel" >
+                    <div id="gridTable">
+
+                    </div>
+                    
+                    <!--<table id="gridTable"></table>
+                    <div id="gridPager"></div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui-layout" id="layout_2" style="height: 100%; width: 50%;float:left">
+        <div class="ui-layout-west">
+            <div class="west-Panel">
+                <div class="panel-Title">调换到宿舍楼</div>
+                <div id="itemTree2"></div>
+            </div>
+        </div>
+        <div class="ui-layout-center">
+            <div class="center-Panel">
+                <div class="panel-Title">调换到房间或床</div>
+                <div class="gridPanel">
+                    <div id="gridTable2">
+                       
+                    </div>
+                    
+                    <!--
+                    <table id="gridTable2"></table>
+                    <div id="gridPager2">
+                    </div>-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div> 
+
+

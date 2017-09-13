@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "分班规则页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+
+    $(function () {
+        $(".sys_spec_text li").addClass("active");
+        $(".sys_spec_text li").click(function () {
+            if (!!$(this).hasClass("active")) {
+                $(this).removeClass("active");
+            } else {
+                $(this).addClass("active").siblings("li");
+            }
+        });
+    });
+    //确定导出
+    function AcceptClick() {
+        var exportField = [];
+        $('.sys_spec_text ').find('li.active').each(function () {
+            var value = $(this).attr('data-value');
+            exportField.push(value);
+        });
+        if (exportField.length==0) {
+            dialogMsg('你还没有选择分班规则！', 0);
+            return;
+        }
+
+        $.SaveForm({
+            url: "/CollegeMIS/BK_ClassInfo/DivideClasses",
+            param: { "secRule": JSON.stringify(exportField)},
+            loading: "正在进行分班，请稍等...",
+            success: function (result) {
+                if (result.type==1) {
+                    dialogMsg('分班成功！', 0);
+                }
+            }
+        })
+
+
+        //$.ajax({
+        //    url: "/CollegeMIS/BK_ClassInfo/DivideClasses",
+        //    data: { secRule, exportField},
+        //    type: "post",
+        //    dataType: "json",
+        //    async:false,
+        //    success: function (result)
+        //    {
+
+        //    }
+        //})
+    }
+</script>
+<div style="margin: 5px;">
+    <div class="alert alert-danger" style="margin-bottom: 5px;">
+        <i class="fa fa-question-circle" style="position: relative; top: 1px; font-size: 15px; padding-right: 5px;"></i>
+        注：请勾选分班的规则
+    </div>
+</div>
+<div style="margin: 5px;">
+    <ul class="sys_spec_text">
+        <li data-value='成绩' title='成绩'><a>成绩</a><i></i></li>
+        <li data-value='性别' title='性别'><a>性别</a><i></i></li>
+        <li data-value='地区' title='地区'><a>地区</a><i></i></li>
+        <li data-value='民族' title='民族'><a>民族</a><i></i></li>
+    </ul>
+</div>

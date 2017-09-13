@@ -1,0 +1,87 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">我要咨询</h1>
+        
+    </ion-header-bar>
+
+
+    <ion-content>
+        <div class="list mt5" style="background-color:white">
+
+
+            <div class="item item-divider">
+                <b>我：</b>请问老师乌鲁木齐机场怎么去学校？
+            </div>
+            <item-content>
+
+                <div class="list list-inset lr-list-type2 " style="margin-top:0px;">
+                    <div class="row">
+                        <div class="col-99">
+                            <p>
+                                <b>回复：</b>从乌鲁木齐地窝堡国际机场到新疆农业大学，全程约15.8公里，机场大巴无法直达学校，建议搭乘出租车，在无堵车状态下，40元左右即可到达。（<a href='http://j.map.baidu.com/xk0pl' target="_blank">打开百度地图</a>）
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </item-content>
+      
+
+        <div class="item item-divider">
+            <b>我：</b>火车南站呢？
+        </div>
+        <item-content>
+            <div class="list list-inset lr-list-type2" style="margin-top:0px;">
+                <div class="row">
+                    <div class="col-99">
+                        <p>
+                            <b>回复：</b>出站口后向前直行50米到“火车南站”乘909、914、52区间车、52路、BRT1号线在“红山站”下车转乘同方向的17路车到终点站“新农大”，就到学校正门，车费2元。也可选择在火车站乘坐出租车到新疆农业大学，在无堵车状态下，20元左右即可到达。（<a href='http://j.map.baidu.com/Dimpl' target="_blank">打开百度地图</a>）
+                        </p>
+                    </div>
+                </div>
+                </div>
+        </item-content>
+        
+        <div class="item item-divider">
+            <b>我：</b>碾子沟汽车站呢？
+        </div>
+        <item-content>
+            <div class="list list-inset lr-list-type2" style="margin-top:0px;">
+                <div class="row">
+                    <div class="col-99">
+                        <p>
+                            <b>回复：</b>等待回复...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </item-content>
+        
+
+        
+        
+
+        </div>
+
+        <ion-list class="lr-list-form">
+            <div class="item item-divider">
+                咨询问题
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加咨询问题</div>
+                <input type="text" ng-model="editData.fullName" ng-class="{'active' : isInputActive('fullName')}" />
+            </ion-item>
+
+        </ion-list>
+        <div>
+            <button class="button button-block button-positive" ng-click="doSubmit()">
+                提交
+            </button>
+        </div>
+
+
+</ion-content>
+
+
+</ion-modal-view>
+

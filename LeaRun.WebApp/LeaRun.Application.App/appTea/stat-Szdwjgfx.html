@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>饼图</title>
+    <!--框架必需start-->
+    <link href="../Content/Styles/Qjkjui-framework.css" rel="stylesheet" />
+    <script src="../Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="../Content/Scripts/Qjkjui-framework.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    <script src="../Content/Scripts/highcharts/highcharts.js"></script>
+    <!--第三方统计图end-->
+    <script>
+        var chart;
+        $(document).ready(function () {
+
+            // Build the chart
+            $('#container').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: '学历结构分析图'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: '份额：',
+                    data: [
+                        ['高中', 51],
+                        ['技工学校', 84],
+                        ['中等专业学校或中等技术学校', 200],
+                        ['大学专科和专科学校', 403],
+                        ['大学本科', 1202],
+                        ['研究生', 609],
+                        ['其他', 703]
+                    ]
+                }]
+            });
+        });
+
+    </script>
+    <script>
+        var chart;
+        $(document).ready(function () {
+
+            // Build the chart
+            $('#container1').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: '学位结构分析图'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: '份额：',
+                    data: [
+                        ['名誉博士', 3],
+                        ['博士', 263],
+                        ['硕士', 858],
+                        ['学士', 855],
+                        ['其它', 1840]
+                    ]
+                }]
+            });
+        });
+
+    </script>
+    <script>
+        var chart;
+        $(document).ready(function () {
+
+            // Build the chart
+            $('#container2').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: '职称结构分析图'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: '份额：',
+                    data: [
+                        ['正高级', 259],
+                        ['副高级', 368],
+                        ['中级', 864],
+                        ['助理级', 441],
+                        ['员级', 16],
+                        ['其它', 1671]
+                    ]
+                }]
+            });
+        });
+
+    </script>
+    <script>
+        var chart;
+        $(document).ready(function () {
+
+            // Build the chart
+            $('#container3').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: '性别结构分析图'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: '份额：',
+                    data: [
+                        ['男', 1348],
+                        ['女', 2271]
+                    ]
+                }]
+            });
+        });
+
+    </script>
+    <script>
+        var chart;
+        $(document).ready(function () {
+
+            // Build the chart
+            $('#container4').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: '年龄结构分析图'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: '份额：',
+                    data: [
+                        ['35岁及以下', 1252],
+                        ['36-45', 1000],
+                        ['46-55', 800],
+                        ['56岁及以上', 507]
+                    ]
+                }]
+            });
+        });
+
+    </script>
+    <script>
+        var chart;
+        $(document).ready(function () {
+
+            // Build the chart
+            $('#container5').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: '工龄结构分析图'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: '份额：',
+                    data: [
+                        ['5年及以下', 547],
+                        ['6-10年', 665],
+                        ['11-15', 288],
+                        ['16-20', 343],
+                        ['21-25', 421],
+                        ['26-30', 466],
+                        ['31-35', 251],
+                        ['36-40', 213],
+                        ['41年及以上', 436]
+                    ]
+                }]
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="container3" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="container4" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="container5" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+﻿<ion-modal-view ng-controller="BaodaoCtrl" ng-init="HomeWork()">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">工作办理</h1>
+        <!--<button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>-->
+    </ion-header-bar>
+    <!--<div class="bar bar-subheader lr-subheader">
+        <div class="lr-left-tool">
+            <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}条</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+        </div>
+        <div class="lr-right-tool">
+            <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+            <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+        </div>
+    </div>-->
+    <ion-content delegate-handle="Baodaolist-content">
+
+        <div class="list mt5">
+            <div class="banner">
+                <img src="img/2.jpg" />
+            </div>
+            <ion-list>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('qingjiashenpiDetails.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    学生请假
+                    <span class="badge badge-assertive">{{Number.TeaStuLeaveNumber.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('TeaCaoxingKoufenChexiaoList.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    操行扣分撤销申请审核
+                    <span class="badge badge-positive">{{Number.TeaCancelAppNumber.result.number}}</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openBaodaoFuncModal('chuqinDetails.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    出勤统计
+                    <span class="badge badge-positive">98%</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+
+
+    </ion-content>
+    <!--<div class="lr-plug-btn">
+        <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+    </div>-->
+
+
+
+</ion-modal-view>

@@ -1,0 +1,62 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">在线支付</h1>
+        
+    </ion-header-bar>
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+    </style>
+
+    <ion-content>
+
+        <div class="item item-divider bgcolor_d">
+            说明
+        </div>
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;margin-bottom:10px">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+
+                            <div class="col-99">
+                                <div class="col-99 item-note">
+                                    <p>
+                                        学校通过支付宝进行网上缴费操作，进行网上缴费操作前必须完成宿舍标准选择、如果办理了绿色通道，必须等待学工处审核通过后才可以进行缴费。缴费前请确保您的支付宝余额或余额宝中的金额充足或您绑定的银行卡当日单笔限额满足支付要求。
+                                        支付宝快捷支付限额查询<br />
+                                        储蓄卡：https://help.alipay.com/lab/help_detail.htm?help_id=419480 <br />
+                                        信用卡：https://help.alipay.com/lab/help_detail.htm?help_id=387096
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+
+
+        <div class="item item-divider">
+            应缴金额
+        </div>
+        <ion-list>
+            <p style="margin:20px">住宿费：<span style="font-size:24px;color:red">¥1480</span></p>
+        </ion-list>
+
+        
+
+
+        <div>
+            <button class="button button-block button-positive" ng-click="">
+                交费
+            </button>
+        </div>
+        
+    </ion-content>
+
+
+</ion-modal-view>
+

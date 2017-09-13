@@ -1,0 +1,425 @@
+﻿@{
+    ViewBag.Title = "奖学金申请表";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+       // GetGrid();
+    })
+  
+
+        //查询条件
+        $("#queryCondition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = {
+                condition: $("#queryCondition").find('.dropdown-text').attr('data-value'),
+                keyword: $("#txt_Keyword").val()
+            }
+            $gridTable.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    //打印
+    function btn_print() {
+        $("#gridPanel").printTable();
+    }
+    //导出
+    function btn_export_old() {
+        dialogOpen({
+            id: "ExcelIExportDialog",
+            title: '奖学金申请表',
+            url: '/Utility/ExcelExportForm?gridId=gridTable',
+            width: "500px",
+            height: "380px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }, btn: ['导出Excel', '关闭']
+        });
+    }
+    function btn_export()
+    {
+        var htmltext = $('.printArea').html();
+        $('#htmltext').val(htmltext);
+        window.open("../../CollegeMIS/GJTableDemo/DownloadPdf?htmlText=" + $('#htmltext').val());
+        
+        //var f = $(' <form action="../../CollegeMIS/GJTableDemo/DownloadPdf" method="post" id="fm1"></form>')
+        //var l = $(' <input type="hidden" id="htmlText" name="htmlText"/>');
+        //var i = $(' <input type="hidden" id="txtName" name="txtName"/>');
+        //l.val(htmltext);
+        //l.appendTo(f);
+        //f.submit();
+       
+
+
+    }
+</script>
+<style>
+    table tr td {
+        border: solid windowtext 1.0pt;
+        border-left: none;
+        text-align: center;
+        height: 35px;
+    }
+</style>
+
+<div class="titlePanel">
+
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-print" class="btn btn-default" onclick="btn_print()"><i class="fa fa-print"></i>&nbsp;打印</a>
+            <a id="lr-export" class="btn btn-default" onclick="btn_export()"><i class="fa fa-sign-out"></i>&nbsp;导出</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="gridPanel" id="gridPanel">
+
+    <div class="printArea">
+        <div class="grid-title" style="text-align:center;font-family:'黑体';font-size:x-large;">（2015—2016学年）国家奖学金申请审批表 </div>
+        <div class="grid-subtitle">
+            <p class=MsoNormal style='margin-top:15.6pt;margin-left:20px; '>
+                    <span style='font-size:12.0pt;font-family:宋体;'>学校：西南大学</span>  
+                    <span style='font-size:12.0pt;font-family:宋体;margin-left:100px;'>院系：生物技术学院</span>
+                    <span style='font-size:12.0pt;font-family:宋体;margin-left:100px;'>学号：222009331022019</span>
+            </p>
+        </div>
+
+        <div>
+            <table border=1 cellspacing=0 cellpadding=0 align="center" width=662 style='width:100%;border-collapse:collapse;border:none;margin-right:20px;'>
+                <tr>
+                    <td rowspan=4 style='width:38pt;border:solid windowtext 1.0pt;'>
+                        <b>
+                            <p style='font-size:12.0pt;font-family:宋体;'>基本</p>
+                            <p style='font-size:12.0pt;font-family:宋体;'>情况</p>
+                        </b>
+                    </td>
+                    <td width=84 style='width:63.0pt; '>
+                        <span style='font-size:12.0pt;font-family:宋体;'>姓名</span>
+                    </td>
+                    <td width=108 colspan=4 style='width:81.0pt;'>贾xx</td>
+                    <td width=72 colspan=4 style='width:54.0pt;'>
+                        <span style='font-size:12.0pt;font-family:宋体;'>性别</span>
+                    </td>
+                    <td width=91 colspan=5 style='width:68.15pt;'>女</td>
+                    <td width=84 colspan=4 style='width:63.0pt;'>
+                        <span style='font-size:12.0pt;font-family:宋体;'>出生年月</span>
+                    </td>
+                    <td width=168 colspan=6 style='width:126.0pt;'>1996年11月</td>
+                </tr>
+                <tr style='page-break-inside:avoid;height:31.3pt'>
+                    <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+
+                        <span style='font-size:12.0pt;font-family:宋体;'>政治面貌</span>
+                    </td>
+                    <td width=108 colspan=4 style='width:81.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>中共党员</td>
+                    <td width=72 colspan=4 style='width:54.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; '>
+                        <span style='font-size:12.0pt;font-family:宋体'>民族</span>
+                    </td>
+                    <td width=91 colspan=5 style='width:68.15pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>汉</td>
+                    <td width=84 colspan=4 style='width:63.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+                        <span style='font-size:12.0pt;font-family:宋体;'>入学时间</span>
+                    </td>
+                    <td width=168 colspan=6 style='width:126.0pt;border-top:none;border-left: none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+                        2014年9月
+                    </td>
+                </tr>
+                <tr style='mso-yfti-irow:2;page-break-inside:avoid;height:31.3pt'>
+                    <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+
+                        <span style='font-size:12.0pt;font-family:宋体;'>专业</span>
+
+                    </td>
+                    <td width=108 colspan=4 style='width:81.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; '>生物技术(应用生物技术方向)</td>
+                    <td width=72 colspan=4 style='width:54.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;  '>
+                        <span style='font-size:12.0pt;font-family:宋体;'>学制</span>
+                    </td>
+                    <td width=91 colspan=5 style='width:68.15pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>4年</td>
+                    <td width=84 colspan=4 style='width:63.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+                        <span style='font-size:12.0pt;font-family:宋体;'>联系电话</span>
+                    </td>
+                    <td width=168 colspan=6 style='width:126.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>15215065200</td>
+                </tr>
+                <tr style='mso-yfti-irow:3;page-break-inside:avoid;height:31.0pt'>
+                    <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+                        <span style='font-size:12.0pt;font-family:宋体;'>身份证号</span>
+                    </td>
+                    <td width=29 style='width:21.75pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>1</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>1</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>0</td>
+                    <td width=29 colspan=2 style='width:21.75pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>1</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>0</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>4</td>
+                    <td width=29 colspan=2 style='width:21.8pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>1</td>
+                    <td width=29 colspan=2 style='width:21.75pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>9</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>9</td>
+                    <td width=29 colspan=2 style='width:21.8pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>6</td>
+                    <td width=29 style='width:21.75pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>1</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>1</td>
+                    <td width=29 colspan=2 style='width:21.8pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>2</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>5</td>
+                    <td width=29 style='width:21.75pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>0</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>0</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>2</td>
+                    <td width=29 style='width:21.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>1</td>
+                </tr>
+                <tr>
+                    <td rowspan=2 style='border:solid windowtext 1.0pt;  border-top:none;'>
+
+                        <b>
+                            <p style='font-size:12.0pt;font-family:宋体;'>学习</p>
+
+                            <p style='font-size:12.0pt;font-family:宋体;'>情况</p>
+                        </b>
+                    </td>
+                    <td width=288 colspan=11 style='width:216.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;'>
+                        &nbsp;<span style='font-size:12.0pt;line-height:150%;font-family:宋体;'>成绩排名：</span>
+                        <u>&nbsp;&nbsp;1&nbsp;&nbsp; /&nbsp;&nbsp;46&nbsp;&nbsp;</u>
+
+                        <span style='font-size:12.0pt;  line-height:150%;font-family:宋体;'>（名次/总人数）</span>
+
+                    </td>
+                    <td width=319 colspan=13 style='width:239.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+                        <span style='font-size:12.0pt;line-height:150%;  font-family:宋体'>
+                            实行综合考评排名：
+                            是<input type="checkbox" style="border:1px outset" checked /> ；
+                            否<input type="checkbox" style="border:1px outset" />
+                        </span>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td width=288 colspan=11 style='width:216.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+
+                        <span style='font-size:12.0pt;line-height:150%;'>必修课<u>　12　</u>门，其中及格以上<u>　12　</u>门</span>
+                    </td>
+                    <td width=319 colspan=13 style='width:239.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+                        <span style='font-size:12.0pt;line-height:150%;  font-family:宋体;'>
+                            如是，排名：
+                            <u> &nbsp;&nbsp;3&nbsp;/&nbsp;46&nbsp;&nbsp;</u>
+                            （名次/总人数）
+                        </span>
+                    </td>
+                </tr>
+                <tr style='mso-yfti-irow:6;page-break-inside:avoid;height:27.0pt'>
+                    <td rowspan=5 style='border:solid windowtext 1.0pt;  border-top:none;  padding:0cm 5.4pt 0cm 5.4pt;'>
+                        <b>
+                            <span style='font-size:12.0pt;font-family:宋体'>大学期间主要获奖情况</span>
+                        </b>
+                    </td>
+                    <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>
+                        <span style='font-size:  12.0pt;font-family:宋体;'>日期</span>
+                    </td>
+                    <td width=271 colspan=13 style='width:203.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;'>
+                        <span style='font-size:  12.0pt;font-family:宋体;'>奖项名称</span>
+                    </td>
+                    <td width=252 colspan=10 style='width:189.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;'>
+                        <span style='font-size:  12.0pt;font-family:宋体;'>颁奖单位</span>
+                    </td>
+                </tr>
+                <tr style='page-break-inside:avoid;height:27.0pt'>
+                    <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;'>2015.5</td>
+                    <td width=271 colspan=13 style='width:203.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;'>全国大学生英语竞赛二等奖</td>
+                    <td width=252 colspan=10 style='width:189.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>高等学校大学外语教学研究会</td>
+                </tr>
+                <tr style='mso-yfti-irow:8;page-break-inside:avoid;height:27.0pt'>
+                    <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>2015.10</td>
+                    <td width=271 colspan=13 style='width:203.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;  padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>国家奖学金</td>
+                    <td width=252 colspan=10 style='width:189.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>中华人民共和国教育部</td>
+                </tr>
+                <tr style='mso-yfti-irow:9;page-break-inside:avoid;height:27.0pt'>
+                    <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>2015.11</td>
+                    <td width=271 colspan=13 style='width:203.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>西南大学一等奖学金</td>
+                    <td width=252 colspan=10 style='width:189.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>西南大学</td>
+                </tr>
+                <tr style='mso-yfti-irow:10;page-break-inside:avoid;height:27.0pt'>
+                    <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>2016.5</td>
+                    <td width=271 colspan=13 style='width:203.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>第八届“挑战杯”全国大学生
+创业计划竞赛重庆市金奖
+</td>
+                    <td width=252 colspan=10 style='width:189.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt'>共青团重庆市委、重庆市教育委员会、重
+庆市科学技术协会、重庆市学生联合会</td>
+                </tr>
+                <tr style='mso-yfti-irow:11;mso-yfti-lastrow:yes;page-break-inside:avoid;  height:248.75pt'>
+                    <td style='border:solid windowtext 1.0pt;border-top:  none;  padding:0cm 5.4pt 0cm 5.4pt;height:248.75pt'>
+
+                        <b>
+                            <span style='font-size:12.0pt;font-family:宋体;'>申请理由</span>
+                        </b>
+                        <span style='font-size:9.0pt;font-family:  宋体;'>(200字)</span>
+
+                    </td>
+                    <td width=607 colspan=24 style='width:455.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:0cm 5.4pt 0cm 5.4pt;height:248.75pt'>
+                        <p style="margin:20px;">2014—2015学年，综合测评排名专业第一名。学习刻苦努力，踏实认真，不仅
+是课业成绩，课外学术活动表现尤其突出。在我担任队长的“知行”创业团队在第八
+届“挑战杯”全国大学生创业计划竞赛中表现出色，荣获重庆市金奖，并代表学校参
+加全国总决赛。在这一年中，我参加项目主持人成功立项西南大学本科生创新基金项
+目以及国家级大学生创业训练项目。除此之外，在学习之余担任学院团委副书记、班
+级调研委员，秉持服务同学，提升自我的宗旨做好了老师的助手，同学们的楷模</p>
+
+                        <span style='font-size:12.0pt;font-family:宋体;'>申请人签名(手签)：</span>
+                        <br />
+                        <br />
+                        <br /><br />
+                        <span style='font-size:12.0pt;font-family:宋体;margin-left:200px'>
+                            2016年9月26日
+                        </span>
+                    </td>
+                </tr>
+
+                <tr style='mso-yfti-irow:11;mso-yfti-lastrow:yes;page-break-inside:avoid;  height:248.75pt'>
+                    <td style='border:solid windowtext 1.0pt;border-top:  none;  padding:0cm 5.4pt 0cm 5.4pt;height:248.75pt'>
+
+                        <b>
+                            <span style='font-size:12.0pt;font-family:宋体;'>推荐理由</span>
+                        </b>
+                        <span style='font-size:9.0pt;font-family:  宋体;'>(100字)</span>
+
+                    </td>
+                    <td width=607 colspan=24 style='width:455.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:0cm 5.4pt 0cm 5.4pt;height:248.75pt'>
+                        <p style="margin:20px;">贾
+
+xx
+
+同学一直以来学习刻苦努力，成绩优秀，乐于助人。作为学生干部，能
+
+够很好的以身作则，是同学们学习的好榜样，老师的好助手。在科技创新方面也表
+
+现突出，并且在“挑战杯”中表现出色，现推荐贾
+
+xx
+
+同学申请国家奖学金</p>
+
+                        <span style='font-size:12.0pt;font-family:宋体;'>推荐人（辅导员或班主任）签名:</span>
+                        <br />
+                        <br />
+                        <br /><br />
+                        <span style='font-size:12.0pt;font-family:宋体;margin-left:200px'>
+                           2016 年9月29日
+                        </span>
+                    </td>
+                </tr>
+                <tr style='mso-yfti-irow:11;mso-yfti-lastrow:yes;page-break-inside:avoid;  height:248.75pt'>
+                    <td style='border:solid windowtext 1.0pt;border-top:  none;  padding:0cm 5.4pt 0cm 5.4pt;height:248.75pt'>
+
+                        <b>
+                            <span style='font-size:12.0pt;font-family:宋体;'>院（系）意见 </span>
+                        </b>
+
+                    </td>
+                    <td width=607 colspan=24 style='width:455.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:0cm 5.4pt 0cm 5.4pt;height:248.75pt'>
+                        <p style="margin-top:20px;">经学院奖助学金评审委员会评议审查,该生情况属实,同意推荐。</p>
+
+                        <span style='font-size:12.0pt;font-family:宋体;'> 院系主管学生工作领导签名：</span>
+                        <br />
+                        <br />
+                        <span style='font-size:12.0pt;font-family:宋体;margin-left:50px'>
+                            （院系公章）
+                        </span>
+                        <br /><br />
+                        <span style='font-size:12.0pt;font-family:宋体;margin-left:200px'>
+                            2016年9月30日
+                        </span>
+                    </td>
+                </tr>
+                <tr style='mso-yfti-irow:11;mso-yfti-lastrow:yes;page-break-inside:avoid;  height:248.75pt'>
+                    <td style='border:solid windowtext 1.0pt;border-top:  none;  padding:0cm 5.4pt 0cm 5.4pt;height:248.75pt'>
+                        
+                        <b>
+                            <span style='font-size:12.0pt;font-family:宋体;'>学校意见 </span>
+                        </b>
+
+                    </td>
+                    <td width=607 colspan=24 style='width:455.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:0cm 5.4pt 0cm 5.4pt;height:248.75pt'>
+
+                        
+                        <p style='font-size:12.0pt;font-family:宋体;'> 经评审，并在校内公示<u>&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>个工作日，无异议，</p>
+                        <p style='font-size:12.0pt;font-family:宋体;'> 现报请批准该同学获得国家奖学金。</p>
+
+                        <br />
+                        <br />
+                        <span style='font-size:12.0pt;font-family:宋体;margin-left:50px'>
+                            （学校公章）
+                        </span>
+                        <br /><br />
+                        <span style='font-size:12.0pt;font-family:宋体;margin-left:200px'>
+                            年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+            <div style='text-indent:278.25pt;'>
+                <span style='font-family:宋体;'>制表：全国学生资助管理中心</span>
+                <span lang=EN-US>2010</span><span style='font-family:宋体;'>年版</span>
+            </div>
+</div>
+</div>

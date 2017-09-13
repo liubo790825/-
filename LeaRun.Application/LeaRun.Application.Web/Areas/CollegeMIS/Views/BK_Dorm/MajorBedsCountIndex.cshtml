@@ -1,0 +1,357 @@
+@{;
+    ViewBag.Title = "院系专业床位统计";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<link href="~/Content/styles/learun-bill.css" rel="stylesheet" />
+<style>
+    .price-box {
+        width: 960px;
+    }
+
+    .disabled {
+        cursor: not-allowed;
+    }
+</style>
+
+
+<script>
+    $(function () {
+        InitialPage();
+        GetTree();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                $(window).resize()
+            }
+        });
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 161.5);
+                $("#itemTree").setTreeHeight($(window).height() - 52);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载树
+    var _parentId = "";
+    var chkwho = "";
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 52,
+            url: "../../CollegeMIS/BK_Dorm/GetTreeJson",
+            onnodeclick: function (item) {
+                _parentId = item.id;
+                chkwho = item.show;
+                $('#btn_Search').trigger("click");
+            }
+        };
+        //初始化
+        $("#itemTree").treeview(item);
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            url: "../../CollegeMIS/BK_Dorm/GetDetailsJson",
+            postData: {
+                queryJson: '{"DormFloorsId":"0"}',
+            },
+            datatype: "json",
+            height: $(window).height() - 161.5,
+            autowidth: true,
+            colModel: [
+                        { label: '序号', name: 'DormId', index: 'DormId', width: 80, align: '', sortable: false, hidden: true },
+                        // { label: '宿舍名称', name: 'DormName', index: 'DormName', width: 80, align: '' },
+                        { label: '宿舍号', name: 'DormNo', index: 'DormNo', width: 80, align: '' },
+                        { label: '价格', name: 'Price', index: 'Price', width: 80, align: '' },
+                        { label: '星级', name: 'StarLevel', index: 'StarLevel', width: 80, align: '' },
+                        { label: '床位总和', name: 'Beds', index: 'Beds', width: 80, align: '' },
+
+                        { label: '已使用床位数', name: 'UsedBeds', index: 'UsedBeds', width: 90, align: '' },
+                        { label: '未使用床位数', name: 'NotUseBeds', index: 'NotUseBeds', width: 90, align: '' },
+                        { label: '已分发床位', name: 'DistributeBeds', index: 'DistributeBeds', width: 80, align: '' },
+                        { label: '未分发床位', name: 'NotDistributeBeds', index: 'NotDistributeBeds', width: 80, align: '' },
+
+                        {
+                            label: '使用专业', name: 'MajorId', index: 'MajorId', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                                return top.bk_majorlist[cellvalue] == null ? "" : top.bk_majorlist[cellvalue].FullName;
+                            }
+                        },
+                        {
+                            label: '专业方向', name: 'MajorDetailId', index: 'MajorDetailId', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                                return top.bk_majordetaillist[cellvalue] == null ? "" : top.bk_majordetaillist[cellvalue].FullName;
+                            }
+                        },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'DormName',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            multiselect: true,
+            onSelectRow: function () {
+                selectedRowIndex = $("#" + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $("#" + this.id).setSelection(selectedRowIndex, false);
+            } ,
+            subGrid: true,
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var keyValue = $gridTable.jqGrid('getRowData', row_id)['DormId'];
+                var subgrid_table_id = subgrid_id + "_t";
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "'></table>");
+                $("#" + subgrid_table_id).jqGrid({
+                    url: "../../CollegeMIS/BK_Dorm/GetDetailsJson",
+                    postData: { keyValue: keyValue },
+                    datatype: "json",
+                    height: "100%",
+                    colModel: [
+                { label: '序号', name: 'BedId', index: 'BedId', width: 80, align: '', hidden: true },
+                { label: '床位名称', name: 'BedName', index: 'BedName', width: 80, align: '' },
+                { label: '床位编号', name: 'BedNo', index: 'BedNo', width: 80, align: '' },
+                { label: '是否使用', name: 'IsDwell', index: 'IsDwell', width: 80, align: '' },//
+                {
+                    label: '是否分发', name: 'IsDistribute', index: 'IsDistribute', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue == 0 ? "未分" : "已分";
+                    }
+                },
+
+                {
+                    label: '专业', name: 'MajorId', index: 'MajorId', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                        return top.bk_majorlist[cellvalue] == null ? "" : top.bk_majorlist[cellvalue].FullName;
+                    }
+                },
+                {
+                    label: '专业方向', name: 'MajorDetailId', index: 'MajorDetailId', width: 80, align: '', formatter: function (cellvalue, options, rowObject) {
+                        return top.bk_majordetaillist[cellvalue] == null ? "" : top.bk_majordetaillist[cellvalue].FullName;
+                    }
+                },
+
+
+                { label: '使用者', name: 'StuName', index: 'StuName', width: 80, align: '' },               
+                { label: '', name: '', index: '', width: 80, align: '' }
+                    ],
+                    caption: "床位详细信息",
+                    rowNum: "1000",
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    gridview: true,
+                    hidegrid: false
+                });
+            }
+        });
+       
+        
+        //查询事件
+        $("#btn_Search").click(function () {
+            if (chkwho=="floor") {
+                $gridTable.jqGrid('setGridParam', { 
+                    url: "../../CollegeMIS/BK_Dorm/GetPageListJson",
+                    postData: {
+                        queryJson: '{"DormFloorsId":"' + _parentId + '"}',
+                    }
+                }).trigger('reloadGrid');
+            }
+        });
+        //查询回车
+        $('#txt_Keyword').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $('#btn_Search').trigger("click");
+            }
+        });
+    }
+    //预分宿舍
+    function btn_add() {        
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);
+            if (row.NotDistributeBeds > 0) {//未预分床位要大于零才能
+                rowIds.push(row.DormId);
+            }
+        }
+        if (rowIds.length==0) {
+            dialogMsg('请选择需要预分的宿舍！', 0);
+            return;
+        }
+        dialogOpen({
+            id: "Form",
+            title: '预分宿舍和床位',
+            url: '/CollegeMIS/BK_Dorm/YFForm?dormids=' + rowIds,
+            width: "700px",
+            height: "530px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+
+    };
+    //预分床位
+    function btn_edit() {
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);
+            if (row.NotDistributeBeds > 0) {//未预分床位要大于零才能
+                rowIds.push(row.DormId);
+            }
+        }
+        if (rowIds.length == 0) {
+            dialogMsg('请选择需要预分床位的宿舍！', 0);
+            return;
+        }
+        dialogOpen({
+            id: "Form",
+            title: '预分床位',
+            url: '/CollegeMIS/BK_Dorm/YFBedForm?dormids=' + rowIds,
+            width: "700px",
+            height: "530px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+
+    }
+    //重置预分
+    function btn_delete() {
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);
+            if (row.DistributeBeds>0) {//已预分床位要大于零才能
+                rowIds.push(row.DormId);
+            }
+        }
+        if (rowIds.length == 0) {
+            dialogMsg('请选择需要重置预分的宿舍或要要预分的宿舍床位为空！', 0);
+            return false;
+        }
+
+        if (confirm("你确定要重置这些宿舍和床位吗？")) {
+            $.SaveForm({
+                url: "../../CollegeMIS/BK_Dorm/ClearYFDorm",
+                param: { "strEntity": rowIds.toString() },
+                loading: "正在清空预分宿舍和床位，请稍等...",
+                success: function () {
+                    $('#gridTable').jqGrid("reloadGrid");
+                }
+            });
+
+        }
+
+
+
+    }
+
+    //清空宿舍,只清除入住信息，其它如专业、预分不清除
+    function btn_cleardorm()
+    {
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);
+            rowIds.push(row.DormId);
+        }
+        if (rowIds.length == 0) {
+            dialogMsg('请选择需要清空的宿舍！', 0);
+            return;
+        }
+
+        if (confirm("你确定要重置这些宿舍和床位吗？")) {
+            $.SaveForm({
+                url: "../../CollegeMIS/BK_Dorm/ClearDormUse",
+                param: { "strEntity": rowIds.toString() },
+                loading: "正在清空宿舍，请稍等...",
+                success: function () {
+                    $('#gridTable').jqGrid("reloadGrid");
+                }
+            });
+
+        }
+
+    }
+
+    //清空床位
+    function btn_clearbed() {
+        var secrowsid = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+        var rowIds = [];
+        for (var rowId in secrowsid) {
+            var row = $('#gridTable').jqGrid('getRowData', secrowsid[rowId]);           
+                rowIds.push(row.DormId);
+        }
+        if (rowIds.length == 0) {
+            dialogMsg('请选择需要清空的床位！', 0);
+            return;
+        }
+        dialogOpen({
+            id: "Form",
+            title: '清空床位',
+            url: '/CollegeMIS/BK_Dorm/YFBedForm?dormids=' + rowIds,
+            width: "700px",
+            height: "530px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+
+    }
+
+</script>
+
+
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel">
+            <div class="panel-Title">宿舍楼信息</div>
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="center-Panel">
+            <div class="panel-Title">房间或床位信息</div>
+            <div class="titlePanel">
+                <div class="title-search">
+                    <table>
+                        <tr>
+                            <td style="padding-left: 5px;">
+                                <a id="btn_Search" style="display:none" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="toolbar">
+                    <div class="btn-group">
+                        <a id="lr-replace" class="btn btn-default" onclick="reload();"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+                        <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;预分宿舍</a>
+                        <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;床位预分</a>
+                        <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;重置预分</a>
+                    </div>
+
+                    <div class="btn-group">                        
+                        <a id="lr-cleardorm" class="btn btn-default" onclick="btn_cleardorm()"><i class="fa fa-trash-o"></i>&nbsp;清空宿舍</a>
+                        <a id="lr-clearbed" class="btn btn-default" onclick="btn_clearbed()"><i class="fa fa-trash-o"></i>&nbsp;清空床位</a>
+                    </div>
+
+                    <script>$('.toolbar').authorizeButton()</script>
+                </div>
+            </div>
+            <div class="gridPanel">
+                <table id="gridTable"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+    </div>
+</div>

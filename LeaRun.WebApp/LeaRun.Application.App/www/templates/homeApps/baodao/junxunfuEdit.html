@@ -1,0 +1,112 @@
+﻿<ion-modal-view>
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <!--<button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>-->
+        <button class="button button-clear " ng-click="closeEditModal()"><i class="icon ion-ios-close-empty"></i></button>
+        <h1 class="title">军训服装编辑</h1>
+        <button class="button button-clear" style="margin-left:5px;" ng-click="doSubmit()">提交</button>
+    </ion-header-bar>
+
+    <style>
+        .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+            white-space: normal; /*覆盖white-space: nowrap*/
+        }
+
+        .item-stacked-label {
+            display: normal;
+        }
+
+        .item-note {
+            margin: -5px;
+        }
+    </style>
+
+    <ion-content>
+        <ion-list class="lr-list-form">
+            
+            <ion-item class="lr-item-htitle">
+                <span>姓名：</span>
+                <span class="positive ng-binding">admin</span>
+            </ion-item>
+
+            <ion-item class="lr-item-htitle">
+                <span>性别：</span>
+                <span class="positive ng-binding">男</span>
+            </ion-item>
+
+
+            
+
+            <div class="item item-divider">
+                身高<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加身高</div>
+                <input type="text" ng-model="editData.fullName" ng-class="{'active' : isInputActive('fullName')}" />
+            </ion-item>
+            <div class="item item-divider">
+                体重<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加体重</div>
+                <input type="text" ng-model="editData.fullName" ng-class="{'active' : isInputActive('fullName')}" />
+            </ion-item>
+            <div class="item item-divider">
+                腰围<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加腰围</div>
+                <input type="text" ng-model="editData.fullName" ng-class="{'active' : isInputActive('fullName')}" />
+            </ion-item>
+            <div class="item item-divider">
+                头围<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加头围</div>
+                <input type="text" ng-model="editData.fullName" ng-class="{'active' : isInputActive('fullName')}" />
+            </ion-item>
+
+            <div class="item item-divider">
+                衣服型号<span>*</span>
+            </div>
+            <ion-item ng-click="openTypeSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.custTypeId != null"><i class="icon ion-ios-drag"></i>选择服装型号</div> <!--S,M,L,XL,XXL,XXXL-->
+                <div class="item-icon-right" ng-hide="editData.custTypeId == null">
+                    <div class="lr-form-label royal-bg">{{editData.custTypeName}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+            </ion-item>
+
+            <div class="item item-divider">
+                裤子型号<span>*</span>
+            </div>
+            <ion-item ng-click="openTypeSelectModal()">
+                <div class="lr-form-select" ng-hide="editData.custTypeId != null"><i class="icon ion-ios-drag"></i>选择裤子型号</div> <!--S,M,L,XL,XXL,XXXL-->
+                <div class="item-icon-right" ng-hide="editData.custTypeId == null">
+                    <div class="lr-form-label royal-bg">{{editData.custTypeName}}</div>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </div>
+            </ion-item>
+            <div class="item item-divider">
+                鞋码<span>*</span>
+            </div>
+            <ion-item class="item-input">
+                <div class="lr-form-input"><i class="icon ion-ios-pricetag-outline"></i>添加鞋号</div>
+                <input type="text" ng-model="editData.fullName" ng-class="{'active' : isInputActive('fullName')}" />
+            </ion-item>
+
+        </ion-list>
+
+        <div>
+            <img src="/www/img/jxf.png" />
+        </div>
+
+        <div>
+            <button class="button button-block button-positive" ng-click="doSubmit()">
+                提交
+            </button>
+        </div>
+    </ion-content>
+
+
+</ion-modal-view>
+

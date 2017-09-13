@@ -1,0 +1,931 @@
+@{;
+    ViewBag.Title = "学生基础信息";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<style>
+    .swfupload {
+    opacity: 0;
+}
+</style>
+
+<script>
+    var keyValue = request('keyValue');
+   // new PCAS(["StuFromProvince=吉林省", "请选择省份"], ["StuFromCity=松原市", "请选择城市"], ["StuFromDestrict=宁江区", "请选择地区"])//三级联动，有默认值，有文字提示信息
+
+    $(function () {
+        InitialPage();
+        //GetOrderEntryGrid();
+        initControl();
+        uploadify();
+        $('#IdentityCardNo').focusout(function () {
+            getBirthdayAndSex();
+        });
+    });
+    //初始化页面
+    function InitialPage() {;
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 240.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载明细表
+    function GetOrderEntryGrid() {
+        var $grid = $('#gridTable');
+        $grid.jqGrid({
+            unwritten: false,
+            datatype: 'local',
+            height: $(window).height() - 240.5,
+            autowidth: true,
+            colModel: [
+                { label: '序号', name: 'StuSocRelaId', width: 80, align: '',  resizable: false },
+                //{ label: '学生ID号', name: 'stuInfoId', width: 80, align: '', sortable: false, resizable: false },
+                { label: '姓名', name: 'SocRelaName', width: 80, align: '', sortable: false, resizable: false },
+                { label: '类型', name: 'RelaType', width: 80, align: '', sortable: false, resizable: false },
+                { label: '与本人的关系', name: 'StuRela', width: 80, align: '',  resizable: false },
+                { label: '工作（学习）单位', name: 'WorkPlace', width: 80, align: '', resizable: false },
+                { label: '职业', name: 'WorkName', width: 80, align: '', resizable: false },
+                { label: '身份证号', name: 'SocRelaIdNo', width: 80, align: '',  resizable: false },
+                { label: '联系方式', name: 'SocRelaPhone', width: 80, align: '',  resizable: false },
+            ],
+            pager: false,
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            footerrow: false,
+            gridComplete: function () {
+            }
+        });
+        //默认添加13行 空行
+        for (var i = 1; i < 13; i++) {
+            var rowdata = {
+                StuSocRelaId: '<input name="StuSocRelaId" type="text" class="editable center" />',
+                //stuInfoId: '<input name="stuInfoId" type="text" class="editable center" />',
+                SocRelaName: '<input name="SocRelaName" type="text" class="editable center" />',
+                RelaType: '<input name="RelaType" type="text" class="editable center" />',
+                StuRela: '<input name="StuRela" type="text" class="editable center" />',
+                WorkPlace: '<input name="WorkPlace" type="text" class="editable center" />',
+                WorkName: '<input name="WorkName" type="text" class="editable center" />',
+                SocRelaIdNo: '<input name="SocRelaIdNo" type="text" class="editable center" />',
+                SocRelaPhone: '<input name="SocRelaPhone" type="text" class="editable center" />',
+            }
+            $grid.jqGrid('addRowData', i, rowdata);
+        };
+    }
+    //初始化控件
+    function initControl() {
+        //招生季节
+        $('#RecruitYearDate').ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=DM-ZSJJ",
+            id: "ItemName",
+            text: "ItemName",
+            height: "150px",
+            description: "==请选择==",
+            allowSearch: true
+        });
+        //在校
+        $('#Graduation').ComboBox({
+            height: "100px",
+            description: "==请选择==",
+            id: "inschool",
+            text: "inschool",
+            data: [{ "inschool": "在校", "inschool": "在校" }, { "inschool": "不在校", "inschool": "不在校" }]
+        });
+
+        //办学类型
+        $('#StuOther3').ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=DM-XXBXLX",
+            id: "ItemName",
+            text: "ItemName",
+            height: "150px",
+            description: "==请选择==",
+            allowSearch: true
+        });
+        //培养类别
+        $('#StuOther1').ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=DM-PYLB",
+            id: "ItemName",
+            text: "ItemName",
+            height: "150px",
+            description: "==请选择==",
+            allowSearch: true
+        });
+        //培养对象
+        $('#StuOther2').ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=DM-PYDX",
+            id: "ItemName",
+            text: "ItemName",
+            height: "150px",
+            description: "==请选择==",
+            allowSearch: true
+        });
+        //培养层次,即：本科、专科
+        $('#GraduateNo').ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=DM-PYCC",
+            id: "ItemName",
+            text: "ItemName",
+            height: "150px",
+            description: "==请选择==",
+            allowSearch: true
+        });
+
+        //政治面貌
+        $('#PartyFaceNo').ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=T4762.1",
+            id: "ItemName",
+            text: "ItemName",
+            height: "150px",
+            description: "==请选择==",
+            allowSearch: true
+        })
+
+        //
+        if ($('#RegionNo').length>0) {
+            $("#RegionNo").ComboBox({
+                url: "../../SystemManage/Area/GetAreaListJson",
+                //id: "AreaId",
+                id: "AreaName",
+                text: "AreaName",
+                height: "150px",
+                description: "==请选择==",
+                allowSearch: true
+            })
+        }
+
+        //院系专业的选择
+        $("#DeptNo").ComboBox({
+            url: "/CollegeMIS/BK_Dept/GetListJson",
+            description: "==请选择==",
+            id: "DeptNo",
+            text: "DeptName",
+            height: "230px",
+            allowSearch: true
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            if (value!="") {
+                $("#MajorNo").removeAttr("disabled");
+            }
+            else {
+                $("#MajorNo").attr("disabled", "disabled");
+            }
+            $("#MajorNo").ComboBox({
+                url: "/CollegeMIS/BK_Major/GetListJson",
+                param: { queryJson: "{\"DeptNo\":\"" + value + "\"}" },
+                description: "==请选择==",
+                id: "MajorNo",
+                text: "MajorName",
+                disabled: false,
+                height: "230px",
+                allowSearch: true
+            }).bind("change", function () {
+                var majno = $(this).attr('data-value');
+                if (majno != "") {
+                    $("#ClassNo").removeAttr("disabled");
+                }else {
+                    $("#ClassNo").attr("disabled", "disabled");
+                }
+                $("#ClassNo").ComboBox({
+                    url: "/CollegeMIS/BK_ClassInfo/GetListJson",
+                    param: { queryJson: "{\"MajorNo\":\"" + majno + "\"}" },
+                    description: "==请选择==",
+                    id: "ClassNo",
+                    text: "ClassName",
+                    disabled: false,
+                    height: "230px",
+                    allowSearch: true
+                })
+
+
+                //if (majno != "") {
+                //    $("#MajorDetailNok").removeAttr("disabled");
+                //}
+                //else {
+                //    $("#MajorDetailNok").attr("disabled", "disabled");
+                //}
+                //$("#MajorDetailNok").ComboBox({
+                //    url: "/CollegeMIS/BK_MajorDetail/GetListJson",
+                //    param: { queryJson: "{\"MajorNo\":\"" + majno + "\"}" },
+                //    description: "==请选择==",
+                //    id: "MajorDetailNo",
+                //    text: "MajorDetailName",
+                //    disabled: false,
+                //    height: "230px",
+                //    allowSearch: true
+                //})
+            })
+            
+        });
+
+        //户口性质
+        $('#ResidenceNo').ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=DM-HKXZ",
+            id: "ItemName",
+            text: "ItemName",
+            height: "150px",
+            description: "==请选择==",
+            allowSearch: true
+        });
+
+        //学生来自哪里
+        if ($("#StuFromProvince").length > 0) {
+
+            $("#StuFromProvince").ComboBox({
+                url: "../../SystemManage/Area/GetAreaListJson",
+                id: "AreaId",
+                text: "AreaName",
+                height: "200px",
+                description: "==请选择==",
+                allowSearch: true
+            }).bind("change", function () {
+                var province = $(this).attr('data-value');
+                $("#StuFromCity").attr('data-value', "");
+                $("#StuFromCity").attr('data-text', "");
+                $("#StuFromCity").empty();
+
+                $("#StuFromDestrict").attr('data-value', "");
+                $("#StuFromDestrict").attr('data-text', "");
+                $("#StuFromDestrict").empty();
+
+                $("#StuFromCity").ComboBox({
+                    url: "../../SystemManage/Area/GetAreaListJson?parentId="+province,
+                    id: "AreaId",
+                    text: "AreaName",
+                    height: "200px",
+                    description: "==请选择==",
+                    allowSearch: true
+                }).bind("change", function () {
+                    var cityvalue = $(this).attr('data-value');
+
+                    $("#StuFromDestrict").attr('data-value', "");
+                    $("#StuFromDestrict").attr('data-text', "");
+                    $("#StuFromDestrict").empty();
+
+                    $("#StuFromDestrict").ComboBox({
+                        url: "../../SystemManage/Area/GetAreaListJson?parentId=" + cityvalue,
+                        id: "AreaId",
+                        text: "AreaName",
+                        height: "200px",
+                        description: "==请选择==",
+                        allowSearch: true
+                    })
+                })
+            });
+        }
+        //家庭地址
+        if ($("#FamliyProvince").length > 0) {
+            $("#FamliyProvince").ComboBox({
+                url: "../../SystemManage/Area/GetAreaListJson",
+                id: "AreaId",
+                text: "AreaName",
+                height: "200px",
+                description: "==请选择==",
+                allowSearch: true
+            }).bind("change", function () {
+                var province = $(this).attr('data-value');
+
+                $("#FamliyCity").attr('data-value', "");
+                $("#FamliyCity").attr('data-text', "");
+                $("#FamliyCity").empty();
+
+                $("#FamliyDistrict").attr('data-value', "");
+                $("#FamliyDistrict").attr('data-text', "");
+                $("#FamliyDistrict").empty();
+
+                $("#FamliyCity").ComboBox({
+                    url: "../../SystemManage/Area/GetAreaListJson?parentId=" + province,
+                    id: "AreaId",
+                    text: "AreaName",
+                    height: "200px",
+                    description: "==请选择==",
+                    allowSearch: true
+                }).bind("change", function () {
+                    var cityvalue = $(this).attr('data-value');
+                    $("#FamliyDistrict").ComboBox({
+                        url: "../../SystemManage/Area/GetAreaListJson?parentId=" + cityvalue,
+                        id: "AreaId",
+                        text: "AreaName",
+                        height: "200px",
+                        description: "==请选择==",
+                        allowSearch: true
+                    })
+                })
+            });
+        }
+
+        //民族
+        if ($("#NationalityNo").length > 0) {
+            $("#NationalityNo").ComboBox({
+                url: "../../SystemManage/DataItemDetail/GetDataItemListJson?EnCode=T3304",
+                id: "ItemName",
+                //id: "ItemName",
+                text: "ItemName",
+                height:"150px",
+                description: "==请选择==",
+                allowSearch: true
+            });
+        }
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_StuInfo/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    //$("#MajorDetailNok").removeAttr("disabled");
+                    //$("#MajorDetailNok").ComboBox({
+                    //    url: "/CollegeMIS/BK_MajorDetail/GetListJson",
+                    //    param: { queryJson: "{\"MajorNo\":\"" + data.entity.MajorNo + "\"}" },
+                    //    description: "==请选择==",
+                    //    id: "MajorDetailNo",
+                    //    text: "MajorDetailName",
+                    //    disabled: false,
+                    //    height: "230px",
+                    //    allowSearch: true
+                    //})
+
+                    $("#ClassNo").removeAttr("disabled");
+                    $("#ClassNo").ComboBox({
+                        url: "/CollegeMIS/BK_ClassInfo/GetListJson",
+                        param: { queryJson: "{\"MajorNo\":\"" + data.entity.MajorNo + "\"}" },
+                        description: "==请选择==",
+                        id: "ClassNo",
+                        text: "ClassName",
+                        disabled: false,
+                        height: "230px",
+                        allowSearch: true
+                    })
+
+                    $("#MajorNo").removeAttr("disabled");
+                    $("#MajorNo").ComboBox({
+                        url: "/CollegeMIS/BK_Major/GetListJson",
+                        param: { queryJson: "{\"DeptNo\":\"" + data.entity.DeptNo + "\"}" },
+                        description: "==请选择==",
+                        id: "MajorNo",
+                        text: "MajorName",
+                        disabled: false,
+                        height: "230px",
+                        allowSearch: true
+                    })
+
+
+                    if ($("#FamliyCity").length > 0) {
+                        $("#FamliyCity").ComboBox({
+                            url: "../../SystemManage/Area/GetAreaListJson?parentId=" + data.entity.FamliyProvince,
+                            id: "AreaId",
+                            text: "AreaName",
+                            height: "200px",
+                            description: "==请选择==",
+                            allowSearch: true
+                        });
+                    }
+                    if ($("#FamliyDistrict").length > 0) {
+                        $("#FamliyDistrict").ComboBox({
+                            url: "../../SystemManage/Area/GetAreaListJson?parentId=" + data.entity.FamliyCity,
+                            id: "AreaId",
+                            text: "AreaName",
+                            height: "200px",
+                            description: "==请选择==",
+                            allowSearch: true
+                        });
+                    }
+                    if ($("#StuFromCity").length > 0) {
+                        $("#StuFromCity").ComboBox({
+                            url: "../../SystemManage/Area/GetAreaListJson?parentId=" + data.entity.StuFromProvince,
+                            id: "AreaId",
+                            text: "AreaName",
+                            height: "200px",
+                            description: "==请选择==",
+                            allowSearch: true
+                        });
+                    }
+                    if ($("#StuFromDestrict").length > 0) {
+                        $("#StuFromDestrict").ComboBox({
+                            url: "../../SystemManage/Area/GetAreaListJson?parentId=" + data.entity.StuFromCity,
+                            id: "AreaId",
+                            text: "AreaName",
+                            height: "200px",
+                            description: "==请选择==",
+                            allowSearch: true
+                        });
+                    }
+
+                    $("#form1").SetWebControls(data.entity);
+                    $('#showheader').attr("src", data.entity.HeadImg);//显示头像图片
+
+                    //明细
+                    var childEntity = data.childEntity;
+                    $('#gridTable').find('[role=row]').each(function (i) {
+                        var row = childEntity[i - 1];
+                        if (row != undefined) {
+                            $(this).find('input[name="StuSocRelaId"]').val(row.StuSocRelaId);
+                            $(this).find('input[name="stuInfoId"]').val(row.stuInfoId);
+                            $(this).find('input[name="SocRelaName"]').val(row.SocRelaName);
+                            $(this).find('input[name="RelaType"]').val(row.RelaType);
+                            $(this).find('input[name="StuRela"]').val(row.StuRela);
+                            $(this).find('input[name="WorkPlace"]').val(row.WorkPlace);
+                            $(this).find('input[name="WorkName"]').val(row.WorkName);
+                            $(this).find('input[name="SocRelaIdNo"]').val(row.SocRelaIdNo);
+                            $(this).find('input[name="SocRelaPhone"]').val(row.SocRelaPhone);
+                        }
+                    });
+                }
+            })
+        }
+    }
+    //得到出生日期和性别
+    function getBirthdayAndSex()
+    {
+        var idno = $.trim($('#IdentityCardNo').val());
+        if (idno.length != 18) {
+            return;
+        }
+        var tmpStr = idno.substring(6, 14); 
+        tmpStr = tmpStr.substring(0, 4) + "-" + tmpStr.substring(4, 6) + "-" + tmpStr.substring(6);
+        var sexStr = parseInt(idno.substring(17, 1), 10) % 2 ? "男" : "女";
+        $('#Birthday').val(tmpStr);
+        $('#Gender').val(sexStr);
+    }
+
+    //上传文件
+    function uploadify() {
+        var auth = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+        $("#uploadify").uploadify({
+            auto: true,
+            method: 'post',
+            uploader: '/PublicInfoManage/ResourceFile/UploadifyHead',
+            swf: '/Content/scripts/plugins/uploadify/uploadify.swf',
+            buttonText: "上传头像",
+            formData: { 'AUTHID': auth, 'ASPSESSID': '@Session.SessionID' },
+            height: 30,
+            width: 90,
+            fileTypeExts: '*.bmp;*.gif;*.jpeg;*.jpg;*.png;',
+            removeCompleted: false,
+            onSelect: function (file) {
+                $("#" + file.id).prepend('<div style="float:left;width:50px;margin-right:2px;"><img src="/Content/images/filetype/' + file.type.replace('.', '') + '.png" style="width:40px;height:40px;" /></div>');
+                $('.border').hide();
+            },
+            onUploadSuccess: function (file, data, response) {
+                var tempdata = JSON.parse(data);
+                $('#showheader').attr("src", tempdata.resultdata);
+                $('#HeadImg').val(tempdata.resultdata);//头像
+
+                $("#" + file.id).find('.uploadify-progress').remove();
+                $("#" + file.id).find('.data').html(' 恭喜您，上传成功！');
+                $("#" + file.id).prepend('<a class="succeed" title="成功"><i class="fa fa-check-circle"></i></a>');
+                Loading(false);              
+                Loading(false);
+            },
+            onUploadError: function (file, errorCode, errorMsg, errorString) {
+                $("#" + file.id).removeClass('uploadify-error');
+                $("#" + file.id).find('.uploadify-progress').remove();
+                $("#" + file.id).find('.data').html(' 很抱歉，上传失败！');
+                $("#" + file.id).prepend('<span class="error" title="失败"><i class="fa fa-exclamation-circle"></i></span>');
+            }
+        });
+
+        $('#uploadify-queue').remove();
+
+      
+    }
+
+
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        getBirthdayAndSex();
+        var postData = $("#form1").GetWebControls(keyValue);
+        var childEntryJson = [];
+        //$('#gridTable').find('[role=row]').each(function (i) {
+        //    if (!!$(this).find('input[name="StuSocRelaId"]').val()) {
+        //        childEntryJson.push({
+        //            StuSocRelaId: $(this).find('input[name="StuSocRelaId"]').val(),
+        //            stuInfoId: $(this).find('input[name="stuInfoId"]').val(),
+        //            SocRelaName: $(this).find('input[name="SocRelaName"]').val(),
+        //            RelaType: $(this).find('input[name="RelaType"]').val(),
+        //            StuRela: $(this).find('input[name="StuRela"]').val(),
+        //            WorkPlace: $(this).find('input[name="WorkPlace"]').val(),
+        //            WorkName: $(this).find('input[name="WorkName"]').val(),
+        //            SocRelaIdNo: $(this).find('input[name="SocRelaIdNo"]').val(),
+        //            SocRelaPhone: $(this).find('input[name="SocRelaPhone"]').val(),
+        //        });
+        //    }
+        //});
+
+
+
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_StuInfo/SaveForm?keyValue=" + keyValue,
+            param: { "strEntity": JSON.stringify(postData), "strChildEntitys": JSON.stringify(childEntryJson) },
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div class="bills" >
+ <div style="overflow-y:auto;margin:10px 10px;">
+     <table class="form" style="width: 100%;">
+         <tr>
+             <th class="formTitle" style="width: 60px;">姓名<font face="宋体" color="red">*</font></th>
+             <td class="formValue"><input id="StuName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"></td>
+             <th class="formTitle" style="width: 60px;">身份证号<font face="宋体" color="red">*</font></th>
+             <td class="formValue">
+                 <input id="IdentityCardNo" type="text" class="form-control" isvalid="yes" checkexpession="IDCard">
+             </td>
+             <th class="formTitle" style="width: 60px;">学号</th>
+             <td class="formValue"><input id="StuNo" type="text" class="form-control"></td>
+             <th colspan="2" rowspan="5">
+                 <div>
+                     <img src="~/Content/images/head/avatar.png" alt="头像" class="img-thumbnail" id="showheader" />
+                 </div>
+                
+                 <div style="text-align:center">
+                     <input id="uploadify" name="uploadify" type="file" />
+                     <input id="HeadImg" type="hidden" class="form-control">
+                 </div>
+
+             </th>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">性别</th>
+             <td class="formValue"><input id="Gender" class="form-control" type="text" readonly></td>
+             <th class="formTitle" style="width: 60px;">出生日期</th>
+             <td class="formValue"><input type="text" id="Birthday" readonly class="form-control" /></td>
+             <th class="formTitle" style="width: 60px;">民族</th>
+             <td class="formValue">
+                 <div id="NationalityNo" type="select" class="ui-select"></div>
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">籍贯</th>
+             <td class="formValue">
+                 <div id="RegionNo" type="select" class="ui-select"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">政治面貌码<font face="宋体" color="red">*</font></th>
+             <td class="formValue">
+                 <div id="PartyFaceNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">户口类别</th>
+             <td class="formValue">
+                 <div id="ResidenceNo" type="select" class="ui-select"></div>
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">电话</th>
+             <td class="formValue"><input id="telephone" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">家长手机</th>
+             <td class="formValue">
+                 <input type="text" class="form-control" id="ParentPhone" />
+             </td>
+             <th class="formTitle" style="width: 60px;">家长座机</th>
+             <td class="formValue"><input id="ParentTel" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">通知书号</th>
+             <td class="formValue"><input id="NoticeNo" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">考生号</th>
+             <td class="formValue"><input id="ksh" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">准考证号</th>
+             <td class="formValue"><input id="zkzh" type="text" class="form-control"></td>
+         </tr>
+
+         <tr>
+             <th class="formTitle" style="width: 60px;">入学年份<font face="宋体" color="red">*</font></th>
+             <td class="formValue">
+                <input id="Grade" type="text" class="form-control" isvalid="yes" checkexpession="Num">
+             </td>
+             <th class="formTitle" style="width: 60px;">招生季节<font face="宋体" color="red">*</font></th>
+             <td class="formValue">
+                 <div id="RecruitYearDate" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>             
+             <th class="formTitle" style="width: 60px;">报到日期</th>
+             <td class="formValue">
+                 <input id="ArriveDate" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+             </td>
+             <th class="formTitle" style="width: 60px;">在校状态<font face="宋体" color="red">*</font></th>
+             <td class="formValue">
+                 <div id="Graduation" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">办学类型<font face="宋体" color="red">*</font></th>
+             <td class="formValue">
+                 <div id="StuOther3" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">培养类别<font face="宋体" color="red">*</font></th>
+             <td class="formValue">
+                 <div id="StuOther1" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">培养对象<font face="宋体" color="red">*</font></th>
+             <td class="formValue">
+                 <div id="StuOther2" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">培养层次<font face="宋体" color="red">*</font></th><!--即：专科、本科-->
+             <td class="formValue">
+                 <div id="GraduateNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">院系</th>
+             <td class="formValue">
+                 <div id="DeptNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">专业</th>
+             <td class="formValue">
+                 <div id="MajorNo" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull" disabled="disabled"></div>
+             </td>
+             <th class="formTitle" style="width: 60px;">班级</th>
+             <td class="formValue">
+                 <div id="ClassNo" type="select" class="ui-select" disabled="disabled"></div>
+                 <!--<div id="MajorDetailNok" type="select" class="ui-select"  disabled="disabled"></div>-->
+             </td>
+             <th class="formTitle" style="width: 60px;"></th>
+             <td class="formValue">
+             </td>
+         </tr>
+         <tr>             
+             <th class="formTitle" style="width: 60px;">考生类别</th>
+             <td class="formValue"><input id="TestStuSortNo" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">第几志愿</th>
+             <td class="formValue"><input id="WillNo" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">考生科类</th>
+             <td class="formValue"><input id="TestStuSubjectNo" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">计划形式</th>
+             <td class="formValue"><input id="PlanFormNo" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">健康状况</th>
+             <td class="formValue"><input id="HealthStatusNo" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">档案号</th>
+             <td class="formValue"><input id="ArchivesNo" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">邮编</th>
+             <td class="formValue"><input id="PostalCode" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">家庭总人数</th>
+             <td class="formValue"><input id="FamliyPeoples" type="text" class="form-control" value="3"></td>            
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">学生来源地</th>
+             <td class="formValue" colspan="7">
+                 <div class="col-sm-4">
+                     <div id="StuFromProvince" type="select" class="ui-select"></div>
+                 </div>
+                 <div class="col-sm-4">
+                     <div id="StuFromCity" name="StuFromCity" type="select" class="ui-select"></div>
+                 </div>
+                 <div class="col-sm-4">
+                     <div id="StuFromDestrict" name="StuFromDestrict" type="select" class="ui-select"></div>
+                 </div>
+             </td>
+         </tr>
+         <tr>
+             <td class="formValue" colspan="8">
+                 <div class="col-sm-3">
+                     详细通讯地址(父母居住地为主)
+                 </div>
+                 <div class="col-sm-2">
+                     <div id="FamliyProvince" type="select" class="ui-select"></div>
+                 </div>
+                 <div class="col-sm-2">
+                     <div id="FamliyCity" type="select" class="ui-select"></div>
+                 </div>
+                 <div class="col-sm-2">
+                     <div id="FamliyDistrict" type="select" class="ui-select"></div>
+                 </div>
+                 <div class="col-sm-3">
+                     <input id="FamilyAddress" type="text" class="form-control">
+                 </div>
+
+             </td>
+         </tr>
+
+         <tr>
+             <td colspan="8">
+                 <div class="form-group">                     
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="IsMarry" type="checkbox" />
+                                 婚否
+                             </label>
+                         </div>
+                     </div>
+
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="Deformity" type="checkbox" />残疾
+                             </label>
+                         </div>
+                     </div>
+
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="Orphan" type="checkbox" />
+                                 孤儿
+                             </label>
+                         </div>
+                     </div>
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="MartyrChildren" type="checkbox" />
+                                 烈士子女
+                             </label>
+                         </div>
+                     </div>
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="BasicLivingAllowances" type="checkbox" />
+                                 低保
+                             </label>
+                         </div>
+                     </div>
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="PhoneNoUseId" type="checkbox" />
+                                 本人身份证办理电话卡
+                             </label>
+                         </div>
+                     </div>
+                     
+                 </div>
+             </td>
+         </tr>
+         <tr>
+             <td colspan="8">
+                 <div class="form-group">
+
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="SingleParent" type="checkbox" />单亲
+                             </label>
+                         </div>
+                     </div>
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="IsThreeGood" type="checkbox" />
+                                 三好
+                             </label>
+                         </div>
+                     </div>
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="IsProvinceFirstThree" type="checkbox" />
+                                 省市前三
+                             </label>
+                         </div>
+                     </div>
+
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="IsNormalCadre" type="checkbox" />
+                                 学生干部
+                             </label>
+                         </div>
+                     </div>
+                    
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="IsExcellent" type="checkbox" />
+                                 优干
+                             </label>
+                         </div>
+                     </div>
+                    
+                     <div class="col-sm-2">
+                         <div class="checkbox">
+                             <label>
+                                 <input id="OverseasChineseNo" type="checkbox" />
+                                 港澳台侨
+                             </label>
+                         </div>
+                     </div>
+                    
+                     
+                 </div>
+
+             </td>
+         </tr>
+
+         <tr>
+             <th class="formTitle" style="width: 60px;">原中学</th>
+             <td class="formValue"><input id="HighSchoolName" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">录取类别</th>
+             <td class="formValue"><input id="MatriculateSort" type="text" class="form-control"></td>            
+             <th class="formTitle" style="width: 60px;">高考类别</th>
+             <td class="formValue"><input id="HighTestSortNo" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">高考总分</th>
+             <td class="formValue"><input id="HighAmountScore" type="text" class="form-control"></td>
+             
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">政治成绩</th>
+             <td class="formValue"><input id="PoliticsScore" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">语文成绩</th>
+             <td class="formValue"><input id="ChineseScore" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">数学成绩</th>
+             <td class="formValue"><input id="MathScore" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">物理成绩</th>
+             <td class="formValue"><input id="PhysicsScore" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">化学成绩</th>
+             <td class="formValue"><input id="ChemScore" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">生物成绩</th>
+             <td class="formValue"><input id="BiologyScore" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">外语成绩</th>
+             <td class="formValue"><input id="ForeignLangScore" type="text" class="form-control"></td>
+             <th class="formTitle" style="width: 60px;">外语口试成绩</th>
+             <td class="formValue"><input id="ForeignLangOralScore" type="text" class="form-control"></td>
+         </tr>
+         
+
+         
+         <tr>
+             <th class="formTitle" style="width: 60px;">特长</th>
+             <td class="formValue" colspan="7"><input id="GoodAt" type="text" class="form-control"></td>
+         </tr>
+         <tr>
+             <th class="formTitle" style="width: 60px;">备注</th>
+             <td class="formValue" colspan="7"><input id="Remark" type="text" class="form-control"></td>
+         </tr>
+
+
+
+         <!-- 按需要来使用
+          <tr>
+             <th class="formTitle" style="width: 60px;">报到注册</th>
+             <td class="formValue"><input id="RegisterStatus" type="text" class="form-control"></td>
+<th class="formTitle" style="width: 60px;">家庭出身</th>
+             <td class="formValue"><input id="FamilyOriginNo" type="text" class="form-control"></td>
+
+
+             <th class="formTitle" style="width: 60px;">外语语种</th>
+             <td class="formValue"><input id="ForeignLangSpecies" type="text" class="form-control"></td>
+              <th class="formTitle" style="width: 60px;">收件人地址</th>
+             <td class="formValue"><input id="MailAddress" type="text" class="form-control"></td>  
+              <th class="formTitle" style="width: 60px;"></th>
+             <td class="formValue">
+                 <div class="checkbox">
+                     <label>
+                         <input id="Graduation" type="checkbox"  />
+                         是否毕业
+                     </label>
+                 </div> 
+             </td>
+              <th class="formTitle" style="width: 60px;">TextNo</th>
+             <td class="formValue"><input id="TextNo" type="text" class="form-control"></td>
+             
+             <th class="formTitle" style="width: 60px;">来源地区</th>
+             <td class="formValue"><input id="ProvinceNo" type="text" class="form-control"></td>
+         </tr>-->
+
+
+
+     </table>
+ </div>
+ <div class="gridPanel" >
+     <table id="gridTable" ></table>
+ </div>
+</div>
+<style>
+    body {
+        margin:0px;
+    }
+    .bills {
+        overflow: hidden;
+        border-radius: 0px;
+        position: relative;
+        background: #FFFFFF;
+        border: 0px solid rgb(204, 204, 204);
+        box-shadow:none;
+        padding: 0px;
+    }
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+</style>

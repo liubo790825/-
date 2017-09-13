@@ -1,0 +1,49 @@
+﻿<ion-modal-view ng-controller="BaodaoCtrl">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closeDetailsModal()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">花名册</h1>
+    </ion-header-bar>
+    <ion-content delegate-handle="Baodaolist-content">
+
+
+        <div class="list mt5">
+
+
+            <div class="item item-divider">
+                共计学生：58名
+            </div>
+            <ion-list>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('huamingcedetails.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    沈剑云
+
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('huamingcedetails.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    王铁柱
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('huamingcedetails.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    赵云
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+            </ion-list>
+
+
+        </div>
+
+
+
+
+
+    </ion-content>
+    <!--<div class="lr-plug-btn">
+        <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+    </div>-->
+
+
+
+</ion-modal-view>

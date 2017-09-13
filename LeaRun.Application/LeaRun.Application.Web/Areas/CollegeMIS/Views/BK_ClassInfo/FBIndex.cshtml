@@ -1,0 +1,189 @@
+@{;
+    ViewBag.Title = "分班管理";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+       // GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+
+
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加行政班',
+            url: '/CollegeMIS/BK_ClassInfo/Form',
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('ClassId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑行政班',
+                url: '/CollegeMIS/BK_ClassInfo/Form?keyValue=' + keyValue,
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'ClassId');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../CollegeMIS/BK_ClassInfo/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的行政班！', 0);
+        }
+    }
+    //详细
+    function btn_details() {
+        var keyValue = $('#gridTable').jqGridRowValue('ClassId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '详细行政班',
+                url: '/CollegeMIS/BK_ClassInfo/Form?keyValue=' + keyValue+'&isDeltail=true',
+                width: '1000px',
+                height: '750px',
+                btn:null,
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+
+    function btn_import() {
+        dialogOpen({
+            id: 'ExcelImportForm',
+            title: '导入新学数据',
+            url: '/Utility/ExcelImportForm?btnId=ExcelImportForm',
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+
+    function btn_fb()
+    {
+        dialogOpen({
+            id: 'ExcelImportForm',
+            title: '分班规则选择',
+            url: '/CollegeMIS/BK_ClassInfo/RuleForm',
+            width: '500px',
+            height: '450px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+
+    function btn_createstuno()
+    {
+        dialogOpen({
+            id: 'ExcelImportForm',
+            title: '学号生成规则选择',
+            url: '/CollegeMIS/BK_ClassInfo/CreateStuNoRuleForm',
+            width: '800px',
+            height: '450px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+
+</script>
+<link href="~/Content/scripts/plugins/qnui/css/sui.min.css" rel="stylesheet" />
+<link href="~/Content/scripts/plugins/qnui/css/sui-append.min.css" rel="stylesheet" />
+<script src="~/Content/scripts/plugins/qnui/js/sui.min.js"></script>
+
+
+<div class="titlePanel">
+  
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>            
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+
+<div class="gridPanel" style="margin-left:2%;">
+    <div style="width:100%;text-align:center" >
+        <h2>分班步骤 </h2>
+    </div>
+    <div class="sui-steps-round">
+        <div class="finished" style="cursor:pointer" onclick="btn_add()">
+            <div class="wrap">
+                <div class="round">1</div>
+                <div class="bar"></div>
+            </div>
+            <label>创建班级</label>
+        </div>
+        <div class="current" style="cursor:pointer" onclick="btn_import()">
+            <div class="wrap">
+                <div class="round">2</div>
+                <div class="bar"></div>
+            </div>
+            <label>导入新生数据</label>
+        </div>
+        <div class="current" style="cursor:pointer">
+            <div class="wrap" style="cursor:pointer" onclick="btn_fb()">
+                <div class="round">3</div>
+                <div class="bar"></div>
+            </div>
+            <label>开始分班</label>
+        </div>
+        <div class="current"  style="cursor:pointer">
+            <div class="wrap" style="cursor:pointer" onclick="btn_createstuno()">
+                <div class="round">4</div>
+                <div class="bar"></div>
+            </div>
+            <label>生成学号</label>
+        </div>
+
+        <div class="todo last">
+            <div class="wrap">
+                <div class="round">5</div>
+            </div>
+            <label>完成</label>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+

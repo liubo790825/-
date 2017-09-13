@@ -1,0 +1,170 @@
+﻿<ion-modal-view ng-controller="ReportsCtrl">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">报表中心</h1>
+        <!--<button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>-->
+    </ion-header-bar>
+    <!--<div class="bar bar-subheader lr-subheader">
+        <div class="lr-left-tool">
+            <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}条</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+        </div>
+        <div class="lr-right-tool">
+            <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+            <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+        </div>
+    </div>-->
+    
+    <ion-content delegate-handle="Baodaolist-content">
+        <div class="banner">
+            <img src="img/2.jpg" />
+        </div>
+        <div class="button-bar bar-balanced mt10" style="padding:0;">
+            <a class="button button-positive">今年</a>
+            <a class="button button-balanced">去年</a>
+            <a class="button button-calm">自定义</a>
+        </div>
+        <div class="list mt5">
+            <div class="item item-divider">
+               招生统计报表
+            </div>
+            <ion-list>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('huamingce.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    班级花名册
+                    <span class="badge badge-assertive">7</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao1.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    新生报到情况分析
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao2.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    学生缴费情况分析
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao3.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    专业统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao4.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    各学年学生人数统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao5.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    各年份学生统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                
+            </ion-list>
+            <div class="item item-divider">
+                人事数据分析
+            </div>
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao6.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    师资队伍结构分析
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao7.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    中青年骨干教师统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+            </ion-list>
+            <div class="item item-divider">
+                学生奖惩报表
+            </div>
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao8.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    学生违纪情况统计表(不含考试违纪)
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao9.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    学生考试违纪情况统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao10.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    学生校级获奖情况统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                
+            </ion-list>
+
+            <div class="item item-divider">
+                图书管理
+            </div>
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao11.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    馆藏和生均图书情况统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao12.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    新增纸质图书情况统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao13.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    图书文献资料购置经费投入
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao14.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    阅览室利用情况统计表
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao14.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    图书管数据库访问情况统计
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+            </ion-list>
+
+            <div class="item item-divider">
+                教学数据分析
+            </div>
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao15.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    教学场地情况分析
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao16.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    专业设置情况分析
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao17.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    教学计划设置分析
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao18.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    在校学生情况分析
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('baobiao19.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    监考情况分析
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+            </ion-list>
+</ion-content>
+    <!--<div class="lr-plug-btn">
+        <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+    </div>-->
+
+
+
+</ion-modal-view>

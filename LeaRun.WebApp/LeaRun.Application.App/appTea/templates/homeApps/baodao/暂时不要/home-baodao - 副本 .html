@@ -1,0 +1,185 @@
+﻿<ion-modal-view ng-controller="BaodaoCtrl">
+    <ion-header-bar class="bar-stable nav-title-slide-ios7">
+        <button class="button button-clear " ng-click="closePageModel()"><i class="icon ion-ios-arrow-left"></i></button>
+        <h1 class="title">新生报到</h1>
+        <!--<button class="button button-clear" ng-click="openSearch()"><i class=" icon ion-ios-search "></i></button>-->
+    </ion-header-bar>
+    <!--<div class="bar bar-subheader lr-subheader">
+        <div class="lr-left-tool">
+            <div class="lr-down-select"><span>全部</span><span class="num">{{data.records}}条</span><span><i class="icon ion-ios-arrow-down"></i></span></div>
+        </div>
+        <div class="lr-right-tool">
+            <button class="button button-clear"><i class="icon iconfont">&#xe6f5;</i></button>
+            <button class="button button-clear"><i class="icon iconfont">&#xe654;</i></button>
+        </div>
+    </div>-->
+    <ion-content delegate-handle="Baodaolist-content">
+        <!--<ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>-->
+        <div class="list list-inset lr-list-type2" style="margin-top:0px;">
+            <ion-list>
+                <ion-item class="mt10" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <div>
+                        <div class="row">
+                            <div class="col-35"><span class="lr-title">扎西.阿力布朗</span></div>
+                            <div class="col-75">
+                                <span class="lr-title" style="text-align:right;">
+                                    <i class="icon ion-card positive"></i>
+                                    510222199902221518
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-33 lr-item-content">
+                                <img width="80px" height="100px" ng-src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497333818987&di=08cba5c5ea76376c42695f6df558bc9f&imgtype=0&src=http%3A%2F%2Fproc.iifs.ifeng.com%2Fblog%2F2016%2F03%2F05%2Fl6KhypeTaqR5aIy0xrGfnty50ZLSg5GHsqWdn2VrbphmameWamyQwm2XZ5aX3mRmlJLCZJWPYZLBo6eX.jpg" name="StuPhoto" />
+
+                                <!--<div class="list card" style="height:100px;"></div>-->
+                            </div>
+                            <!--<div class="col-33"><div class="lr-label">北京-朝阳</div></div>-->
+                            <div class="col-33 lr-item-content">
+                                <p><i class="icon ion-ios-analytics-outline positive"></i><span>男</span></p>
+                                <p><i class="icon ion-ios-analytics royal"></i><span>汉族</span></p>
+                                <p><i class="icon ion-ios-analytics energized"></i><span>北京-朝阳</span></p>
+                                <p><i class="ion-ios-calendar-outline positive"></i><span>1999-3-2</span></p>
+                                <p><i class="ion-ios-telephone-outline royal"></i><span>18986645554</span></p>
+                            </div>
+
+                            <div class="col-33 lr-item-content">
+                                <p><i class="icon ion-ios-book positive"></i><span>软件技术系</span></p>
+                                <p><i class="icon ion-ios-book royal"></i><span>软件专业</span></p>
+                                <p><i class="icon ion-ios-book energized"></i><span>软件1701班</span></p>
+                                <p><i class="icon ion-ios-flower-outline positive"></i><span>20170201001</span></p>
+                                <p><i class="icon ion-ios-flower-outline royal"></i><span>170010214</span></p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--<ion-option-button ng-click="doDelete(customer)">
+                        <span class="lr-trash-circled"><i class="icon ion-ios-trash-outline"></i></span>
+                    </ion-option-button>-->
+                </ion-item>
+            </ion-list>
+        </div>
+        <!--<ion-infinite-scroll ng-if="data.moredata" on-infinite="doLoadMore()" distance="1%"></ion-infinite-scroll>-->
+
+
+
+        <div class="list mt5">
+
+
+            <div class="item item-divider">
+                入学办理
+            </div>
+            <ion-list>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('BaodaoDetails.html','up')">
+                    <i class="icon ion-ios-list-outline positive-bg"></i>
+                    抵校登记
+                    <span class="badge badge-assertive">未办理</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('JunxunfuDetails.html','up')">
+                    <i class="icon ion-person bgcolor_e"></i>
+                    军训服信息
+                    <span class="badge bgcolor_f">已办理</span>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                </ion-item>
+
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('BaodaodanDetails.html','up')">
+                    <i class="icon ion-ios-list-outline bgcolor_a"></i>
+                    我的报到单
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('lvsetongdaoEdit.html','up')">
+                    <i class="icon ion-ios-arrow-right bgcolor_f"></i>
+                    绿色通道
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory " "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('TuichiBaodao.html','up')">
+                    <i class="icon ion-ios-clock-outline bgcolor_c"></i>
+                    推迟报到
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('ask.html','up')">
+                    <i class="icon ion-chatbubble-working bgcolor_g"></i>
+                    我要咨询
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('SusheYvding.html','up')">
+                    <i class="icon ion-ios-cart-outline bgcolor_b"></i>
+                    宿舍预订
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('Jiaofei.html','up')">
+                    <i class="icon ion-ios-paperplane-outline bgcolor_c"></i>
+                    网上缴费
+                    <span class="badge badge-positive">办理中</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+            <div class="item item-divider">
+                认识新同学
+            </div>
+
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="document.location.href = 'tel:18983377679'">
+                    <i class="icon ion-ios-telephone assertive-bg"></i>
+                    联系辅导员
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('MyClassmates.html','up')">
+                    <i class="icon ion-ios-people-outline calm-bg"></i>
+                    我的同学
+                    <span class="badge badge-assertive">30</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('MyRoommates.html','up')">
+                    <i class="icon ion-person-stalker bgcolor_c"></i>
+                    我的室友
+                    <span class="badge badge-assertive">4</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+
+            <div class="item item-divider">
+                入学指南
+            </div>
+
+            <ion-list>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('RuxueXuzhi.html','up')">
+                    <i class="icon ion-alert assertive-bg"></i>
+                    入学须知
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('TongzhiGonggaoList.html','up')">
+                    <i class="icon ion-ios-bell-outline bgcolor_b"></i>
+                    通知公告
+                    <span class="badge badge-assertive">0</span>
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+                <ion-item class="item-icon-right lr-iconitem item" ng-click="openDetailsModal('Luxian.html','up')">
+                    <i class="icon ion-ios-location bgcolor_g"></i>
+                    到校路线
+                    <i class="icon ion-chevron-right icon-accessory "></i>
+                </ion-item>
+            </ion-list>
+
+
+        </div>
+
+
+
+
+
+    </ion-content>
+    <!--<div class="lr-plug-btn">
+        <i class=" icon ion-ios-plus positive" ng-click="openEditModal()"></i>
+    </div>-->
+
+
+
+</ion-modal-view>

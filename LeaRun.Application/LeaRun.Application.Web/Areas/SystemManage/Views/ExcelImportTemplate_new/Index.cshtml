@@ -1,0 +1,183 @@
+@{;
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../SystemManage/ExcelImportTemplate/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'ID号', name: 'F_ExcelImportTemplateId', index: 'F_ExcelImportTemplateId', width: 80, align: '',sortable: true ,hidden: true },
+                { label: '名称', name: 'F_Name', index: 'F_Name', width: 80, align: '',sortable: true  },
+                { label: '功能页面ID', name: 'F_ModuleId', index: 'F_ModuleId', width: 80, align: '',sortable: true  },
+                { label: '功能页面的按钮ID号', name: 'F_ModuleBtnId', index: 'F_ModuleBtnId', width: 80, align: '',sortable: true  },
+                { label: '数据库ID号', name: 'F_DbId', index: 'F_DbId', width: 80, align: '',sortable: true  },
+                { label: '表名称', name: 'F_DbTable', index: 'F_DbTable', width: 80, align: '',sortable: true  },
+                { label: '导入错误时的类型，跳过或终止', name: 'F_ErrorType', index: 'F_ErrorType', width: 80, align: '',sortable: true  },
+                { label: '是否启用', name: 'F_EnabledMark', index: 'F_EnabledMark', width: 80, align: '',sortable: true  },
+                { label: '关联类型', name: 'F_Description', index: 'F_Description', width: 80, align: '',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'F_ExcelImportTemplateId',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            },
+            subGrid: true,
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var keyValue = $gridTable.jqGrid('getRowData', row_id)['F_ExcelImportTemplateId'];
+                var subgrid_table_id = subgrid_id + "_t";
+                $("#" + subgrid_id).html("<table id='" + subgrid_table_id + "'></table>");
+                $("#" + subgrid_table_id).jqGrid({
+                    url: "../../SystemManage/ExcelImportTemplate/GetDetailsJson",
+                    postData: { keyValue: keyValue },
+                    datatype: "json",
+                    height: "100%",
+                    colModel: [
+                { label: 'ID号', name: 'F_FiledsInfoId', index: 'F_FiledsInfoId', width: 80, align: '',sortable: true ,hidden: true },
+                { label: 'ID号', name: 'F_ExcelImportTemplateId', index: 'F_ExcelImportTemplateId', width: 80, align: '',sortable: true  },
+                { label: '字段名', name: 'F_FiledName', index: 'F_FiledName', width: 80, align: '',sortable: true  },
+                { label: '数据类型', name: 'F_FiledType', index: 'F_FiledType', width: 80, align: '',sortable: true  },
+                { label: 'Excel列名', name: 'F_ColName', index: 'F_ColName', width: 80, align: '',sortable: true  },
+                { label: '唯一性', name: 'F_OnlyOne', index: 'F_OnlyOne', width: 80, align: '',sortable: true  },
+                { label: '关联类型', name: 'F_RelationType', index: 'F_RelationType', width: 80, align: '',sortable: true  },
+                { label: '数据字典编码', name: 'F_DataItemEncode', index: 'F_DataItemEncode', width: 80, align: '',sortable: true  },
+                { label: '固定数值', name: 'F_Value', index: 'F_Value', width: 80, align: '',sortable: true  },
+                { label: '数据库ID号', name: 'F_DbId', index: 'F_DbId', width: 80, align: '',sortable: true  },
+                { label: '表名', name: 'F_DbTable', index: 'F_DbTable', width: 80, align: '',sortable: true  },
+                { label: '字段名', name: 'F_FliedLabel', index: 'F_FliedLabel', width: 80, align: '',sortable: true  },
+                { label: '保存数据字段', name: 'F_DbSaveFlied', index: 'F_DbSaveFlied', width: 80, align: '',sortable: true  },
+                { label: '对应字段', name: 'F_DbRelationFiled', index: 'F_DbRelationFiled', width: 80, align: '',sortable: true  },
+                { label: '描述', name: 'F_Description', index: 'F_Description', width: 80, align: '',sortable: true  },
+                { label: '排序', name: 'F_SortCode', index: 'F_SortCode', width: 80, align: '',sortable: true  },
+                    ],
+                    caption: "明细",
+                    rowNum: "1000",
+                    rownumbers: true,
+                    shrinkToFit: false,
+                    gridview: true,
+                    hidegrid: false
+                });
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加数据导入',
+            url: '/SystemManage/ExcelImportTemplate/Form',
+            width: '1000px',
+            height: '750px',
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $('#gridTable').jqGridRowValue('F_ExcelImportTemplateId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑数据导入',
+                url: '/SystemManage/ExcelImportTemplate/Form?keyValue=' + keyValue,
+                width: '1000px',
+                height: '750px',
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $('#gridTable').jqGridRowValue( 'F_ExcelImportTemplateId');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../SystemManage/ExcelImportTemplate/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的数据导入！', 0);
+        }
+    }
+    //详细
+    function btn_details() {
+        var keyValue = $('#gridTable').jqGridRowValue('F_ExcelImportTemplateId');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '详细数据导入',
+                url: '/SystemManage/ExcelImportTemplate/Form?keyValue=' + keyValue+'&isDeltail=true',
+                width: '1000px',
+                height: '750px',
+                btn:null,
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+</script>
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_details()"><i class="fa fa-list-alt"></i>详细</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

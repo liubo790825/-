@@ -1,0 +1,117 @@
+@{;
+    ViewBag.Title = "家庭成员及其他社会关系人员";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    var stuInfoId = request('stuInfoId');//学生的ID号
+
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+
+        $("#RelaType").ComboBox({
+            id: "id",
+            text: "val",
+            description: "==请选择==",
+            data: [
+                    { "id": "家庭主要成员", "val": "家庭主要成员" },
+                    { "id": "其他社会关系", "val": "其他社会关系" }
+                ]
+        })
+
+
+
+        $('#stuInfoId').val(stuInfoId);
+
+        //获取学生信息
+        if (!!stuInfoId) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_StuInfo/GetFormJson2",
+                param: { keyValue: stuInfoId },
+                success: function (data) {
+                    $("#stuname").text(data.StuName);//.SetWebControls(data);
+                }
+            })
+        }
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../CollegeMIS/BK_StuSocRela/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../CollegeMIS/BK_StuSocRela/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">学生</td>
+            <td class="formValue">
+                <div id="stuname"></div>
+                <input type="hidden" id="stuInfoId" name="stuInfoId" />                
+            </td>
+       
+            <td class="formTitle">成员姓名</td>
+            <td class="formValue">
+                <input id="SocRelaName" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">成员类别</td>
+            <td class="formValue">
+                <div id="RelaType" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull">                   
+                </div>                
+            </td>
+      
+            <td class="formTitle">与学生的关系</td>
+            <td class="formValue">
+                <input id="StuRela" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">工作（学习）单位</td>
+            <td class="formValue">
+                <input id="WorkPlace" type="text" class="form-control"  />
+            </td>
+      
+            <td class="formTitle">职业</td>
+            <td class="formValue">
+                <input id="WorkName" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">身份证号</td>
+            <td class="formValue">
+                <input id="SocRelaIdNo" type="text" class="form-control" isvalid="yes" checkexpession="IDCard" />
+            </td>
+        
+            <td class="formTitle">联系方式</td>
+            <td class="formValue">
+                <input id="SocRelaPhone" type="text" class="form-control"  />
+            </td>
+        </tr>
+       
+    </table>
+</div>
